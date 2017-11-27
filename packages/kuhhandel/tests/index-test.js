@@ -11,4 +11,8 @@ describe('Kuhhandel', () => {
   it('should throw if num players is less than 2', () => {
     expect(() => new Kuhhandel({ numPlayers: 1 })).toThrow('A minimum of 2 players is required')
   })
+
+  it('should throw if num players if more than 5', () => {
+    expect(() => new Kuhhandel({ numPlayers: 6 })).toThrow('A maximum of 5 players is allowed')
+  })
 })
