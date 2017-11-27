@@ -1,5 +1,8 @@
 import expect from 'expect'
-import Kuhhandel, { INITIAL_DEAL } from 'src/index'
+import Kuhhandel, {
+  INITIAL_DEAL,
+  DECK,
+} from 'src/index'
 
 const randomPlayers = () => Math.floor(2 + Math.random() * 3)
 const randomKuhhandel = () => {
@@ -35,5 +38,11 @@ describe('Kuhhandel', () => {
     kh.players.forEach(p => {
       expect(p.money).toEqual(INITIAL_DEAL)
     })
+  })
+
+  it('should shuffle the animal cards on the initial shuffle', () => {
+    const { kh } = randomKuhhandel()
+    kh.initialShuffle()
+    expect(kh.stack).toNotBe(DECK)
   })
 })

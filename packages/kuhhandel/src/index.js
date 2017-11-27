@@ -1,9 +1,4 @@
-/*
-40 Animal cards
-10 Pedigree cards (one of each animal)
-4 Rat cards
-55 money cards [10x0, 20x10, 10x50, 5x100, 5x200, 5x500]
-*/
+import shuffle from 'shuffle-array'
 
 export const INITIAL_DEAL = [
  { value: 0 },
@@ -26,6 +21,7 @@ const ANIMALS = [
   { animal: 'cow', value: 800 },
   { animal: 'horse', value: 1000 },
 ]
+export const DECK = [...ANIMALS, ...ANIMALS, ...ANIMALS, ...ANIMALS]
 
 class Player {
   constructor({ id }) {
@@ -43,12 +39,17 @@ class Kuhhandel {
       throw new Error('A maximum of 5 players is allowed')
     }
     this.players = Array(players).fill(0).map((item, index) => new Player({ id: index }))
+    this.stack = []
   }
 
   initialDeal() {
     this.players.forEach(p => {
       p.money = Array.from(INITIAL_DEAL)
     })
+  }
+
+  initialShuffle() {
+    this.stack = shuffle(DECK, { copy: true })
   }
 }
 

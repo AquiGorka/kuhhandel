@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "lerna": "^2.5.1"
+  },
+  "dependencies": {
+    "shuffle-array": "^1.0.1"
   }
 }
