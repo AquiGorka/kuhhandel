@@ -1,7 +1,12 @@
 import expect from 'expect'
-import Kuhhandel from 'src/index'
+import Kuhhandel, { INITIAL_DEAL } from 'src/index'
 
 const randomPlayers = () => Math.floor(2 + Math.random() * 3)
+const randomKuhhandel = () => {
+  const players = randomPlayers()
+  const kh = new Kuhhandel({ players })
+  return { kh, players }
+}
 
 describe('Kuhhandel', () => {
   it('default to 2 players', () => {
@@ -22,5 +27,13 @@ describe('Kuhhandel', () => {
     const kh = new Kuhhandel({ players: numPlayers })
     const set = new Set(kh.players.map(p => p.id))
     expect(Array.from(set).length).toBe(numPlayers)
+  })
+
+  it('should deal 7 the same money to each player on the initial deal', ()=> {
+    const { kh, players } = randomKuhhandel()
+    kh.initialDeal()
+    kh.players.forEach(p => {
+      expect(p.money).toEqual(INITIAL_DEAL)
+    })
   })
 })

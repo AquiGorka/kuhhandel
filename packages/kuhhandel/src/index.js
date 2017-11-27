@@ -5,8 +5,14 @@
 55 money cards [10x0, 20x10, 10x50, 5x100, 5x200, 5x500]
 */
 
-const MONEY = [
-  { value: 0 }, { value: 10 }, { value: 20 }, { value: 50 }, { value: 200 }, { value: 500 },
+export const INITIAL_DEAL = [
+ { value: 0 },
+ { value: 0 },
+ { value: 10 },
+ { value: 10 },
+ { value: 10 },
+ { value: 20 },
+ { value: 50 },
 ]
 const ANIMALS = [
   { animal: 'chicken', value: 10 },
@@ -24,6 +30,7 @@ const ANIMALS = [
 class Player {
   constructor({ id }) {
     this.id = id
+    this.money = []
   }
 }
 
@@ -36,6 +43,12 @@ class Kuhhandel {
       throw new Error('A maximum of 5 players is allowed')
     }
     this.players = Array(players).fill(0).map((item, index) => new Player({ id: index }))
+  }
+
+  initialDeal() {
+    this.players.forEach(p => {
+      p.money = Array.from(INITIAL_DEAL)
+    })
   }
 }
 
