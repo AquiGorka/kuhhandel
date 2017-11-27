@@ -9,7 +9,7 @@ const randomKuhhandel = () => {
 }
 
 describe('Kuhhandel', () => {
-  it('default to 2 players', () => {
+  it('should default to 2 players', () => {
     const kh = new Kuhhandel()
     expect(kh.players.length).toBe(2)
   })
@@ -18,7 +18,7 @@ describe('Kuhhandel', () => {
     expect(() => new Kuhhandel({ players: 1 })).toThrow('A minimum of 2 players is required')
   })
 
-  it('should throw if num players if more than 5', () => {
+  it('should throw if num players is more than 5', () => {
     expect(() => new Kuhhandel({ players: 6 })).toThrow('A maximum of 5 players is allowed')
   })
 
@@ -29,7 +29,7 @@ describe('Kuhhandel', () => {
     expect(Array.from(set).length).toBe(numPlayers)
   })
 
-  it('should deal 7 the same money to each player on the initial deal', ()=> {
+  it('should deal the same money cards to each player on the initial deal', ()=> {
     const { kh, players } = randomKuhhandel()
     kh.initialDeal()
     kh.players.forEach(p => {
