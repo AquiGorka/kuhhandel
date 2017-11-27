@@ -2,9 +2,13 @@ import expect from 'expect'
 
 import Kuhhandel from 'src/index'
 
-describe('Kuhhanel', () => {
+describe('Kuhhandel', () => {
   it('default to 2 players', () => {
     const kh = new Kuhhandel()
     expect(kh.numPlayers).toBe(2)
+  })
+
+  it('should throw if num players is less than 2', () => {
+    expect(() => new Kuhhandel({ numPlayers: 1 })).toThrow('A minimum of 2 players is required')
   })
 })
