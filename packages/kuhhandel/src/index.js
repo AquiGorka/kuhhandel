@@ -30,6 +30,22 @@ class Player {
   }
 }
 
+class Auction {
+  constructor(card) {
+    this.card = card
+    this.offers = []
+  }
+
+  highestBid() {
+    return this.offers.sort((a, b) => b.value - a.value)[0]
+  }
+
+  offer(o) {
+    this.offers.push(o)
+  }
+}
+
+
 class Kuhhandel {
   constructor({ players = 2 } = {}) {
     if (players < 2) {
@@ -40,6 +56,17 @@ class Kuhhandel {
     }
     this.players = Array(players).fill(0).map((item, index) => new Player({ id: index }))
     this.stack = []
+  }
+
+  auction(card) {
+    return new Auction(card)
+  }
+
+  draw() {
+    if (!this.stack.length) {
+      throw new Error('There are no more cards left')
+    }
+    return this.stack.pop()
   }
 
   initialDeal() {

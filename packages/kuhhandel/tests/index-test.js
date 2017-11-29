@@ -10,6 +10,12 @@ const randomKuhhandel = () => {
   const kh = new Kuhhandel({ players })
   return { kh, players }
 }
+const randomInitiatedKuhhandel = () => {
+  const { kh, players } = randomKuhhandel()
+  kh.initialDeal()
+  kh.initialShuffle()
+  return { kh, players }
+}
 
 describe('Kuhhandel', () => {
   it('should default to 2 players', () => {
@@ -18,11 +24,11 @@ describe('Kuhhandel', () => {
   })
 
   it('should throw if num players is less than 2', () => {
-    expect(() => new Kuhhandel({ players: 1 })).toThrow('A minimum of 2 players is required')
+    expect(() => new Kuhhandel({ players: 1 })).toThrow()
   })
 
   it('should throw if num players is more than 5', () => {
-    expect(() => new Kuhhandel({ players: 6 })).toThrow('A maximum of 5 players is allowed')
+    expect(() => new Kuhhandel({ players: 6 })).toThrow()
   })
 
   it('should instantiate players with unique ids', () => {
@@ -44,5 +50,37 @@ describe('Kuhhandel', () => {
     const { kh } = randomKuhhandel()
     kh.initialShuffle()
     expect(kh.stack).toNotBe(DECK)
+  })
+
+  it('should draw one card from the stack', () => {
+    const { kh } = randomKuhhandel()
+    kh.initialShuffle()
+    kh.draw()
+    expect(kh.stack.length).toBe(DECK.length - 1)
+  })
+
+  it('should throw if trying to draw from the stack when there are no more cards left', () => {
+    const { kh } = randomKuhhandel()
+    kh.initialShuffle()
+    DECK.forEach(() => kh.draw())
+    setTimeout(() => expect(kh.draw()).toThrow(), 0)
+  })
+
+  it('should start an auction and listen to offers', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    const card = kh.draw()
+    const { offer } = kh.auction(card)
+    expect(typeof offer).toBe('function')
+  })
+
+  it('should return the highest bid for a card', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    const card = kh.draw()
+    const auction = kh.auction(card)
+    const offer0 = { playerId: 0, value: 0 }
+    const offer1 = { playerId: 1, value: 10 }
+    auction.offer(offer0)
+    auction.offer(offer1)
+    expect(auction.highestBid()).toBe(offer1)
   })
 })
