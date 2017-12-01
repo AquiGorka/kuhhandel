@@ -28,6 +28,10 @@ class Player {
     this.id = id
     this.money = []
   }
+
+  get total() {
+    return this.money.reduce((p, c) => p + c.value, 0)
+  }
 }
 
 class Auction {
@@ -79,6 +83,15 @@ class Kuhhandel {
 
   auction(card) {
     return new Auction(card)
+  }
+
+  canThePlayerPay(auction) {
+    const { playerId, value } = auction.highestBid()
+    const player = this.players.find(p => p.id === playerId)
+    if (!player) {
+      throw new Error('The player with such id does not exist')
+    }
+    return player.total >= value
   }
 
   draw() {

@@ -111,7 +111,7 @@ describe('Kuhhandel auction', () => {
     const player = kh.players[0]
     const auction = kh.auction({ player, card })
     const offer = { playerId: 0, value: 0 }
-    setTimeout(() => expect(auction.offer(offer)).toThrow(), 1)
+    expect(() => auction.offer(offer)).toThrow()
   })
 
   it('should not accept offers for less or equal the current highest bid', () => {
@@ -152,10 +152,26 @@ describe('Kuhhandel auction', () => {
     auction.offer(offer0)
     auction.offer(offer1)
     auction.close()
-    setTimeout(() => expect(auction.offer(offer2)).toThrow(), 1)
+    expect(() => auction.offer(offer2)).toThrow()
   })
+})
+
+describe('Kuhhandel closed auction trade', () => {
+  it('should return true if the trade can take place', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    const card = kh.draw()
+    const player = kh.players[0]
+    const auction = kh.auction({ player, card })
+    const offer0 = { playerId: kh.players[1].id, value: 0 }
+    auction.offer(offer0)
+    auction.close()
+    const accepted = kh.canThePlayerPay(auction)
+    expect(accepted).toBe(true)
+  })
+  it('should return false if the trade can not take place', () => {})
 
   it('should execute the trade after the offer closes', () => {
     
   })
+
 })
