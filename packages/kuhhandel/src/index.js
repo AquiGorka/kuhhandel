@@ -60,6 +60,9 @@ class Auction {
     if (this.auctioneer.id === o.playerId) {
       throw new Error('The auctioneer can not place an offer')
     }
+    if (o.value === 0) {
+      return false
+    }
     if (this.offers.length && this.highestBid().value >= o.value) {
       return false
     }

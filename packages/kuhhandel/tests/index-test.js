@@ -78,7 +78,7 @@ describe('Kuhhandel auction', () => {
     const card = kh.draw()
     const player = kh.players[0]
     const auction = kh.auction({ player, card })
-    const offer = { playerId: 1, value: 0 }
+    const offer = { playerId: 1, value: 10 }
     auction.offer(offer)
     expect(auction.offers).toEqual([offer])
   })
@@ -88,7 +88,7 @@ describe('Kuhhandel auction', () => {
     const card = kh.draw()
     const player = kh.players[0]
     const auction = kh.auction({ player, card })
-    const offer = { playerId: 1, value: 0 }
+    const offer = { playerId: 1, value: 10 }
     const accepted = auction.offer(offer)
     expect(accepted).toBe(true)
   })
@@ -98,9 +98,18 @@ describe('Kuhhandel auction', () => {
     const card = kh.draw()
     const player = kh.players[0]
     const auction = kh.auction({ player, card })
-    const offer = { playerId: 1, value: 0 }
-    const offer1 = { playerId: 2, value: 0 }
+    const offer = { playerId: 1, value: 10 }
     auction.offer(offer)
+    const rejected = auction.offer(offer)
+    expect(rejected).toBe(false)
+  })
+
+  it('should not accept offers for value 0', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    const card = kh.draw()
+    const player = kh.players[0]
+    const auction = kh.auction({ player, card })
+    const offer = { playerId: 1, value: 0 }
     const rejected = auction.offer(offer)
     expect(rejected).toBe(false)
   })
@@ -110,7 +119,7 @@ describe('Kuhhandel auction', () => {
     const card = kh.draw()
     const player = kh.players[0]
     const auction = kh.auction({ player, card })
-    const offer = { playerId: 0, value: 0 }
+    const offer = { playerId: 0, value: 10 }
     expect(() => auction.offer(offer)).toThrow()
   })
 
@@ -119,9 +128,9 @@ describe('Kuhhandel auction', () => {
     const card = kh.draw()
     const player = kh.players[0]
     const auction = kh.auction({ player, card })
-    const offer0 = { playerId: 1, value: 10 }
+    const offer0 = { playerId: 1, value: 20 }
     const offer1 = { playerId: 2, value: 10 }
-    const offer2= { playerId: 2, value: 0 }
+    const offer2= { playerId: 2, value: 20 }
     auction.offer(offer0)
     auction.offer(offer1)
     auction.offer(offer2)
@@ -134,8 +143,8 @@ describe('Kuhhandel auction', () => {
     const card = kh.draw()
     const player = kh.players[0]
     const auction = kh.auction({ player, card })
-    const offer0 = { playerId: 1, value: 0 }
-    const offer1 = { playerId: 2, value: 10 }
+    const offer0 = { playerId: 1, value: 10 }
+    const offer1 = { playerId: 2, value: 20 }
     auction.offer(offer0)
     auction.offer(offer1)
     expect(auction.highestBid()).toBe(offer1)
@@ -146,9 +155,9 @@ describe('Kuhhandel auction', () => {
     const card = kh.draw()
     const player = kh.players[0]
     const auction = kh.auction({ player, card })
-    const offer0 = { playerId: 1, value: 0 }
-    const offer1 = { playerId: 2, value: 10 }
-    const offer2 = { playerId: 3, value: 20 }
+    const offer0 = { playerId: 1, value: 10 }
+    const offer1 = { playerId: 2, value: 20 }
+    const offer2 = { playerId: 3, value: 30 }
     auction.offer(offer0)
     auction.offer(offer1)
     auction.close()
@@ -168,6 +177,7 @@ describe('Kuhhandel closed auction trade', () => {
     const accepted = kh.canThePlayerPay(auction)
     expect(accepted).toBe(true)
   })
+
   it('should return false if the trade can not take place', () => {
     const { kh } = randomInitiatedKuhhandel()
     const card = kh.draw()
