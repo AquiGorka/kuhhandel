@@ -84,6 +84,17 @@ describe('Kuhhandel', () => {
     expect(accepted).toBe(true)
   })
 
+  it('should return false after not accepting an offer', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    const card = kh.draw()
+    const auction = kh.auction(card)
+    const offer = { playerId: 0, value: 0 }
+    const offer1 = { playerId: 1, value: 0 }
+    auction.offer(offer)
+    const rejected = auction.offer(offer)
+    expect(rejected).toBe(false)
+  })
+
   it('should not accept offers for less or equal the current highest bid', () => {
     const { kh } = randomInitiatedKuhhandel()
     const card = kh.draw()
