@@ -65,7 +65,9 @@ describe('Kuhhandel', () => {
     DECK.forEach(() => kh.draw())
     setTimeout(() => expect(kh.draw()).toThrow(), 0)
   })
+})
 
+describe('Kuhhandel auction', () => {
   it('should start an auction and listen to offers', () => {
     const { kh } = randomInitiatedKuhhandel()
     const card = kh.draw()
