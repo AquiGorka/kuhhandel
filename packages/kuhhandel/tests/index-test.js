@@ -162,13 +162,23 @@ describe('Kuhhandel closed auction trade', () => {
     const card = kh.draw()
     const player = kh.players[0]
     const auction = kh.auction({ player, card })
-    const offer0 = { playerId: kh.players[1].id, value: 0 }
+    const offer0 = { playerId: kh.players[1].id, value: 10 }
     auction.offer(offer0)
     auction.close()
     const accepted = kh.canThePlayerPay(auction)
     expect(accepted).toBe(true)
   })
-  it('should return false if the trade can not take place', () => {})
+  it('should return false if the trade can not take place', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    const card = kh.draw()
+    const player = kh.players[0]
+    const auction = kh.auction({ player, card })
+    const offer0 = { playerId: kh.players[1].id, value: 1000000 }
+    auction.offer(offer0)
+    auction.close()
+    const accepted = kh.canThePlayerPay(auction)
+    expect(accepted).toBe(false)
+  })
 
   it('should execute the trade after the offer closes', () => {
     
