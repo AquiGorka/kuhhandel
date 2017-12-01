@@ -53,6 +53,7 @@ class Auction {
       return false
     }
     this.offers.push(o)
+    return true
   }
 }
 
