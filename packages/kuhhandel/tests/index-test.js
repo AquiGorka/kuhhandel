@@ -69,8 +69,10 @@ describe('Kuhhandel', () => {
   it('should start an auction and listen to offers', () => {
     const { kh } = randomInitiatedKuhhandel()
     const card = kh.draw()
-    const { offer } = kh.auction(card)
-    expect(typeof offer).toBe('function')
+    const auction = kh.auction(card)
+    const offer = { playerId: 0, value: 0 }
+    auction.offer(offer)
+    expect(auction.offers).toEqual([offer])
   })
 
   it('should return the highest bid for a card', () => {
