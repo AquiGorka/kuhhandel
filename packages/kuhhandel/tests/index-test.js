@@ -75,6 +75,20 @@ describe('Kuhhandel', () => {
     expect(auction.offers).toEqual([offer])
   })
 
+  it('should not accept offers for less or equal the current highest bid', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    const card = kh.draw()
+    const auction = kh.auction(card)
+    const offer0 = { playerId: 0, value: 10 }
+    const offer1 = { playerId: 1, value: 10 }
+    const offer2= { playerId: 2, value: 0 }
+    auction.offer(offer0)
+    auction.offer(offer1)
+    auction.offer(offer2)
+    expect(auction.offers.length).toBe(1)
+    expect(auction.highestBid()).toEqual(offer0)
+  })
+
   it('should return the highest bid for a card', () => {
     const { kh } = randomInitiatedKuhhandel()
     const card = kh.draw()

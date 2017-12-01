@@ -49,6 +49,9 @@ class Auction {
     if (this.closed) {
       throw new Error('Auction has been closed and cannot accept more offers')
     }
+    if (this.offers.length && this.highestBid().value >= o.value) {
+      return false
+    }
     this.offers.push(o)
   }
 }
