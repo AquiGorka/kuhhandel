@@ -69,8 +69,8 @@ describe('Kuhhandel', () => {
   it('should start an auction and listen to offers', () => {
     const { kh } = randomInitiatedKuhhandel()
     const card = kh.draw()
-    const auction = kh.auction(card)
-    const offer = { playerId: 0, value: 0 }
+    const auction = kh.auction({ playerId: 0, card })
+    const offer = { playerId: 1, value: 0 }
     auction.offer(offer)
     expect(auction.offers).toEqual([offer])
   })
@@ -93,6 +93,14 @@ describe('Kuhhandel', () => {
     auction.offer(offer)
     const rejected = auction.offer(offer)
     expect(rejected).toBe(false)
+  })
+
+  it('should throw if it receives an offer from the auctioneer', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    const card = kh.draw()
+    const auction = kh.auction({ playerId: 0, card })
+    const offer = { playerId: 0, value: 0 }
+    setTimeout(() => expect(auction.offer(offer)).toThrow(), 1)
   })
 
   it('should not accept offers for less or equal the current highest bid', () => {
