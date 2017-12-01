@@ -85,4 +85,17 @@ describe('Kuhhandel', () => {
     auction.offer(offer1)
     expect(auction.highestBid()).toBe(offer1)
   })
+
+  it('should not accept more offers after the auction has been closed', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    const card = kh.draw()
+    const auction = kh.auction(card)
+    const offer0 = { playerId: 0, value: 0 }
+    const offer1 = { playerId: 1, value: 10 }
+    const offer2 = { playerId: 2, value: 20 }
+    auction.offer(offer0)
+    auction.offer(offer1)
+    auction.close()
+    setTimeout(() => expect(auction.offer(offer2)).toThrow(), 1)
+  })
 })

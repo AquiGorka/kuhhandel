@@ -33,7 +33,12 @@ class Player {
 class Auction {
   constructor(card) {
     this.card = card
+    this.closed = false
     this.offers = []
+  }
+
+  close() {
+    this.closed = true
   }
 
   highestBid() {
@@ -41,6 +46,9 @@ class Auction {
   }
 
   offer(o) {
+    if (this.closed) {
+      throw new Error('Auction has been closed and cannot accept more offers')
+    }
     this.offers.push(o)
   }
 }
