@@ -31,9 +31,12 @@ class Player {
 }
 
 class Auction {
-  constructor({ playerId, card }) {
+  constructor({ player, card } = {}) {
+    if (!player || !card) {
+      throw new Error('Provide a player id and a card to start an auction')
+    }
     this.card = card
-    this.auctioneerId = playerId
+    this.auctioneer = player
     this.closed = false
     this.offers = []
   }
@@ -50,7 +53,7 @@ class Auction {
     if (this.closed) {
       throw new Error('Auction has been closed and cannot accept more offers')
     }
-    if (this.auctioneerId === o.playerId) {
+    if (this.auctioneer.id === o.playerId) {
       throw new Error('The auctioneer can not place an offer')
     }
     if (this.offers.length && this.highestBid().value >= o.value) {

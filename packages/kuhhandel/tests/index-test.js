@@ -63,15 +63,21 @@ describe('Kuhhandel', () => {
     const { kh } = randomKuhhandel()
     kh.initialShuffle()
     DECK.forEach(() => kh.draw())
-    setTimeout(() => expect(kh.draw()).toThrow(), 0)
+    expect(kh.draw).toThrow()
   })
 })
 
 describe('Kuhhandel auction', () => {
+  it('should throw if it does not receive a player id and card to start an auction', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    expect(kh.auction).toThrow()
+  })
+
   it('should start an auction and listen to offers', () => {
     const { kh } = randomInitiatedKuhhandel()
     const card = kh.draw()
-    const auction = kh.auction({ playerId: 0, card })
+    const player = kh.players[0]
+    const auction = kh.auction({ player, card })
     const offer = { playerId: 1, value: 0 }
     auction.offer(offer)
     expect(auction.offers).toEqual([offer])
@@ -80,8 +86,9 @@ describe('Kuhhandel auction', () => {
   it('should return true after accepting an offer', () => {
     const { kh } = randomInitiatedKuhhandel()
     const card = kh.draw()
-    const auction = kh.auction(card)
-    const offer = { playerId: 0, value: 0 }
+    const player = kh.players[0]
+    const auction = kh.auction({ player, card })
+    const offer = { playerId: 1, value: 0 }
     const accepted = auction.offer(offer)
     expect(accepted).toBe(true)
   })
@@ -89,9 +96,10 @@ describe('Kuhhandel auction', () => {
   it('should return false after not accepting an offer', () => {
     const { kh } = randomInitiatedKuhhandel()
     const card = kh.draw()
-    const auction = kh.auction(card)
-    const offer = { playerId: 0, value: 0 }
-    const offer1 = { playerId: 1, value: 0 }
+    const player = kh.players[0]
+    const auction = kh.auction({ player, card })
+    const offer = { playerId: 1, value: 0 }
+    const offer1 = { playerId: 2, value: 0 }
     auction.offer(offer)
     const rejected = auction.offer(offer)
     expect(rejected).toBe(false)
@@ -100,7 +108,8 @@ describe('Kuhhandel auction', () => {
   it('should throw if it receives an offer from the auctioneer', () => {
     const { kh } = randomInitiatedKuhhandel()
     const card = kh.draw()
-    const auction = kh.auction({ playerId: 0, card })
+    const player = kh.players[0]
+    const auction = kh.auction({ player, card })
     const offer = { playerId: 0, value: 0 }
     setTimeout(() => expect(auction.offer(offer)).toThrow(), 1)
   })
@@ -108,9 +117,10 @@ describe('Kuhhandel auction', () => {
   it('should not accept offers for less or equal the current highest bid', () => {
     const { kh } = randomInitiatedKuhhandel()
     const card = kh.draw()
-    const auction = kh.auction(card)
-    const offer0 = { playerId: 0, value: 10 }
-    const offer1 = { playerId: 1, value: 10 }
+    const player = kh.players[0]
+    const auction = kh.auction({ player, card })
+    const offer0 = { playerId: 1, value: 10 }
+    const offer1 = { playerId: 2, value: 10 }
     const offer2= { playerId: 2, value: 0 }
     auction.offer(offer0)
     auction.offer(offer1)
@@ -122,9 +132,10 @@ describe('Kuhhandel auction', () => {
   it('should return the highest bid for a card', () => {
     const { kh } = randomInitiatedKuhhandel()
     const card = kh.draw()
-    const auction = kh.auction(card)
-    const offer0 = { playerId: 0, value: 0 }
-    const offer1 = { playerId: 1, value: 10 }
+    const player = kh.players[0]
+    const auction = kh.auction({ player, card })
+    const offer0 = { playerId: 1, value: 0 }
+    const offer1 = { playerId: 2, value: 10 }
     auction.offer(offer0)
     auction.offer(offer1)
     expect(auction.highestBid()).toBe(offer1)
@@ -133,13 +144,18 @@ describe('Kuhhandel auction', () => {
   it('should not accept more offers after the auction has been closed', () => {
     const { kh } = randomInitiatedKuhhandel()
     const card = kh.draw()
-    const auction = kh.auction(card)
-    const offer0 = { playerId: 0, value: 0 }
-    const offer1 = { playerId: 1, value: 10 }
-    const offer2 = { playerId: 2, value: 20 }
+    const player = kh.players[0]
+    const auction = kh.auction({ player, card })
+    const offer0 = { playerId: 1, value: 0 }
+    const offer1 = { playerId: 2, value: 10 }
+    const offer2 = { playerId: 3, value: 20 }
     auction.offer(offer0)
     auction.offer(offer1)
     auction.close()
     setTimeout(() => expect(auction.offer(offer2)).toThrow(), 1)
+  })
+
+  it('should execute the trade after the offer closes', () => {
+    
   })
 })
