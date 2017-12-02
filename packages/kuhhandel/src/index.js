@@ -1,5 +1,6 @@
 import shuffle from 'shuffle-array'
 
+// total: 100
 export const INITIAL_DEAL = [
  { value: 0 },
  { value: 0 },
@@ -27,10 +28,34 @@ class Player {
   constructor({ id }) {
     this.id = id
     this.money = []
+    this.cards = []
   }
 
   get total() {
     return this.money.reduce((p, c) => p + c.value, 0)
+  }
+
+  pay(cards) {
+    const cardsCopy = cards.concat()
+    this.money = this.money.reduce((p, c) => {
+      const compareValue = card => card.value === c.value
+      const exists = cardsCopy.some(compareValue)
+      if (exists) {
+        const index = cardsCopy.findIndex(compareValue)
+        cardsCopy.splice(index, 1)
+      } else {
+        p.push(c)
+      }
+      return p
+    }, [])
+  }
+
+  receiveCards(cards) {
+    this.cards = this.cards.concat(cards)
+  }
+
+  receiveMoney(cards) {
+    this.money = this.money.concat(cards)
   }
 }
 
@@ -102,6 +127,14 @@ class Kuhhandel {
       throw new Error('There are no more cards left')
     }
     return this.stack.pop()
+  }
+
+  exchange(auction, cards) {
+    const { playerId, value } = auction.highestBid()
+    const player = this.players.find(p => p.id === playerId)
+    player.pay(cards)
+    auction.auctioneer.receiveMoney(cards)
+    player.receiveCards(auction.card)
   }
 
   initialDeal() {

@@ -166,7 +166,7 @@ describe('Kuhhandel auction', () => {
 })
 
 describe('Kuhhandel closed auction trade', () => {
-  it('should return true if the trade can take place', () => {
+  it('should return true if the exchange can take place', () => {
     const { kh } = randomInitiatedKuhhandel()
     const card = kh.draw()
     const player = kh.players[0]
@@ -178,7 +178,7 @@ describe('Kuhhandel closed auction trade', () => {
     expect(accepted).toBe(true)
   })
 
-  it('should return false if the trade can not take place', () => {
+  it('should return false if the exchange can not take place', () => {
     const { kh } = randomInitiatedKuhhandel()
     const card = kh.draw()
     const player = kh.players[0]
@@ -190,8 +190,27 @@ describe('Kuhhandel closed auction trade', () => {
     expect(accepted).toBe(false)
   })
 
-  it('should execute the trade after the offer closes', () => {
-    
+  it('should execute the exchange successfully', () => {
+    const { kh} = randomInitiatedKuhhandel()
+    const card = kh.draw()
+    const auctioneer = kh.players[0]
+    const auction = kh.auction({ player: auctioneer, card })
+    const player = kh.players[1]
+    const offeredValue = 10
+    const offer0 = { playerId: player.id, value: offeredValue }
+    auction.offer(offer0)
+    auction.close()
+    const accepted = kh.canThePlayerPay(auction)
+    if (accepted) {
+      kh.exchange(auction, [{ value: 10 }])
+      const initialDealTotal = INITIAL_DEAL.reduce((p, c) => p + c.value, 0)
+      expect(kh.players[0].total).toBe(initialDealTotal + offeredValue)
+      expect(kh.players[1].total).toBe(initialDealTotal - offeredValue)
+      expect(kh.players[1].cards).toEqual([card])
+    } else {
+      // fail on purpose, this should not happen
+      expect('the player cannot pay the exchange').toBe(false)
+    }
   })
 
 })
