@@ -137,6 +137,14 @@ class Kuhhandel {
     player.receiveCards(auction.card)
   }
 
+  buyBack(auction, cards) {
+    const { playerId, value } = auction.highestBid()
+    const player = this.players.find(p => p.id === playerId)
+    auction.auctioneer.pay(cards)
+    player.receiveMoney(cards)
+    auction.auctioneer.receiveCards(auction.card)
+  }
+
   initialDeal() {
     this.players.forEach(p => {
       p.money = Array.from(INITIAL_DEAL)

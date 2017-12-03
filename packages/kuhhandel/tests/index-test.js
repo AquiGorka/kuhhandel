@@ -213,4 +213,21 @@ describe('Kuhhandel closed auction trade', () => {
     }
   })
 
+  it('should execute the byBack successfully', () => {
+    const { kh} = randomInitiatedKuhhandel()
+    const card = kh.draw()
+    const auctioneer = kh.players[0]
+    const auction = kh.auction({ player: auctioneer, card })
+    const player = kh.players[1]
+    const offeredValue = 10
+    const offer0 = { playerId: player.id, value: offeredValue }
+    auction.offer(offer0)
+    auction.close()
+    kh.buyBack(auction, [{ value: 10 }])
+    const initialDealTotal = INITIAL_DEAL.reduce((p, c) => p + c.value, 0)
+    expect(kh.players[0].total).toBe(initialDealTotal - offeredValue)
+    expect(kh.players[0].cards).toEqual([card])
+    expect(kh.players[1].total).toBe(initialDealTotal + offeredValue)
+  })
+
 })
