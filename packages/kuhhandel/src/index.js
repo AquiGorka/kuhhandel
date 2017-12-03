@@ -96,13 +96,45 @@ class Auction {
   }
 }
 
-class CowTrade {
-  constructor({ player, visibleCards }) {
-    if (!player || !visibleCards) {
-      throw new Error('Provide a player and/or number of visible cards to start a Cow Trade')
+class Initiator {
+  constructor({ player, cards }) {
+    if (!player || !cards.length) {
+      throw new Error('Provide an initiator player and cards to start a Cow Trade')
     }
-    this.initiator = player
-    this.visibleCards = visibleCards
+    this.player = player
+    this.cards = cards
+  }
+
+  visibleCards() {
+    return this.cards.length
+  }
+}
+
+class Challenged {
+  constructor({ player }) {
+    if (!player) {
+      throw new Error('Provide a challenged player to start a Cow Trade')
+    }
+    this.player = player
+  }
+
+  response(cards) {
+    this.cards = cards
+  }
+
+  visibleCards() {
+    return this.cards.length
+  }
+}
+
+class CowTrade {
+  constructor({ initiator, challenged, card }) {
+    if (!initiator || !challenged || !card) {
+      throw new Error('Provide an initiator a challenger and a card to start a Cow Trade')
+    }
+    this.initiator = new Initiator(initiator)
+    this.challenged = new Challenged(challenged)
+    this.card = card
   }
 }
 

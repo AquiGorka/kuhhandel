@@ -257,10 +257,32 @@ describe('Kuhhandel cow trading', () => {
     expect(kh.cowTrade).toThrow()
   })
 
-  it('should initiate a cow trading and return how many cards the challenger submits', () => {
+  it('should initiate a cow trade and see how many money cards the challenger submitted', () => {
     const { kh } = randomHalfDeckEvenDistributedKuhhandel()
     const card = kh.draw()
-    const cowTrade = kh.cowTrade({ player: kh.players[0], visibleCards: 1 })
-    expect(cowTrade.visibleCards).toBe(1)
+    const cowTrade = kh.cowTrade({
+      initiator: { player: kh.players[0], cards: [{ value: 0 }] },
+      challenged: { player: kh.players[1] },
+      card
+    })
+    expect(cowTrade.initiator.visibleCards()).toBe(1)
+  })
+
+  it('should settle a cow trade after the challenged player submits their cards', () => {
+    const { kh } = randomHalfDeckEvenDistributedKuhhandel()
+    const card = kh.draw()
+    const initiator = kh.players[0]
+    const challenged = kh.players[1]
+    const cowTrade = kh.cowTrade({ player: initiator, cards: [{ value: 0 }] })
+    cowTrade.response([{ value: 10 }])
+    const settled = kh.settleCowTrade(cowTrade)
+    const initialDealTotal = INITIAL_DEAL.reduce((p, c) => p + c.value, 0)
+    if (settled) {
+      expect(initiator.total).toBe(initialDeal + 10)
+      expect(challenger.total).toBe(initialDeal - 10)
+    } else {
+      // fail on purpose, this should not happen
+      expect('the cow trade could not be settled').toBe(false)
+    }
   })
 })
