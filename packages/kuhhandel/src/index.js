@@ -96,6 +96,16 @@ class Auction {
   }
 }
 
+class CowTrade {
+  constructor({ player, visibleCards }) {
+    if (!player || !visibleCards) {
+      throw new Error('Provide a player and/or number of visible cards to start a Cow Trade')
+    }
+    this.initiator = player
+    this.visibleCards = visibleCards
+  }
+}
+
 
 class Kuhhandel {
   constructor({ players = 2 } = {}) {
@@ -109,8 +119,16 @@ class Kuhhandel {
     this.stack = []
   }
 
-  auction(card) {
-    return new Auction(card)
+  auction(opts) {
+    return new Auction(opts)
+  }
+
+  buyBack(auction, cards) {
+    const { playerId, value } = auction.highestBid()
+    const player = this.players.find(p => p.id === playerId)
+    auction.auctioneer.pay(cards)
+    player.receiveMoney(cards)
+    auction.auctioneer.receiveCards(auction.card)
   }
 
   canThePlayerPay(auction) {
@@ -129,20 +147,16 @@ class Kuhhandel {
     return this.stack.pop()
   }
 
+  cowTrade(opts) {
+    return new CowTrade(opts)
+  }
+
   exchange(auction, cards) {
     const { playerId, value } = auction.highestBid()
     const player = this.players.find(p => p.id === playerId)
     player.pay(cards)
     auction.auctioneer.receiveMoney(cards)
     player.receiveCards(auction.card)
-  }
-
-  buyBack(auction, cards) {
-    const { playerId, value } = auction.highestBid()
-    const player = this.players.find(p => p.id === playerId)
-    auction.auctioneer.pay(cards)
-    player.receiveMoney(cards)
-    auction.auctioneer.receiveCards(auction.card)
   }
 
   initialDeal() {

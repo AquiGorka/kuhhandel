@@ -16,6 +16,26 @@ const randomInitiatedKuhhandel = () => {
   kh.initialShuffle()
   return { kh, players }
 }
+const randomHalfDeckEvenDistributedKuhhandel = () => {
+  const { kh, players } = randomKuhhandel()
+  kh.initialDeal()
+  //kh.initialShuffle()
+  kh.stack = DECK.concat()
+  let current = 0
+  const playerLoop = () => {
+    const player = kh.players[current]
+    current++
+    if (current >= players) {
+      current = 0
+    }
+    return player
+  }
+  for (let i=0; i< DECK.length / 2; i++) {
+    const player = playerLoop()
+    player.receiveCards(kh.draw())
+  }
+  return { kh, players }
+}
 
 describe('Kuhhandel', () => {
   it('should default to 2 players', () => {
@@ -165,7 +185,7 @@ describe('Kuhhandel auction', () => {
   })
 })
 
-describe('Kuhhandel closed auction trade', () => {
+describe('Kuhhandel closed auction exchange', () => {
   it('should return true if the exchange can take place', () => {
     const { kh } = randomInitiatedKuhhandel()
     const card = kh.draw()
@@ -191,7 +211,7 @@ describe('Kuhhandel closed auction trade', () => {
   })
 
   it('should execute the exchange successfully', () => {
-    const { kh} = randomInitiatedKuhhandel()
+    const { kh } = randomInitiatedKuhhandel()
     const card = kh.draw()
     const auctioneer = kh.players[0]
     const auction = kh.auction({ player: auctioneer, card })
@@ -214,7 +234,7 @@ describe('Kuhhandel closed auction trade', () => {
   })
 
   it('should execute the byBack successfully', () => {
-    const { kh} = randomInitiatedKuhhandel()
+    const { kh } = randomInitiatedKuhhandel()
     const card = kh.draw()
     const auctioneer = kh.players[0]
     const auction = kh.auction({ player: auctioneer, card })
@@ -229,5 +249,18 @@ describe('Kuhhandel closed auction trade', () => {
     expect(kh.players[0].cards).toEqual([card])
     expect(kh.players[1].total).toBe(initialDealTotal + offeredValue)
   })
+})
 
+describe('Kuhhandel cow trading', () => {
+  it('should throw if the proper options are not sent to start a cow trade', () => {
+    const { kh } = randomKuhhandel()
+    expect(kh.cowTrade).toThrow()
+  })
+
+  it('should initiate a cow trading and return how many cards the challenger submits', () => {
+    const { kh } = randomHalfDeckEvenDistributedKuhhandel()
+    const card = kh.draw()
+    const cowTrade = kh.cowTrade({ player: kh.players[0], visibleCards: 1 })
+    expect(cowTrade.visibleCards).toBe(1)
+  })
 })
