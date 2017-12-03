@@ -24,47 +24,55 @@ const ANIMALS = [
 ]
 export const DECK = [...ANIMALS, ...ANIMALS, ...ANIMALS, ...ANIMALS]
 
+export const totalValue = (p, c) => p + c.value
+
+const reduceArray = (fullArray, itemsToRemove, compareFn) => {
+  return fullArray.reduce((p, c) => {
+    const exists = itemsToRemove.some(compareFn(c))
+    if (exists) {
+      const index = itemsToRemove.findIndex(compareFn(c))
+      itemsToRemove.splice(index, 1)
+    } else {
+      p.push(c)
+    }
+    return p
+  }, [])
+}
+
 class Player {
   constructor({ id }) {
     this.id = id
     this.money = []
-    this.cards = []
+    this.animals = []
   }
 
   get total() {
-    return this.money.reduce((p, c) => p + c.value, 0)
+    return this.money.reduce(totalValue, 0)
   }
 
-  pay(cards) {
-    const cardsCopy = cards.concat()
-    this.money = this.money.reduce((p, c) => {
-      const compareValue = card => card.value === c.value
-      const exists = cardsCopy.some(compareValue)
-      if (exists) {
-        const index = cardsCopy.findIndex(compareValue)
-        cardsCopy.splice(index, 1)
-      } else {
-        p.push(c)
-      }
-      return p
-    }, [])
+  letGoAnimals(animals) {
+    this.animals = reduceArray(this.animals, animals.concat(), c => i => i.value === c.value)
   }
 
-  receiveCards(cards) {
-    this.cards = this.cards.concat(cards)
+  letGoMoney(money) {
+    this.money = reduceArray(this.money, money.concat(), c => i => i.value === c.value)
   }
 
-  receiveMoney(cards) {
-    this.money = this.money.concat(cards)
+  receiveAnimals(animals) {
+    this.animals = this.animals.concat(animals)
+  }
+
+  receiveMoney(money) {
+    this.money = this.money.concat(money)
   }
 }
 
 class Auction {
-  constructor({ player, card } = {}) {
-    if (!player || !card) {
-      throw new Error('Provide a player id and a card to start an auction')
+  constructor({ player, animal } = {}) {
+    if (!player || !animal) {
+      throw new Error('Provide a player id and an animal to start an auction')
     }
-    this.card = card
+    this.animal = animal
     this.auctioneer = player
     this.closed = false
     this.offers = []
@@ -97,16 +105,20 @@ class Auction {
 }
 
 class Initiator {
-  constructor({ player, cards }) {
-    if (!player || !cards.length) {
-      throw new Error('Provide an initiator player and cards to start a Cow Trade')
+  constructor({ player, money }) {
+    if (!player || !money.length) {
+      throw new Error('Provide an initiator player and money to start a Cow Trade')
     }
     this.player = player
-    this.cards = cards
+    this.money = money
   }
 
-  visibleCards() {
-    return this.cards.length
+  visibleMoney() {
+    return this.money.length
+  }
+
+  total() {
+    return this.money.reduce(totalValue, 0)
   }
 }
 
@@ -118,23 +130,27 @@ class Challenged {
     this.player = player
   }
 
-  response(cards) {
-    this.cards = cards
+  response(money) {
+    this.money = money
   }
 
-  visibleCards() {
-    return this.cards.length
+  total() {
+    return this.money.reduce(totalValue, 0)
+  }
+
+  visibleMoney() {
+    return this.money.length
   }
 }
 
 class CowTrade {
-  constructor({ initiator, challenged, card }) {
-    if (!initiator || !challenged || !card) {
-      throw new Error('Provide an initiator a challenger and a card to start a Cow Trade')
+  constructor({ initiator, challenged, animal }) {
+    if (!initiator || !challenged || !animal) {
+      throw new Error('Provide an initiator a challengerd and an animal to start a Cow Trade')
     }
     this.initiator = new Initiator(initiator)
     this.challenged = new Challenged(challenged)
-    this.card = card
+    this.animal = animal
   }
 }
 
@@ -155,12 +171,12 @@ class Kuhhandel {
     return new Auction(opts)
   }
 
-  buyBack(auction, cards) {
+  buyBack(auction, money) {
     const { playerId, value } = auction.highestBid()
     const player = this.players.find(p => p.id === playerId)
-    auction.auctioneer.pay(cards)
-    player.receiveMoney(cards)
-    auction.auctioneer.receiveCards(auction.card)
+    auction.auctioneer.letGoMoney(money)
+    player.receiveMoney(money)
+    auction.auctioneer.receiveAnimals(auction.animal)
   }
 
   canThePlayerPay(auction) {
@@ -183,12 +199,12 @@ class Kuhhandel {
     return new CowTrade(opts)
   }
 
-  exchange(auction, cards) {
+  exchange(auction, money) {
     const { playerId, value } = auction.highestBid()
     const player = this.players.find(p => p.id === playerId)
-    player.pay(cards)
-    auction.auctioneer.receiveMoney(cards)
-    player.receiveCards(auction.card)
+    player.letGoMoney(money)
+    auction.auctioneer.receiveMoney(money)
+    player.receiveAnimals(auction.animal)
   }
 
   initialDeal() {
@@ -199,6 +215,25 @@ class Kuhhandel {
 
   initialShuffle() {
     this.stack = shuffle(DECK, { copy: true })
+  }
+
+  settleCowTrade(cowTrade) {
+    const { initiator, challenged } = cowTrade
+    if (initiator.total === challenged.total) {
+      return false
+    }
+    const winner = (initiator.total() > challenged.total()) ? initiator : challenged
+    const loser  = (initiator.total() < challenged.total()) ? initiator : challenged
+    // the winner gets the animal card
+    winner.player.receiveAnimals([cowTrade.animal])
+    loser.player.letGoAnimals([cowTrade.animal])
+    // exchange money cards
+    initiator.player.letGoMoney(initiator.money)
+    initiator.player.receiveMoney(challenged.money)
+    challenged.player.letGoMoney(challenged.money)
+    challenged.player.receiveMoney(initiator.money)
+    // success
+    return true
   }
 }
 
