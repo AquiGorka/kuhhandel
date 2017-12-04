@@ -45,6 +45,15 @@ const randomHalfDeckEvenDistributedKuhhandel = () => {
   }
   return { kh, players }
 }
+const drawUntilNthDonkey = (kh, nth) => {
+  let i = 0
+  while(i < nth) {
+    const animal = kh.draw()
+    if (animal === DONKEY){
+      i++
+    }
+  }
+}
 
 describe('Kuhhandel', () => {
   it('should default to 2 players', () => {
@@ -97,7 +106,7 @@ describe('Kuhhandel', () => {
 
   it('should give each player additional money when the first donkey comes out', () => {
     const { kh } = randomInitiatedKuhhandel()
-    while(kh.draw() != DONKEY) {}
+    drawUntilNthDonkey(kh, 1)
     const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
     kh.players.forEach(p => {
       const total = p.money.reduce(totalValue, 0)
@@ -107,13 +116,7 @@ describe('Kuhhandel', () => {
 
   it('should give each player additional money when the second donkey comes out', () => {
     const { kh } = randomInitiatedKuhhandel()
-    let i = 0
-    while(i < 2) {
-      const animal = kh.draw()
-      if (animal === DONKEY){
-        i++
-      }
-    }
+    drawUntilNthDonkey(kh, 2)
     const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
     kh.players.forEach(p => {
       const total = p.money.reduce(totalValue, 0)
@@ -123,13 +126,7 @@ describe('Kuhhandel', () => {
 
   it('should give each player additional money when the third donkey comes out', () => {
     const { kh } = randomInitiatedKuhhandel()
-    let i = 0
-    while(i < 3) {
-      const animal = kh.draw()
-      if (animal === DONKEY){
-        i++
-      }
-    }
+    drawUntilNthDonkey(kh, 3)
     const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
     kh.players.forEach(p => {
       const total = p.money.reduce(totalValue, 0)
@@ -139,13 +136,7 @@ describe('Kuhhandel', () => {
 
   it('should give each player additional money when the fourth donkey comes out', () => {
     const { kh } = randomInitiatedKuhhandel()
-    let i = 0
-    while(i < 4) {
-      const animal = kh.draw()
-      if (animal === DONKEY){
-        i++
-      }
-    }
+    drawUntilNthDonkey(kh, 4)
     const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
     kh.players.forEach(p => {
       const total = p.money.reduce(totalValue, 0)
