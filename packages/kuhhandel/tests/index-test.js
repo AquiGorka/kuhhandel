@@ -95,7 +95,7 @@ describe('Kuhhandel', () => {
     expect(kh.draw).toThrow()
   })
 
-  it('should give each player an additional 50 money card when the first donkey comes out', () => {
+  it('should give each player additional money when the first donkey comes out', () => {
     const { kh } = randomInitiatedKuhhandel()
     while(kh.draw() != DONKEY) {}
     const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
@@ -105,10 +105,10 @@ describe('Kuhhandel', () => {
     })
   })
 
-  it('should give each player an additional 100 money card when the second donkey comes out', () => {
+  it('should give each player additional money when the second donkey comes out', () => {
     const { kh } = randomInitiatedKuhhandel()
     let i = 0
-    while(i<2) {
+    while(i < 2) {
       const animal = kh.draw()
       if (animal === DONKEY){
         i++
@@ -118,6 +118,22 @@ describe('Kuhhandel', () => {
     kh.players.forEach(p => {
       const total = p.money.reduce(totalValue, 0)
       expect(total).toEqual(initialDealTotal + FIRST_DONKEY_DEAL + SECOND_DONKEY_DEAL)
+    })
+  })
+
+  it('should give each player additional money when the third donkey comes out', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    let i = 0
+    while(i < 3) {
+      const animal = kh.draw()
+      if (animal === DONKEY){
+        i++
+      }
+    }
+    const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
+    kh.players.forEach(p => {
+      const total = p.money.reduce(totalValue, 0)
+      expect(total).toEqual(initialDealTotal + FIRST_DONKEY_DEAL + SECOND_DONKEY_DEAL + THIRD_DONKEY_DEAL)
     })
   })
 })
