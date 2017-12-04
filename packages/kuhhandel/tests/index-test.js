@@ -24,7 +24,7 @@ const randomInitiatedKuhhandel = () => {
 }
 const randomHalfDeckEvenDistributedKuhhandel = () => {
   // we need players < 5 so that ech of them receive one of each card
-  const players = 1 + Math.floor(Math.random() * 3)
+  const players = 2 + Math.floor(Math.random() * 2)
   const kh = new Kuhhandel({ players })
   kh.initialDeal()
   // this is done on purpose, no shuffle means dealing evenly
@@ -102,6 +102,22 @@ describe('Kuhhandel', () => {
     kh.players.forEach(p => {
       const total = p.money.reduce(totalValue, 0)
       expect(total).toEqual(initialDealTotal + FIRST_DONKEY_DEAL)
+    })
+  })
+
+  it('should give each player an additional 100 money card when the second donkey comes out', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    let i = 0
+    while(i<2) {
+      const animal = kh.draw()
+      if (animal === DONKEY){
+        i++
+      }
+    }
+    const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
+    kh.players.forEach(p => {
+      const total = p.money.reduce(totalValue, 0)
+      expect(total).toEqual(initialDealTotal + FIRST_DONKEY_DEAL + SECOND_DONKEY_DEAL)
     })
   })
 })
@@ -240,11 +256,13 @@ describe('Kuhhandel closed auction exchange', () => {
     auction.offer(offer0)
     auction.close()
     const accepted = kh.canThePlayerPay(auction)
-    const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
+    // the draw might be a donkey and players receive extra money if that happens
+    const auctioneerOriginalMoneyTotal = auctioneer.money.reduce(totalValue, 0)
+    const playerOriginalMoneyTotal = player.money.reduce(totalValue, 0)
     kh.exchange(auction, [{ value: 10 }])
     expect(accepted).toBe(true)
-    expect(kh.players[0].total).toBe(initialDealTotal + offeredValue)
-    expect(kh.players[1].total).toBe(initialDealTotal - offeredValue)
+    expect(kh.players[0].total).toBe(auctioneerOriginalMoneyTotal + offeredValue)
+    expect(kh.players[1].total).toBe(playerOriginalMoneyTotal - offeredValue)
     expect(kh.players[1].animals).toEqual([animal])
   })
 
@@ -258,11 +276,13 @@ describe('Kuhhandel closed auction exchange', () => {
     const offer0 = { playerId: player.id, value: offeredValue }
     auction.offer(offer0)
     auction.close()
+    // the draw might be a donkey and players receive extra money if that happens
+    const auctioneerOriginalMoneyTotal = auctioneer.money.reduce(totalValue, 0)
+    const playerOriginalMoneyTotal = player.money.reduce(totalValue, 0)
     kh.buyBack(auction, [{ value: 10 }])
-    const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
-    expect(kh.players[0].total).toBe(initialDealTotal - offeredValue)
+    expect(kh.players[0].total).toBe(auctioneerOriginalMoneyTotal - offeredValue)
     expect(kh.players[0].animals).toEqual([animal])
-    expect(kh.players[1].total).toBe(initialDealTotal + offeredValue)
+    expect(kh.players[1].total).toBe(playerOriginalMoneyTotal + offeredValue)
   })
 })
 
@@ -292,12 +312,14 @@ describe('Kuhhandel cow trading', () => {
     challenged.player.receiveAnimals(animal)
     const cowTrade = kh.cowTrade({ initiator, challenged, animal })
     cowTrade.challenged.response([{ value: 0 }])
+    // the draw might be a donkey and players receive extra money if that happens
+    const initiatorOriginalMoneyTotal = initiator.player.money.reduce(totalValue, 0)
+    const challengedOriginalMoneyTotal = challenged.player.money.reduce(totalValue, 0)
     const settled = kh.settleCowTrade(cowTrade)
-    const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
     expect(settled).toBe(true)
-    expect(initiator.player.money.reduce(totalValue, 0)).toBe(initialDealTotal - 10)
+    expect(initiator.player.money.reduce(totalValue, 0)).toBe(initiatorOriginalMoneyTotal - 10)
     expect(initiator.player.animals).toEqual([animal, animal])
-    expect(challenged.player.money.reduce(totalValue, 0)).toBe(initialDealTotal + 10)
+    expect(challenged.player.money.reduce(totalValue, 0)).toBe(challengedOriginalMoneyTotal + 10)
     expect(challenged.player.animals).toEqual([])
   })
 
@@ -311,12 +333,14 @@ describe('Kuhhandel cow trading', () => {
     challenged.player.receiveAnimals(animal)
     const cowTrade = kh.cowTrade({ initiator, challenged, animal })
     cowTrade.challenged.response([{ value: 0 }])
+    // the draw might be a donkey and players receive extra money if that happens
+    const initiatorOriginalMoneyTotal = initiator.player.money.reduce(totalValue, 0)
+    const challengedOriginalMoneyTotal = challenged.player.money.reduce(totalValue, 0)
     const settled = kh.settleCowTrade(cowTrade)
-    const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
     expect(settled).toBe(true)
-    expect(initiator.player.money.reduce(totalValue, 0)).toBe(initialDealTotal - 10)
+    expect(initiator.player.money.reduce(totalValue, 0)).toBe(initiatorOriginalMoneyTotal - 10)
     expect(initiator.player.animals).toEqual([animal, animal])
-    expect(challenged.player.money.reduce(totalValue, 0)).toBe(initialDealTotal + 10)
+    expect(challenged.player.money.reduce(totalValue, 0)).toBe(challengedOriginalMoneyTotal + 10)
     expect(challenged.player.animals).toEqual([animal])
   })
 
@@ -330,12 +354,14 @@ describe('Kuhhandel cow trading', () => {
     challenged.player.receiveAnimals(animal)
     const cowTrade = kh.cowTrade({ initiator, challenged, animal })
     cowTrade.challenged.response([{ value: 0 }])
+    // the draw might be a donkey and players receive extra money if that happens
+    const initiatorOriginalMoneyTotal = initiator.player.money.reduce(totalValue, 0)
+    const challengedOriginalMoneyTotal = challenged.player.money.reduce(totalValue, 0)
     const settled = kh.settleCowTrade(cowTrade)
-    const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
     expect(settled).toBe(true)
-    expect(initiator.player.money.reduce(totalValue, 0)).toBe(initialDealTotal - 10)
+    expect(initiator.player.money.reduce(totalValue, 0)).toBe(initiatorOriginalMoneyTotal - 10)
     expect(initiator.player.animals).toEqual([animal, animal, animal])
-    expect(challenged.player.money.reduce(totalValue, 0)).toBe(initialDealTotal + 10)
+    expect(challenged.player.money.reduce(totalValue, 0)).toBe(challengedOriginalMoneyTotal + 10)
     expect(challenged.player.animals).toEqual([])
   })
 
@@ -350,12 +376,14 @@ describe('Kuhhandel cow trading', () => {
     challenged.player.receiveAnimals(animal)
     const cowTrade = kh.cowTrade({ initiator, challenged, animal })
     cowTrade.challenged.response([{ value: 0 }])
+    // the draw might be a donkey and players receive extra money if that happens
+    const initiatorOriginalMoneyTotal = initiator.player.money.reduce(totalValue, 0)
+    const challengedOriginalMoneyTotal = challenged.player.money.reduce(totalValue, 0)
     const settled = kh.settleCowTrade(cowTrade)
-    const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
     expect(settled).toBe(true)
-    expect(initiator.player.money.reduce(totalValue, 0)).toBe(initialDealTotal - 10)
+    expect(initiator.player.money.reduce(totalValue, 0)).toBe(initiatorOriginalMoneyTotal - 10)
     expect(initiator.player.animals).toEqual([animal, animal, animal, animal])
-    expect(challenged.player.money.reduce(totalValue, 0)).toBe(initialDealTotal + 10)
+    expect(challenged.player.money.reduce(totalValue, 0)).toBe(challengedOriginalMoneyTotal + 10)
     expect(challenged.player.animals).toEqual([])
   })
 })

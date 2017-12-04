@@ -194,8 +194,19 @@ class Kuhhandel {
   }
 
   computeValueForDonkeyDraw() {
-    let value = 50
-    return value
+    const values = new Map([
+      [0, FOURTH_DONKEY_DEAL],
+      [1, THIRD_DONKEY_DEAL],
+      [2, SECOND_DONKEY_DEAL],
+      [3, FIRST_DONKEY_DEAL]
+    ])
+    const remainingDonkeysInDeck = this.stack.reduce((p, c) => {
+      if (c === DONKEY) {
+        p++
+      }
+      return p
+    }, 0)
+    return values.get(remainingDonkeysInDeck)
   }
 
   draw() {
