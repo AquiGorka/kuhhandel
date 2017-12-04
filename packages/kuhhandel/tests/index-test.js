@@ -282,4 +282,23 @@ describe('Kuhhandel cow trading', () => {
     expect(challenged.player.money.reduce(totalValue, 0)).toBe(initialDealTotal + 10)
     expect(challenged.player.animals).toEqual([])
   })
+
+  it('should settle the cow trade for one card when the initiator only owns one item', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    const animal = kh.draw()
+    const initiator = { player: kh.players[0], money: [{ value: 10 }] }
+    initiator.player.receiveAnimals(animal)
+    const challenged = { player: kh.players[1] }
+    challenged.player.receiveAnimals(animal)
+    challenged.player.receiveAnimals(animal)
+    const cowTrade = kh.cowTrade({ initiator, challenged, animal })
+    cowTrade.challenged.response([{ value: 0 }])
+    const settled = kh.settleCowTrade(cowTrade)
+    const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
+    expect(settled).toBe(true)
+    expect(initiator.player.money.reduce(totalValue, 0)).toBe(initialDealTotal - 10)
+    expect(initiator.player.animals).toEqual([animal, animal])
+    expect(challenged.player.money.reduce(totalValue, 0)).toBe(initialDealTotal + 10)
+    expect(challenged.player.animals).toEqual([animal])
+  })
 })
