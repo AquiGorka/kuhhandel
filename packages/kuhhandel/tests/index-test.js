@@ -136,6 +136,22 @@ describe('Kuhhandel', () => {
       expect(total).toEqual(initialDealTotal + FIRST_DONKEY_DEAL + SECOND_DONKEY_DEAL + THIRD_DONKEY_DEAL)
     })
   })
+
+  it('should give each player additional money when the fourth donkey comes out', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    let i = 0
+    while(i < 4) {
+      const animal = kh.draw()
+      if (animal === DONKEY){
+        i++
+      }
+    }
+    const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
+    kh.players.forEach(p => {
+      const total = p.money.reduce(totalValue, 0)
+      expect(total).toEqual(initialDealTotal + FIRST_DONKEY_DEAL + SECOND_DONKEY_DEAL + THIRD_DONKEY_DEAL + FOURTH_DONKEY_DEAL)
+    })
+  })
 })
 
 describe('Kuhhandel auction', () => {
