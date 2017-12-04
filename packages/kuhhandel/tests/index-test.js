@@ -3,6 +3,11 @@ import Kuhhandel, {
   INITIAL_DEAL,
   DECK,
   totalValue,
+  FIRST_DONKEY_DEAL,
+  SECOND_DONKEY_DEAL,
+  THIRD_DONKEY_DEAL,
+  FOURTH_DONKEY_DEAL,
+  DONKEY,
 } from 'src/index'
 
 const randomPlayers = () => Math.floor(2 + Math.random() * 3)
@@ -18,8 +23,11 @@ const randomInitiatedKuhhandel = () => {
   return { kh, players }
 }
 const randomHalfDeckEvenDistributedKuhhandel = () => {
-  const { kh, players } = randomKuhhandel()
+  // we need players < 5 so that ech of them receive one of each card
+  const players = 1 + Math.floor(Math.random() * 3)
+  const kh = new Kuhhandel({ players })
   kh.initialDeal()
+  // this is done on purpose, no shuffle means dealing evenly
   //kh.initialShuffle()
   kh.stack = DECK.concat()
   let current = 0
@@ -85,6 +93,16 @@ describe('Kuhhandel', () => {
     kh.initialShuffle()
     DECK.forEach(() => kh.draw())
     expect(kh.draw).toThrow()
+  })
+
+  it('should give each player an additional 50 money card when the first donkey comes out', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    while(kh.draw() != DONKEY) {}
+    const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
+    kh.players.forEach(p => {
+      const total = p.money.reduce(totalValue, 0)
+      expect(total).toEqual(initialDealTotal + FIRST_DONKEY_DEAL)
+    })
   })
 })
 

@@ -10,6 +10,11 @@ export const INITIAL_DEAL = [
  { value: 20 },
  { value: 50 },
 ]
+export const FIRST_DONKEY_DEAL = 50
+export const SECOND_DONKEY_DEAL = 100
+export const THIRD_DONKEY_DEAL = 200
+export const FOURTH_DONKEY_DEAL = 500
+export const DONKEY = { animal: 'donkey', value: 500 }
 const ANIMALS = [
   { animal: 'chicken', value: 10 },
   { animal: 'goose', value: 40 },
@@ -17,7 +22,7 @@ const ANIMALS = [
   { animal: 'dog', value: 160 },
   { animal: 'sheep', value: 250 },
   { animal: 'goat', value: 350 },
-  { animal: 'donkey', value: 500 },
+  DONKEY,
   { animal: 'pig', value: 650 },
   { animal: 'cow', value: 800 },
   { animal: 'horse', value: 1000 },
@@ -188,11 +193,21 @@ class Kuhhandel {
     return player.total >= value
   }
 
+  computeValueForDonkeyDraw() {
+    let value = 50
+    return value
+  }
+
   draw() {
     if (!this.stack.length) {
       throw new Error('There are no more cards left')
     }
-    return this.stack.pop()
+    const animal = this.stack.pop()
+    if (animal === DONKEY) {
+      const value = this.computeValueForDonkeyDraw()
+      this.players.forEach(p => p.receiveMoney({ value }))
+    }
+    return animal
   }
 
   cowTrade(opts) {
