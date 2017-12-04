@@ -54,6 +54,7 @@ const drawUntilNthDonkey = (kh, nth) => {
     }
   }
 }
+const INITIAL_DEAL_TOTAL = INITIAL_DEAL.reduce(totalValue, 0)
 
 describe('Kuhhandel', () => {
   it('should default to 2 players', () => {
@@ -107,40 +108,36 @@ describe('Kuhhandel', () => {
   it('should give each player additional money when the first donkey comes out', () => {
     const { kh } = randomInitiatedKuhhandel()
     drawUntilNthDonkey(kh, 1)
-    const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
     kh.players.forEach(p => {
       const total = p.money.reduce(totalValue, 0)
-      expect(total).toEqual(initialDealTotal + FIRST_DONKEY_DEAL)
+      expect(total).toEqual(INITIAL_DEAL_TOTAL + FIRST_DONKEY_DEAL)
     })
   })
 
   it('should give each player additional money when the second donkey comes out', () => {
     const { kh } = randomInitiatedKuhhandel()
     drawUntilNthDonkey(kh, 2)
-    const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
     kh.players.forEach(p => {
       const total = p.money.reduce(totalValue, 0)
-      expect(total).toEqual(initialDealTotal + FIRST_DONKEY_DEAL + SECOND_DONKEY_DEAL)
+      expect(total).toEqual(INITIAL_DEAL_TOTAL + FIRST_DONKEY_DEAL + SECOND_DONKEY_DEAL)
     })
   })
 
   it('should give each player additional money when the third donkey comes out', () => {
     const { kh } = randomInitiatedKuhhandel()
     drawUntilNthDonkey(kh, 3)
-    const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
     kh.players.forEach(p => {
       const total = p.money.reduce(totalValue, 0)
-      expect(total).toEqual(initialDealTotal + FIRST_DONKEY_DEAL + SECOND_DONKEY_DEAL + THIRD_DONKEY_DEAL)
+      expect(total).toEqual(INITIAL_DEAL_TOTAL + FIRST_DONKEY_DEAL + SECOND_DONKEY_DEAL + THIRD_DONKEY_DEAL)
     })
   })
 
   it('should give each player additional money when the fourth donkey comes out', () => {
     const { kh } = randomInitiatedKuhhandel()
     drawUntilNthDonkey(kh, 4)
-    const initialDealTotal = INITIAL_DEAL.reduce(totalValue, 0)
     kh.players.forEach(p => {
       const total = p.money.reduce(totalValue, 0)
-      expect(total).toEqual(initialDealTotal + FIRST_DONKEY_DEAL + SECOND_DONKEY_DEAL + THIRD_DONKEY_DEAL + FOURTH_DONKEY_DEAL)
+      expect(total).toEqual(INITIAL_DEAL_TOTAL + FIRST_DONKEY_DEAL + SECOND_DONKEY_DEAL + THIRD_DONKEY_DEAL + FOURTH_DONKEY_DEAL)
     })
   })
 })
