@@ -224,9 +224,14 @@ class Kuhhandel {
     }
     const winner = (initiator.total() > challenged.total()) ? initiator : challenged
     const loser  = (initiator.total() < challenged.total()) ? initiator : challenged
-    // the winner gets the animal card
-    winner.player.receiveAnimals([cowTrade.animal])
-    loser.player.letGoAnimals([cowTrade.animal])
+    // the winner gets the animal card(s)
+    const winnerNumberOfAnimal = winner.player.animals.filter(a => a.animal === cowTrade.animal.animal).length
+    const loserNumberOfAnimal = loser.player.animals.filter(a => a.animal === cowTrade.animal.animal).length
+    const numberOfAnimalsToReceive = (winnerNumberOfAnimal === 2 && loserNumberOfAnimal === 2) ? 2 : 1
+    for (let i = 0; i < numberOfAnimalsToReceive; i++) {
+      winner.player.receiveAnimals([cowTrade.animal])
+      loser.player.letGoAnimals([cowTrade.animal])
+    }
     // exchange money cards
     initiator.player.letGoMoney(initiator.money)
     initiator.player.receiveMoney(challenged.money)
