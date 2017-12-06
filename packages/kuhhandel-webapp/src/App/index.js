@@ -1,17 +1,28 @@
 import React, { Component } from 'react'
 import Setup from './Setup'
+import Board from './Board'
+import Controls from './Controls'
+import game from '../Game'
 import './App.css'
 
-const Board = props => <div>Board</div>
-
-
 class App extends Component {
+
+  state = { doneSetup: false }
+
   render() {
-    return <Setup />
+    if (!this.state.doneSetup) {
+      return <Setup onSetup={this.setup} />
+    }
+
     return [
-      <Board />,
-      <div>Players</div>
+      <Board key="board" game={game} />,
+      <Controls key="controls" game={game} />
     ]
+  }
+
+  setup = opts => {
+    game.setup(opts)
+    this.setState({ doneSetup: true })
   }
 }
 
