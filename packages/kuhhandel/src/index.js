@@ -15,7 +15,7 @@ export const SECOND_DONKEY_DEAL = 100
 export const THIRD_DONKEY_DEAL = 200
 export const FOURTH_DONKEY_DEAL = 500
 export const DONKEY = { animal: 'donkey', value: 500 }
-const ANIMALS = [
+export const ANIMALS = [
   { animal: 'chicken', value: 10 },
   { animal: 'goose', value: 40 },
   { animal: 'cat', value: 90 },
@@ -52,9 +52,6 @@ class Player {
   }
 
   score() {
-    //animals a map
-    //map con count
-    //map a reduce
     const animalMap = this.animals.reduce((p, c) => {
       if (!p.has(c.animal)) {
         p.set(c.animal, { count: 0 })
@@ -62,13 +59,10 @@ class Player {
       p.set(c.animal, { value: c.value, count: p.get(c.animal).count + 1 })
       return p
     }, new Map())
-    return Array.from(animalMap)
-      .filter(arr => {
-        return arr[1].count === 4
-      })
-      .reduce((p, c) => {
-        return p + c[1].value
-      }, 0)
+    const fourOfAKindMap = Array.from(animalMap).filter(arr => arr[1].count === 4)
+    return fourOfAKindMap.length * fourOfAKindMap.reduce((p, c) => {
+      return p + c[1].value
+    }, 0)
   }
 
   total() {

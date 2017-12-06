@@ -8,6 +8,7 @@ import Kuhhandel, {
   THIRD_DONKEY_DEAL,
   FOURTH_DONKEY_DEAL,
   DONKEY,
+  ANIMALS
 } from 'src/index'
 
 const randomPlayers = () => Math.floor(2 + Math.random() * 3)
@@ -420,10 +421,27 @@ describe('Kuhhandel scoring', () => {
 
   it('should not add an animals value to a players score if the players does not have the four cards', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
     for(let i = 0; i < 3; i++) {
+      const animal = kh.draw()
       kh.players[0].receiveAnimals(animal)
     }
     expect(kh.players[0].score()).toBe(0)
+  })
+
+  it('should multiply the players score times the number of four of a kind animals the player has', () => {
+    const { kh } = randomKuhhandel()
+    kh.stack = DECK.concat().sort((a , b) => b.value - a.value)
+    let total = 0
+    const howMany = 2 + Math.floor(Math.random() * ANIMALS.length - 2)
+    for( let i = 0; i < howMany; i++) {
+      const animal = kh.draw()
+      total += animal.value
+      kh.players[0].receiveAnimals(animal)
+      for (let j = 1; j < 4; j++) {
+        const animal = kh.draw()
+        kh.players[0].receiveAnimals(animal)
+      }
+    }
+    expect(kh.players[0].score()).toBe(total * howMany)
   })
 })
