@@ -417,4 +417,13 @@ describe('Kuhhandel scoring', () => {
     }
     expect(kh.players[0].score()).toBe(animal.value)
   })
+
+  it('should not add an animals value to a players score if the players does not have the four cards', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    const animal = kh.draw()
+    for(let i = 0; i < 3; i++) {
+      kh.players[0].receiveAnimals(animal)
+    }
+    expect(kh.players[0].score()).toBe(0)
+  })
 })
