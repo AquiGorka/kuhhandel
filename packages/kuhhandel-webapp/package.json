@@ -2,7 +2,6 @@
   "name": "kuhhandel-webapp",
   "version": "1.0.0",
   "description": "",
-  "private": true,
   "scripts": {
     "build": "nwb build-react-app",
     "clean": "nwb clean-app",
@@ -12,6 +11,7 @@
     "test:watch": "nwb test-react --server"
   },
   "dependencies": {
+    "kuhhandel": "^1.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   },

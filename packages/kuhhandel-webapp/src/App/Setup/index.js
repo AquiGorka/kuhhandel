@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React from 'react'
+import game from '../../Game'
 
 const Setup = props => <div>Setup</div>
 
