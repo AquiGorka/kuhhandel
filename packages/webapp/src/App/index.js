@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
+import Setup from './Setup'
 import './App.css'
 
 const Board = props => <div>Board</div>
 
-const Setup = props => <div>Setup</div>
 
 class App extends Component {
   render() {
