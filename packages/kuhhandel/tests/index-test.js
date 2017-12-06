@@ -281,8 +281,8 @@ describe('Kuhhandel closed auction exchange', () => {
     const playerOriginalMoneyTotal = player.money.reduce(totalValue, 0)
     kh.exchange(auction, [{ value: 10 }])
     expect(accepted).toBe(true)
-    expect(kh.players[0].total).toBe(auctioneerOriginalMoneyTotal + offeredValue)
-    expect(kh.players[1].total).toBe(playerOriginalMoneyTotal - offeredValue)
+    expect(kh.players[0].total()).toBe(auctioneerOriginalMoneyTotal + offeredValue)
+    expect(kh.players[1].total()).toBe(playerOriginalMoneyTotal - offeredValue)
     expect(kh.players[1].animals).toEqual([animal])
   })
 
@@ -300,13 +300,13 @@ describe('Kuhhandel closed auction exchange', () => {
     const auctioneerOriginalMoneyTotal = auctioneer.money.reduce(totalValue, 0)
     const playerOriginalMoneyTotal = player.money.reduce(totalValue, 0)
     kh.buyBack(auction, [{ value: 10 }])
-    expect(kh.players[0].total).toBe(auctioneerOriginalMoneyTotal - offeredValue)
+    expect(kh.players[0].total()).toBe(auctioneerOriginalMoneyTotal - offeredValue)
     expect(kh.players[0].animals).toEqual([animal])
-    expect(kh.players[1].total).toBe(playerOriginalMoneyTotal + offeredValue)
+    expect(kh.players[1].total()).toBe(playerOriginalMoneyTotal + offeredValue)
   })
 })
 
-describe('Kuhhandel cow trading', () => {
+describe('Kuhhandel cow trade', () => {
   it('should throw if the proper options are not sent to start a cow trade', () => {
     const { kh } = randomKuhhandel()
     expect(kh.cowTrade).toThrow()
@@ -314,7 +314,7 @@ describe('Kuhhandel cow trading', () => {
 
   it('should initiate a cow trade and see how many money cards the challenger submitted', () => {
     const { kh } = randomHalfDeckEvenDistributedKuhhandel()
-    const animal = kh.draw()
+    const animal = kh.players[0].animals[0]
     const cowTrade = kh.cowTrade({
       initiator: { player: kh.players[0], money: [{ value: 0 }] },
       challenged: { player: kh.players[1] },
@@ -405,5 +405,16 @@ describe('Kuhhandel cow trading', () => {
     expect(initiator.player.animals).toEqual([animal, animal, animal, animal])
     expect(challenged.player.money.reduce(totalValue, 0)).toBe(challengedOriginalMoneyTotal + 10)
     expect(challenged.player.animals).toEqual([])
+  })
+})
+
+describe('Kuhhandel scoring', () => {
+  it('should add an animals value to a players score if the players has the four cards', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    const animal = kh.draw()
+    for(let i = 0; i < 4; i++) {
+      kh.players[0].receiveAnimals(animal)
+    }
+    expect(kh.players[0].score()).toBe(animal.value)
   })
 })

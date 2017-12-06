@@ -2,13 +2,13 @@ import shuffle from 'shuffle-array'
 
 // total: 100
 export const INITIAL_DEAL = [
- { value: 0 },
- { value: 0 },
- { value: 10 },
- { value: 10 },
- { value: 10 },
- { value: 20 },
- { value: 50 },
+  { value: 0 },
+  { value: 0 },
+  { value: 10 },
+  { value: 10 },
+  { value: 10 },
+  { value: 20 },
+  { value: 50 },
 ]
 export const FIRST_DONKEY_DEAL = 50
 export const SECOND_DONKEY_DEAL = 100
@@ -51,7 +51,27 @@ class Player {
     this.animals = []
   }
 
-  get total() {
+  score() {
+    //animals a map
+    //map con count
+    //map a reduce
+    const animalMap = this.animals.reduce((p, c) => {
+      if (!p.has(c.animal)) {
+        p.set(c.animal, { count: 0 })
+      }
+      p.set(c.animal, { value: c.value, count: p.get(c.animal).count + 1 })
+      return p
+    }, new Map())
+    return Array.from(animalMap)
+      .filter(arr => {
+        return arr[1].count === 4
+      })
+      .reduce((p, c) => {
+        return p + c[1].value
+      }, 0)
+  }
+
+  total() {
     return this.money.reduce(totalValue, 0)
   }
 
@@ -190,7 +210,7 @@ class Kuhhandel {
     if (!player) {
       throw new Error('The player with such id does not exist')
     }
-    return player.total >= value
+    return player.total() >= value
   }
 
   computeValueForDonkeyDraw() {
@@ -245,7 +265,7 @@ class Kuhhandel {
 
   settleCowTrade(cowTrade) {
     const { initiator, challenged } = cowTrade
-    if (initiator.total === challenged.total) {
+    if (initiator.total() === challenged.total()) {
       return false
     }
     const winner = (initiator.total() > challenged.total()) ? initiator : challenged
