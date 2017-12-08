@@ -20,7 +20,7 @@ class Game extends EventEmitter {
 
   setup = async opts => {
     this.kh = new Kuhhandel(opts)
-    await this.saveState('setup', opts)
+    this.saveState('setup', opts)
     this.emit('setup')
   }
 
@@ -36,7 +36,7 @@ class Game extends EventEmitter {
     const log = await localForage.getItem(KH)
     const state = log ? log : []
     state.push({ method, payload })
-    await localForage.setItem(KH, state)
+    localForage.setItem(KH, state)
   }
 }
 
