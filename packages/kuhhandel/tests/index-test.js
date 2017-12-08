@@ -101,6 +101,16 @@ describe('Kuhhandel', () => {
     expect(k1.stack).toEqual(k2.stack)
   })
 
+  it('should shuffle the decks differently using different seeds', () => {
+    const seed1 = Math.random()
+    const seed2 = Date.now()
+    const { kh: k1 } = randomKuhhandel()
+    const { kh: k2 } = randomKuhhandel()
+    k1.initialShuffle(seed1)
+    k2.initialShuffle(seed2)
+    expect(k1.stack).toNotEqual(k2.stack)
+  })
+
   it('should draw one card from the stack', () => {
     const { kh } = randomKuhhandel()
     kh.initialShuffle()
