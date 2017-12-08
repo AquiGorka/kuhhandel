@@ -1,4 +1,5 @@
 import shuffle from 'shuffle-array'
+import RNG from 'rng'
 
 // total: 100
 export const INITIAL_DEAL = [
@@ -253,8 +254,9 @@ class Kuhhandel {
     })
   }
 
-  initialShuffle() {
-    this.stack = shuffle(DECK, { copy: true })
+  initialShuffle(seed = Math.random) {
+    const rng = new RNG.MT(seed)
+    this.stack = shuffle(DECK, { copy: true, rng: rng.random.bind(rng) })
   }
 
   settleCowTrade(cowTrade) {

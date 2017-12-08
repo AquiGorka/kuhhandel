@@ -16,7 +16,9 @@
     "test:coverage": "nwb test --coverage",
     "test:watch": "nwb test --server"
   },
-  "dependencies": {},
+  "dependencies": {
+    "rng": "^0.2.2"
+  },
   "devDependencies": {
     "nwb": "^0.20.0"
   },
