@@ -14,16 +14,18 @@ class Game extends EventEmitter {
   init = async () => {
     const log = await this.getState()
     if (log && log.length) {
-      log.forEach(action => this[action.method](action.payload))
+      log.forEach(action => this[action.method](action.payload, false))
     }
   }
 
-  setup = async opts => {
+  setup = async (opts, log = true) => {
     if (!this.kh) {
       const options = { ...opts, seed: Date.now() }
       this.kh = new Kuhhandel(options)
-      this.saveState('setup', options)
       this.emit('setup')
+      if (log) {
+        this.saveState({ method: 'setup', payload: options })
+      }
     }
   }
 
@@ -32,13 +34,13 @@ class Game extends EventEmitter {
     return await localForage.getItem(KH)
   }
 
-  saveState = async (method, payload) => {
+  saveState = async (action) => {
     if (!this.kh) {
       throw new Error('Cannot save state if game has not been setup')
     }
     const log = await localForage.getItem(KH)
     const state = log ? log : []
-    state.push({ method, payload })
+    state.push(action)
     localForage.setItem(KH, state)
   }
 }
