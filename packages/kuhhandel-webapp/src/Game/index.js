@@ -19,9 +19,12 @@ class Game extends EventEmitter {
   }
 
   setup = async opts => {
-    this.kh = new Kuhhandel(opts)
-    this.saveState('setup', opts)
-    this.emit('setup')
+    if (!this.kh) {
+      const options = { ...opts, seed: Date.now() }
+      this.kh = new Kuhhandel(options)
+      this.saveState('setup', options)
+      this.emit('setup')
+    }
   }
 
   /* save & fetch from localstorage */
