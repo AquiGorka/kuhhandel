@@ -77,6 +77,16 @@ class Game extends EventEmitter {
     }
   }
 
+  buyBack = (money, log = true) => {
+    kh.buyBack(currentAuction, money)
+    currentDraw = null
+    currentAuction = null
+    if (log) {
+      saveState({ method: 'buyBack', payload: money })
+    }
+    this.emit('update')
+  }
+
 
   draw = (playerId, log = true) => {
     currentDraw = kh.draw()
@@ -87,15 +97,15 @@ class Game extends EventEmitter {
   }
 
   exchange = (money, log = true) => {
-    const accepted = kh.canThePlayerPay(currentAuction)
-    if (accepted) {
+    if (kh.canThePlayerPay(currentAuction)) {
       kh.exchange(currentAuction, money)
+      currentDraw = null
+      currentAuction = null
       if (log) {
         saveState({ method: 'exchange', payload: money })
       }
     }
     this.emit('update')
-    return accepted
   }
 
   get cannotPayPlayerMoney() {

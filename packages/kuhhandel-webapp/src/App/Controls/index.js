@@ -15,7 +15,7 @@ class AuctionOffer extends Component {
   }
 }
 
-class Exchange extends Component {
+class SelectMoney extends Component {
   render() {
     return <form ref={f => this.form = f} onSubmit={this.onSubmit}>
       {this.props.money.map((card, index) =>
@@ -23,7 +23,7 @@ class Exchange extends Component {
           {JSON.stringify(card)}<input name={index} type="checkbox" value={index} />
         </label>
       )}
-      <button type="submit">Exchange</button>
+      <button type="submit">{this.props.label}</button>
     </form>
   }
 
@@ -35,7 +35,7 @@ class Exchange extends Component {
       }
       return p
     }, [])
-    this.props.onExchange(money)
+    this.props.onSubmit(money)
     this.form.reset()
   }
 }
@@ -47,11 +47,13 @@ const Control = ({
   onAuctionOffer,
   onExchange,
   money,
+  onBuyBack,
 }) => [
   <button key="draw" onClick={onDraw}>Draw</button>,
   <button key="auctionStart" onClick={onAuctionStart}>Start auction</button>,
   <button key="auctionClose" onClick={onAuctionClose}>Close auction</button>,
-  <Exchange key="exchange" onExchange={onExchange} money={money} />,
+  <SelectMoney key="exchange" onSubmit={onExchange} money={money} label="Exchange" />,
+  <SelectMoney key="buyback" onSubmit={onBuyBack} money={money} label="Buy back" />,
   <AuctionOffer key="auctionOffer" onAuctionOffer={onAuctionOffer} />,
 ]
 
@@ -67,6 +69,7 @@ const Controls = ({ game }) =>
       }
       onExchange={game.exchange}
       money={player.money}
+      onBuyBack={game.buyBack}
     />
   )
 
