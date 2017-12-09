@@ -4,7 +4,7 @@ import localForage from 'localforage'
 
 const KH = 'Kuhhandel'
 let kh = null
-let currentDraw = null
+let draw = null
 let auction = null
 
 /* save & fetch from localstorage */
@@ -69,7 +69,7 @@ class Game extends EventEmitter {
 
   auctionStart = (playerId, log = true) => {
     const player = kh.players.find(p => p.id === playerId)
-    const opts = { player, animal: currentDraw }
+    const opts = { player, animal: draw }
     auction = kh.auction(opts)
     this.emit('update')
     if (log) {
@@ -79,7 +79,7 @@ class Game extends EventEmitter {
 
   buyBack = (money, log = true) => {
     kh.buyBack(auction, money)
-    currentDraw = null
+    draw = null
     auction = null
     if (log) {
       saveState({ method: 'buyBack', payload: money })
@@ -89,7 +89,7 @@ class Game extends EventEmitter {
 
 
   draw = (playerId, log = true) => {
-    currentDraw = kh.draw()
+    draw = kh.draw()
     this.emit('update')
     if (log) {
       saveState({ method: 'draw', payload: playerId })
@@ -99,7 +99,7 @@ class Game extends EventEmitter {
   exchange = (money, log = true) => {
     if (kh.canThePlayerPay(auction)) {
       kh.exchange(auction, money)
-      currentDraw = null
+      draw = null
       auction = null
       if (log) {
         saveState({ method: 'exchange', payload: money })
@@ -122,12 +122,12 @@ class Game extends EventEmitter {
     return kh.canThePlayerPay(auction)
   }
 
-  get auction() {
+  get currentAuction() {
     return auction
   }
 
   get currentDraw() {
-    return currentDraw
+    return draw
   }
 
   get highestBid() {
