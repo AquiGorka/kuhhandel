@@ -23,7 +23,8 @@ const saveState = async action => {
 class Game extends EventEmitter {
   constructor() {
     super()
-    this.lastDraw = null
+    this.currentDraw = null
+    this.currentAuction = null
     this.init()
   }
 
@@ -48,11 +49,25 @@ class Game extends EventEmitter {
   }
 
   /* this layer exists to persist actions, some methods are simple pass-by handlers */
-  draw = (playerIdObj, log = true) => {
-    this.lastDraw = kh.draw()
+  auction = (playerId, log = true) => {
+    const player = kh.players.find(p => p.id === playerId)
+    const opts = { player, animal: this.currentDraw }
+    this.currentAuction = kh.auction(opts)
+    this.emit('auction')
+    if (log) {
+      saveState({ method: 'auction', payload: playerId })
+    }
+  }
+
+  auctionOffer = (playerId, qty) => {
+    
+  }
+
+  draw = (playerId, log = true) => {
+    this.currentDraw = kh.draw()
     this.emit('draw')
     if (log) {
-      saveState({ method: 'draw', payload: playerIdObj })
+      saveState({ method: 'draw', payload: playerId })
     }
   }
 
