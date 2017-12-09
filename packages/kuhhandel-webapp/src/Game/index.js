@@ -23,6 +23,7 @@ const saveState = async action => {
 class Game extends EventEmitter {
   constructor() {
     super()
+    this.lastDraw = null
     this.init()
   }
 
@@ -37,6 +38,8 @@ class Game extends EventEmitter {
     if (!kh) {
       const options = { ...opts, seed: Date.now() }
       kh = new Kuhhandel(options)
+      kh.initialShuffle()
+      kh.initialDeal()
       this.emit('setup')
       if (log) {
         saveState({ method: 'setup', payload: options })

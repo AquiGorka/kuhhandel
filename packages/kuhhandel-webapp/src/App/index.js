@@ -11,10 +11,12 @@ class App extends Component {
 
   componentDidMount() {
     game.on('setup', this.onSetup)
+    game.on('draw', this.rerender)
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     game.off('setup', this.onSetup)
+    game.off('draw', this.rerender)
   }
 
   render() {
@@ -26,6 +28,10 @@ class App extends Component {
       <Board key="board" game={game} />,
       <Controls key="controls" game={game} />
     ]
+  }
+
+  rerender = () => {
+    this.setState({ time: Date.now() })
   }
 
   onSetup = () => {
