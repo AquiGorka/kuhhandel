@@ -5,7 +5,7 @@ import localForage from 'localforage'
 const KH = 'Kuhhandel'
 let kh = null
 let currentDraw = null
-let currentAuction = null
+let auction = null
 
 /* save & fetch from localstorage */
 const getState = async () => {
@@ -50,7 +50,7 @@ class Game extends EventEmitter {
 
   /* this layer exists to persist actions, some methods are simple pass-by handlers */
   auctionClose = (_, log = true) => {
-    currentAuction.close()
+    auction.close()
     this.emit('update')
     if (log) {
       saveState({ method: 'auctionClose', payload: null })
@@ -58,7 +58,7 @@ class Game extends EventEmitter {
   }
 
   auctionOffer = (offer, log = true) => {
-    const accepted = currentAuction.offer(offer)
+    const accepted = auction.offer(offer)
     if (accepted) {
       this.emit('update')
       if (log) {
@@ -70,7 +70,7 @@ class Game extends EventEmitter {
   auctionStart = (playerId, log = true) => {
     const player = kh.players.find(p => p.id === playerId)
     const opts = { player, animal: currentDraw }
-    currentAuction = kh.auction(opts)
+    auction = kh.auction(opts)
     this.emit('update')
     if (log) {
       saveState({ method: 'auctionStart', payload: playerId })
@@ -78,9 +78,9 @@ class Game extends EventEmitter {
   }
 
   buyBack = (money, log = true) => {
-    kh.buyBack(currentAuction, money)
+    kh.buyBack(auction, money)
     currentDraw = null
-    currentAuction = null
+    auction = null
     if (log) {
       saveState({ method: 'buyBack', payload: money })
     }
@@ -97,10 +97,10 @@ class Game extends EventEmitter {
   }
 
   exchange = (money, log = true) => {
-    if (kh.canThePlayerPay(currentAuction)) {
-      kh.exchange(currentAuction, money)
+    if (kh.canThePlayerPay(auction)) {
+      kh.exchange(auction, money)
       currentDraw = null
-      currentAuction = null
+      auction = null
       if (log) {
         saveState({ method: 'exchange', payload: money })
       }
@@ -110,20 +110,20 @@ class Game extends EventEmitter {
 
   get cannotPayPlayerMoney() {
     if (this.canThePlayerPay === false) {
-      return kh.players.find(p => p.id === currentAuction.highestBid().playerId).money
+      return kh.players.find(p => p.id === auction.highestBid().playerId).money
     }
     return null
   }
 
   get canThePlayerPay() {
-    if (!currentAuction || !currentAuction.closed) {
+    if (!auction || !auction.closed) {
       return null
     }
-    return kh.canThePlayerPay(currentAuction)
+    return kh.canThePlayerPay(auction)
   }
 
-  get currentAuction() {
-    return currentAuction
+  get auction() {
+    return auction
   }
 
   get currentDraw() {
@@ -131,7 +131,7 @@ class Game extends EventEmitter {
   }
 
   get highestBid() {
-    return currentAuction && currentAuction.highestBid()
+    return auction && auction.highestBid()
   }
 
   get players() {
