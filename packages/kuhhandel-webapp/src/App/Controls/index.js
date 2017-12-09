@@ -85,6 +85,7 @@ const Control = ({
   onBuyBack,
   onCowTradeStart,
   cowTradeOtherPlayersXAnimals,
+  onCowTradeRespond,
 }) => [
   <button key="draw" onClick={onDraw}>
     Draw
@@ -114,6 +115,12 @@ const Control = ({
     money={money}
     cowTradeOtherPlayersXAnimals={cowTradeOtherPlayersXAnimals}
   />,
+  <SelectMoney
+    key="cowTradeRespond"
+    onSubmit={onCowTradeRespond}
+    money={money}
+    label="Respond Cow Trade"
+  />,
 ]
 
 const Controls = ({ game }) =>
@@ -137,6 +144,7 @@ const Controls = ({ game }) =>
         .map(({ id, animals }) =>
           ({ id, animals: animals.filter(a => player.animals.includes(a)) })
         )}
+      onCowTradeRespond={game.cowTradeRespond}
     />
   ))
 

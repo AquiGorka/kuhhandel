@@ -88,6 +88,16 @@ class Game extends EventEmitter {
     }
   }
 
+  cowTradeRespond = (money, log = true) => {
+    cowTrade.challenged.response(money)
+    kh.settleCowTrade(cowTrade)
+    cowTrade = null
+    this.emit('update')
+    if (log) {
+      saveState({ method: 'cowTradeRespond', payload: money })
+    }
+  }
+
   cowTradeStart = (opts, log = true) => {
     const { money, animal, initiatorId, challengedId } = opts
     cowTrade = kh.cowTrade({
