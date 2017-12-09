@@ -183,7 +183,10 @@ class Kuhhandel {
     if (players > 5) {
       throw new Error('A maximum of 5 players is allowed')
     }
-    this.players = Array(players).fill(0).map((item, index) => new Player({ id: index }))
+    this.players = []
+    for (let i=0; i < players; i++) {
+      this.players.push(new Player({ id: i }))
+    }
     this.stack = []
   }
 
