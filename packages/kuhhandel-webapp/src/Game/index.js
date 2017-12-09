@@ -6,6 +6,7 @@ const KH = 'Kuhhandel'
 let kh = null
 let draw = null
 let auction = null
+let cowTrade = null
 
 /* save & fetch from localstorage */
 const getState = async () => {
@@ -81,12 +82,24 @@ class Game extends EventEmitter {
     kh.buyBack(auction, money)
     draw = null
     auction = null
+    this.emit('update')
     if (log) {
       saveState({ method: 'buyBack', payload: money })
     }
-    this.emit('update')
   }
 
+  cowTradeStart = (opts, log = true) => {
+    const { money, animal, initiatorId, challengedId } = opts
+    cowTrade = kh.cowTrade({
+      initiator: { money, player: kh.players.find(p => p.id === initiatorId) },
+      challenged: { player: kh.players.find(p => p.id === challengedId )},
+      animal
+    })
+    this.emit('update')
+    if (log) {
+      saveState({ method: 'cowTradeStart', payload: opts })
+    }
+  }
 
   draw = (playerId, log = true) => {
     draw = kh.draw()
@@ -124,6 +137,10 @@ class Game extends EventEmitter {
 
   get currentAuction() {
     return auction
+  }
+
+  get currentCowTrade() {
+    return cowTrade
   }
 
   get currentDraw() {

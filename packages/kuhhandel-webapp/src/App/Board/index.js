@@ -11,6 +11,7 @@ const Board = ({ game }) => [
   <div key="canPay">Current auction can the player pay: {JSON.stringify(game.canThePlayerPay)}</div>,
   <div key="canPayFalse">Player money: {JSON.stringify(game.cannotPayPlayerMoney)}</div>,
   <Animals key="animals" players={game.players} />,
+  <div key="cowTrade">Current cow trade: {JSON.stringify(game.currentCowTrade)}</div>
 ]
 
 export default Board
