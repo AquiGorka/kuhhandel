@@ -87,8 +87,9 @@ class Game extends EventEmitter {
   }
 
   exchange = (money, log = true) => {
-    const accepted = kh.exchange(currentAuction, money)
+    const accepted = kh.canThePlayerPay(currentAuction)
     if (accepted) {
+      kh.exchange(currentAuction, money)
       if (log) {
         saveState({ method: 'exchange', payload: money })
       }
