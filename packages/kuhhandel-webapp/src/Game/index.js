@@ -59,8 +59,14 @@ class Game extends EventEmitter {
     }
   }
 
-  auctionOffer = (playerId, qty) => {
-    
+  auctionOffer = (offer, log = true) => {
+    const accepted = this.currentAuction.offer(offer)
+    if (accepted) {
+      this.emit('auctionOffer')
+      if (log) {
+        saveState({ method: 'auctionOffer', payload: offer })
+      }
+    }
   }
 
   draw = (playerId, log = true) => {
