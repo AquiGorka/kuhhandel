@@ -4,6 +4,8 @@ import localForage from 'localforage'
 
 const KH = 'Kuhhandel'
 let kh = null
+let currentDraw = null
+let currentAuction = null
 
 /* save & fetch from localstorage */
 const getState = async () => {
@@ -23,8 +25,6 @@ const saveState = async action => {
 class Game extends EventEmitter {
   constructor() {
     super()
-    this.currentDraw = null
-    this.currentAuction = null
     this.init()
   }
 
@@ -49,20 +49,28 @@ class Game extends EventEmitter {
   }
 
   /* this layer exists to persist actions, some methods are simple pass-by handlers */
-  auction = (playerId, log = true) => {
+  auctionStart = (playerId, log = true) => {
     const player = kh.players.find(p => p.id === playerId)
-    const opts = { player, animal: this.currentDraw }
-    this.currentAuction = kh.auction(opts)
-    this.emit('auction')
+    const opts = { player, animal: currentDraw }
+    currentAuction = kh.auction(opts)
+    this.emit('update')
     if (log) {
-      saveState({ method: 'auction', payload: playerId })
+      saveState({ method: 'auctionStart', payload: playerId })
+    }
+  }
+
+  auctionClose = (_, log = true) => {
+    currentAuction.close()
+    this.emit('update')
+    if (log) {
+      saveState({ method: 'auctionClose', payload: null })
     }
   }
 
   auctionOffer = (offer, log = true) => {
-    const accepted = this.currentAuction.offer(offer)
+    const accepted = currentAuction.offer(offer)
     if (accepted) {
-      this.emit('auctionOffer')
+      this.emit('update')
       if (log) {
         saveState({ method: 'auctionOffer', payload: offer })
       }
@@ -70,8 +78,8 @@ class Game extends EventEmitter {
   }
 
   draw = (playerId, log = true) => {
-    this.currentDraw = kh.draw()
-    this.emit('draw')
+    currentDraw = kh.draw()
+    this.emit('update')
     if (log) {
       saveState({ method: 'draw', payload: playerId })
     }
@@ -83,6 +91,14 @@ class Game extends EventEmitter {
 
   get stack() {
     return kh.stack
+  }
+
+  get currentAuction() {
+    return currentAuction
+  }
+
+  get currentDraw() {
+    return currentDraw
   }
 
 }

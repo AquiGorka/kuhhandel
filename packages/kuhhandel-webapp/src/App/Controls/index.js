@@ -13,9 +13,10 @@ class AuctionOffer extends Component {
   }
 }
 
-const Control = ({ onDraw, onAuction, onAuctionOffer }) => [
+const Control = ({ onDraw, onAuctionStart, onAuctionClose, onAuctionOffer }) => [
   <button key="draw" onClick={onDraw}>Draw</button>,
-  <button key="auction" onClick={onAuction}>Start auction</button>,
+  <button key="auctionStart" onClick={onAuctionStart}>Start auction</button>,
+  <button key="auctionClose" onClick={onAuctionClose}>Close auction</button>,
   <AuctionOffer key="auctionOffer" onAuctionOffer={onAuctionOffer} />
 ]
 
@@ -24,7 +25,8 @@ const Controls = ({ game }) =>
     <Control
       key={player.id}
       onDraw={() => game.draw(player.id)}
-      onAuction={() => game.auction(player.id)}
+      onAuctionStart={() => game.auctionStart(player.id)}
+      onAuctionClose={game.auctionClose}
       onAuctionOffer={value => game.auctionOffer({ playerId: player.id, value })}
     />
   ))

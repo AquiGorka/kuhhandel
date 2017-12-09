@@ -11,16 +11,12 @@ class App extends Component {
 
   componentDidMount() {
     game.on('setup', this.onSetup)
-    game.on('draw', this.rerender)
-    game.on('auction', this.rerender)
-    game.on('auctionOffer', this.rerender)
+    game.on('update', this.rerender)
   }
 
   componentWillUnmount() {
     game.off('setup', this.onSetup)
-    game.off('draw', this.rerender)
-    game.off('auction', this.rerender)
-    game.off('auctionOffer', this.rerender)
+    game.off('update', this.rerender)
   }
 
   render() {
