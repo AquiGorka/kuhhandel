@@ -49,16 +49,6 @@ class Game extends EventEmitter {
   }
 
   /* this layer exists to persist actions, some methods are simple pass-by handlers */
-  auctionStart = (playerId, log = true) => {
-    const player = kh.players.find(p => p.id === playerId)
-    const opts = { player, animal: currentDraw }
-    currentAuction = kh.auction(opts)
-    this.emit('update')
-    if (log) {
-      saveState({ method: 'auctionStart', payload: playerId })
-    }
-  }
-
   auctionClose = (_, log = true) => {
     currentAuction.close()
     this.emit('update')
@@ -77,6 +67,17 @@ class Game extends EventEmitter {
     }
   }
 
+  auctionStart = (playerId, log = true) => {
+    const player = kh.players.find(p => p.id === playerId)
+    const opts = { player, animal: currentDraw }
+    currentAuction = kh.auction(opts)
+    this.emit('update')
+    if (log) {
+      saveState({ method: 'auctionStart', payload: playerId })
+    }
+  }
+
+
   draw = (playerId, log = true) => {
     currentDraw = kh.draw()
     this.emit('update')
@@ -85,12 +86,29 @@ class Game extends EventEmitter {
     }
   }
 
-  get players() {
-    return kh.players
+  exchange = (money, log = true) => {
+    const accepted = kh.exchange(currentAuction, money)
+    if (accepted) {
+      if (log) {
+        saveState({ method: 'exchange', payload: money })
+      }
+    }
+    this.emit('update')
+    return accepted
   }
 
-  get stack() {
-    return kh.stack
+  get cannotPayPlayerMoney() {
+    if (this.canThePlayerPay === false) {
+      return kh.players.find(p => p.id === currentAuction.highestBid().playerId).money
+    }
+    return null
+  }
+
+  get canThePlayerPay() {
+    if (!currentAuction || !currentAuction.closed) {
+      return null
+    }
+    return kh.canThePlayerPay(currentAuction)
   }
 
   get currentAuction() {
@@ -99,6 +117,18 @@ class Game extends EventEmitter {
 
   get currentDraw() {
     return currentDraw
+  }
+
+  get highestBid() {
+    return currentAuction && currentAuction.highestBid()
+  }
+
+  get players() {
+    return kh.players
+  }
+
+  get stack() {
+    return kh.stack
   }
 
 }
