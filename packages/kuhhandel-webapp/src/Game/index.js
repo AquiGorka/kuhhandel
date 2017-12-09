@@ -4,6 +4,21 @@ import localForage from 'localforage'
 
 const KH = 'Kuhhandel'
 
+/* save & fetch from localstorage */
+const getState = async () => {
+  return await localForage.getItem(KH)
+}
+
+const saveState = async (action) => {
+  if (!this.kh) {
+    throw new Error('Cannot save state if game has not been setup')
+  }
+  const log = await localForage.getItem(KH)
+  const state = log ? log : []
+  state.push(action)
+  localForage.setItem(KH, state)
+}
+
 class Game extends EventEmitter {
   constructor() {
     super()
@@ -12,7 +27,7 @@ class Game extends EventEmitter {
   }
 
   init = async () => {
-    const log = await this.getState()
+    const log = await getState()
     if (log && log.length) {
       log.forEach(action => this[action.method](action.payload, false))
     }
@@ -24,25 +39,20 @@ class Game extends EventEmitter {
       this.kh = new Kuhhandel(options)
       this.emit('setup')
       if (log) {
-        this.saveState({ method: 'setup', payload: options })
+        saveState({ method: 'setup', payload: options })
       }
     }
   }
 
-  /* save & fetch from localstorage */
-  getState = async () => {
-    return await localForage.getItem(KH)
+  /* this layer exists to persist actions, some methods are simple pass-by handlers */
+  draw() {
+    return this.kh.draw()
   }
 
-  saveState = async (action) => {
-    if (!this.kh) {
-      throw new Error('Cannot save state if game has not been setup')
-    }
-    const log = await localForage.getItem(KH)
-    const state = log ? log : []
-    state.push(action)
-    localForage.setItem(KH, state)
+  get players() {
+    return this.kh.players
   }
+
 }
 
 export default new Game()
