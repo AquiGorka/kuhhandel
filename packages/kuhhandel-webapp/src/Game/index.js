@@ -3,14 +3,15 @@ import { EventEmitter } from 'events'
 import localForage from 'localforage'
 
 const KH = 'Kuhhandel'
+let kh = null
 
 /* save & fetch from localstorage */
 const getState = async () => {
   return await localForage.getItem(KH)
 }
 
-const saveState = async (action) => {
-  if (!this.kh) {
+const saveState = async action => {
+  if (!kh) {
     throw new Error('Cannot save state if game has not been setup')
   }
   const log = await localForage.getItem(KH)
@@ -22,7 +23,6 @@ const saveState = async (action) => {
 class Game extends EventEmitter {
   constructor() {
     super()
-    this.kh = null
     this.init()
   }
 
@@ -34,9 +34,9 @@ class Game extends EventEmitter {
   }
 
   setup = async (opts, log = true) => {
-    if (!this.kh) {
+    if (!kh) {
       const options = { ...opts, seed: Date.now() }
-      this.kh = new Kuhhandel(options)
+      kh = new Kuhhandel(options)
       this.emit('setup')
       if (log) {
         saveState({ method: 'setup', payload: options })
@@ -46,11 +46,16 @@ class Game extends EventEmitter {
 
   /* this layer exists to persist actions, some methods are simple pass-by handlers */
   draw() {
-    return this.kh.draw()
+    this.lastDraw = kh.draw()
+    this.emit('draw')
   }
 
   get players() {
-    return this.kh.players
+    return kh.players
+  }
+
+  get stack() {
+    return kh.stack
   }
 
 }

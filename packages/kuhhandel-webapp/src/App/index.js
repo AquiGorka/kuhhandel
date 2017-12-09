@@ -7,17 +7,19 @@ import './App.css'
 
 class App extends Component {
 
+  state = { setupDone: false }
+
   componentDidMount() {
-    game.on('setup', this.rerender)
+    game.on('setup', this.onSetup)
   }
 
   componentWillUnmount(){
-    game.off('setup', this.rerender)
+    game.off('setup', this.onSetup)
   }
 
   render() {
-    if (!game.kh) {
-      return <Setup onSetup={this.setup} />
+    if (!this.state.setupDone) {
+      return <Setup onSetup={game.setup} />
     }
 
     return [
@@ -26,12 +28,8 @@ class App extends Component {
     ]
   }
 
-  rerender = () => {
-    this.setState({ time: Date.now() })
-  }
-
-  setup = opts => {
-    game.setup(opts)
+  onSetup = () => {
+    this.setState({ setupDone: true })
   }
 }
 

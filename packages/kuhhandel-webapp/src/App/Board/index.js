@@ -1,5 +1,7 @@
 import React from 'react'
 
-const Board = props => <div>Board</div>
+const Board = ({ game }) => [
+  <div key="stack">Stack: {game.stack.length}</div>
+]
 
 export default Board
