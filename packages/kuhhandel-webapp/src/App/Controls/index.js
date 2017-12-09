@@ -7,6 +7,8 @@ const Control = ({ onDraw }) => [
 ]
 
 const Controls = ({ game }) =>
-  game.players.map(player => <Control key={player.id} onDraw={game.draw} />)
+  game.players.map(player => (
+    <Control key={player.id} onDraw={() => game.draw({ playerId: player.id })} />
+  ))
 
 export default Controls

@@ -48,9 +48,12 @@ class Game extends EventEmitter {
   }
 
   /* this layer exists to persist actions, some methods are simple pass-by handlers */
-  draw() {
+  draw = (playerIdObj, log = true) => {
     this.lastDraw = kh.draw()
     this.emit('draw')
+    if (log) {
+      saveState({ method: 'draw', payload: playerIdObj })
+    }
   }
 
   get players() {
