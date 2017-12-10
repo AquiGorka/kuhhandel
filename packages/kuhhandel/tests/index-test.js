@@ -94,21 +94,21 @@ describe('Kuhhandel', () => {
 
   it('should shuffle the deck in the same way using the same seed', () => {
     const seed = Math.random()
-    const { kh: k1 } = randomKuhhandel()
-    const { kh: k2 } = randomKuhhandel()
-    k1.initialShuffle(seed)
-    k2.initialShuffle(seed)
-    expect(k1.stack).toEqual(k2.stack)
+    const kh1 = new Kuhhandel({ seed })
+    const kh2 = new Kuhhandel({ seed })
+    kh1.initialShuffle()
+    kh2.initialShuffle()
+    expect(kh1.stack).toEqual(kh2.stack)
   })
 
   it('should shuffle the decks differently using different seeds', () => {
     const seed1 = Math.random()
     const seed2 = Date.now()
-    const { kh: k1 } = randomKuhhandel()
-    const { kh: k2 } = randomKuhhandel()
-    k1.initialShuffle(seed1)
-    k2.initialShuffle(seed2)
-    expect(k1.stack).toNotEqual(k2.stack)
+    const kh1 = new Kuhhandel({ seed: seed1 })
+    const kh2 = new Kuhhandel({ seed: seed2 })
+    kh1.initialShuffle()
+    kh2.initialShuffle()
+    expect(kh1.stack).toNotEqual(kh2.stack)
   })
 
   it('should draw one card from the stack', () => {

@@ -176,13 +176,14 @@ class CowTrade {
 
 
 class Kuhhandel {
-  constructor({ players = 2 } = {}) {
+  constructor({ players = 2, seed = Math.random() } = {}) {
     if (players < 2) {
       throw new Error('A minimum of 2 players is required')
     }
     if (players > 5) {
       throw new Error('A maximum of 5 players is allowed')
     }
+    this.seed = seed
     this.players = []
     for (let i=0; i < players; i++) {
       this.players.push(new Player({ id: i }))
@@ -257,8 +258,8 @@ class Kuhhandel {
     })
   }
 
-  initialShuffle(seed = Math.random) {
-    const rng = new RNG.MT(seed)
+  initialShuffle() {
+    const rng = new RNG.MT(this.seed)
     this.stack = shuffle(DECK, { copy: true, rng: rng.random.bind(rng) })
   }
 
