@@ -245,6 +245,9 @@ class Kuhhandel {
   }
 
   exchange(auction, money) {
+    if (!auction.closed) {
+      throw new Error('Cannot exchange if the auction is not closed')
+    }
     const { playerId, value } = auction.highestBid()
     const player = this.players.find(p => p.id === playerId)
     player.letGoMoney(money)
