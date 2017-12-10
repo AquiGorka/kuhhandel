@@ -51,7 +51,7 @@ class Game extends EventEmitter {
 
   /* this layer exists to persist actions, some methods are simple pass-by handlers */
   auctionClose = (_, log = true) => {
-    auction.close()
+    kh.auctionClose(auction)
     this.emit('update')
     if (log) {
       saveState({ method: 'auctionClose', payload: null })
