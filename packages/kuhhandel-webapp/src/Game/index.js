@@ -38,7 +38,7 @@ class Game extends EventEmitter {
 
   setup = async (opts, log = true) => {
     if (!kh) {
-      const options = { ...opts, seed: Date.now() }
+      const options = { seed: Date.now(), ...opts }
       kh = new Kuhhandel(options)
       kh.initialShuffle()
       kh.initialDeal()
