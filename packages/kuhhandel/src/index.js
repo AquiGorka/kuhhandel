@@ -47,7 +47,7 @@ const reduceArray = (fullArray, itemsToRemove, compareFn) => {
 
 class Player {
   constructor({ id }) {
-    this.id = id
+    this.id = `${id}`
     this.money = []
     this.animals = []
   }
@@ -88,12 +88,12 @@ class Player {
 }
 
 class Auction {
-  constructor({ player, animal } = {}) {
-    if (!player || !animal) {
+  constructor({ playerId, animal } = {}) {
+    if (!playerId || !animal) {
       throw new Error('Provide a player id and an animal to start an auction')
     }
     this.animal = animal
-    this.auctioneer = player
+    this.auctioneerId = playerId
     this.closed = false
     this.offers = []
   }
@@ -110,7 +110,7 @@ class Auction {
     if (this.closed) {
       throw new Error('Auction has been closed and cannot accept more offers')
     }
-    if (this.auctioneer.id === o.playerId) {
+    if (this.auctioneerId === o.playerId) {
       throw new Error('The auctioneer can not place an offer')
     }
     if (o.value === 0) {
@@ -125,11 +125,11 @@ class Auction {
 }
 
 class Initiator {
-  constructor({ player, money }) {
-    if (!player || !money.length) {
-      throw new Error('Provide an initiator player and money to start a Cow Trade')
+  constructor({ playerId, money }) {
+    if (!playerId || !money.length) {
+      throw new Error('Provide an initiator player id and money to start a Cow Trade')
     }
-    this.player = player
+    this.playerId = playerId
     this.money = money
   }
 
@@ -143,11 +143,11 @@ class Initiator {
 }
 
 class Challenged {
-  constructor({ player }) {
-    if (!player) {
-      throw new Error('Provide a challenged player to start a Cow Trade')
+  constructor({ playerId }) {
+    if (!playerId) {
+      throw new Error('Provide a challenged player id to start a Cow Trade')
     }
-    this.player = player
+    this.playerId = playerId
   }
 
   response(money) {
@@ -198,7 +198,9 @@ class Kuhhandel {
   auctionClose(auction) {
     auction.close()
     if (!auction.offers.length) {
-      auction.auctioneer.receiveAnimals(auction.animal)
+      this.players
+        .find(p => p.id === auction.auctioneerId)
+        .receiveAnimals(auction.animal)
     }
   }
 
@@ -211,9 +213,10 @@ class Kuhhandel {
     }
     const { playerId, value } = auction.highestBid()
     const player = this.players.find(p => p.id === playerId)
-    auction.auctioneer.letGoMoney(money)
+    const auctioneer = this.players.find(p => p.id === auction.auctioneerId)
+    auctioneer.letGoMoney(money)
     player.receiveMoney(money)
-    auction.auctioneer.receiveAnimals(auction.animal)
+    auctioneer.receiveAnimals(auction.animal)
   }
 
   canThePlayerPay(auction) {
@@ -266,8 +269,9 @@ class Kuhhandel {
     }
     const { playerId, value } = auction.highestBid()
     const player = this.players.find(p => p.id === playerId)
+    const auctioneer = this.players.find(p => p.id === auction.auctioneerId)
     player.letGoMoney(money)
-    auction.auctioneer.receiveMoney(money)
+    auctioneer.receiveMoney(money)
     player.receiveAnimals(auction.animal)
   }
 
@@ -287,21 +291,25 @@ class Kuhhandel {
     if (initiator.total() === challenged.total()) {
       return false
     }
-    const winner = (initiator.total() > challenged.total()) ? initiator : challenged
-    const loser  = (initiator.total() < challenged.total()) ? initiator : challenged
+    const winnerId = (initiator.total() > challenged.total()) ? initiator.playerId : challenged.playerId
+    const loserId  = (initiator.total() < challenged.total()) ? initiator.playerId : challenged.playerId
+    const winner = this.players.find(p => p.id === winnerId)
+    const loser = this.players.find(p => p.id === loserId)
     // the winner gets the animal card(s)
-    const winnerNumberOfAnimal = winner.player.animals.filter(a => a.animal === cowTrade.animal.animal).length
-    const loserNumberOfAnimal = loser.player.animals.filter(a => a.animal === cowTrade.animal.animal).length
+    const winnerNumberOfAnimal = winner.animals.filter(a => a.animal === cowTrade.animal.animal).length
+    const loserNumberOfAnimal = loser.animals.filter(a => a.animal === cowTrade.animal.animal).length
     const numberOfAnimalsToReceive = (winnerNumberOfAnimal === 2 && loserNumberOfAnimal === 2) ? 2 : 1
     for (let i = 0; i < numberOfAnimalsToReceive; i++) {
-      winner.player.receiveAnimals([cowTrade.animal])
-      loser.player.letGoAnimals([cowTrade.animal])
+      winner.receiveAnimals([cowTrade.animal])
+      loser.letGoAnimals([cowTrade.animal])
     }
+    const initiatorPlayer = this.players.find(p => p.id === initiator.playerId)
+    const challengedPlayer = this.players.find(p => p.id === challenged.playerId)
     // exchange money cards
-    initiator.player.letGoMoney(initiator.money)
-    initiator.player.receiveMoney(challenged.money)
-    challenged.player.letGoMoney(challenged.money)
-    challenged.player.receiveMoney(initiator.money)
+    initiatorPlayer.letGoMoney(initiator.money)
+    initiatorPlayer.receiveMoney(challenged.money)
+    challengedPlayer.letGoMoney(challenged.money)
+    challengedPlayer.receiveMoney(initiator.money)
     // success
     return true
   }
