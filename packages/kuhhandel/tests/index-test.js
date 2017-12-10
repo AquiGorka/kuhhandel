@@ -295,6 +295,21 @@ describe('Kuhhandel closed auction exchange', () => {
     expect(() => kh.exchange(auction, [])).toThrow()
   })
 
+  it('should throw if exchange is not given equal or more money for the highest offer', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    const animal = kh.draw()
+    const auctioneer = kh.players[0]
+    const auction = kh.auction({ player: auctioneer, animal })
+    const player = kh.players[1]
+    const offeredValue = 10
+    const offer0 = { playerId: player.id, value: offeredValue }
+    auction.offer(offer0)
+    auction.close()
+    const accepted = kh.canThePlayerPay(auction)
+    expect(accepted).toBe(true)
+    expect(() => kh.exchange(auction, [{ value: 0 }])).toThrow()
+  })
+
   it('should execute the exchange successfully', () => {
     const { kh } = randomInitiatedKuhhandel()
     const animal = kh.draw()
