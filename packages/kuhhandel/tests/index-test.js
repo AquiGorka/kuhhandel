@@ -316,7 +316,19 @@ describe('Kuhhandel closed auction exchange', () => {
     expect(kh.players[1].animals).toEqual([animal])
   })
 
-  it('should execute the byBack successfully', () => {
+  it('should throw if trying to buyback and the auction is not closed', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    const animal = kh.draw()
+    const auctioneer = kh.players[0]
+    const auction = kh.auction({ player: auctioneer, animal })
+    const player = kh.players[1]
+    const offeredValue = 10
+    const offer0 = { playerId: player.id, value: offeredValue }
+    auction.offer(offer0)
+    expect(() => kh.buyBack(auction, [])).toThrow()
+  })
+
+  it('should execute the buyBack successfully', () => {
     const { kh } = randomInitiatedKuhhandel()
     const animal = kh.draw()
     const auctioneer = kh.players[0]

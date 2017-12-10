@@ -196,6 +196,9 @@ class Kuhhandel {
   }
 
   buyBack(auction, money) {
+    if (!auction.closed) {
+      throw new Error('Cannot buyback if the auction is not closed')
+    }
     const { playerId, value } = auction.highestBid()
     const player = this.players.find(p => p.id === playerId)
     auction.auctioneer.letGoMoney(money)
