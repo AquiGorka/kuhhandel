@@ -195,6 +195,13 @@ class Kuhhandel {
     return new Auction(opts)
   }
 
+  auctionClose(auction) {
+    auction.close()
+    if (!auction.offers.length) {
+      auction.auctioneer.receiveAnimals(auction.animal)
+    }
+  }
+
   buyBack(auction, money) {
     if (!auction.closed) {
       throw new Error('Cannot buyback if the auction is not closed')

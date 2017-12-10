@@ -255,7 +255,7 @@ describe('Kuhhandel auction', () => {
     const offer2 = { playerId: 3, value: 30 }
     auction.offer(offer0)
     auction.offer(offer1)
-    auction.close()
+    kh.auctionClose(auction)
     expect(() => auction.offer(offer2)).toThrow()
   })
 })
@@ -268,7 +268,7 @@ describe('Kuhhandel closed auction exchange', () => {
     const auction = kh.auction({ player, animal })
     const offer0 = { playerId: kh.players[1].id, value: 10 }
     auction.offer(offer0)
-    auction.close()
+    kh.auctionClose(auction)
     const accepted = kh.canThePlayerPay(auction)
     expect(accepted).toBe(true)
   })
@@ -280,7 +280,7 @@ describe('Kuhhandel closed auction exchange', () => {
     const auction = kh.auction({ player, animal })
     const offer0 = { playerId: kh.players[1].id, value: Infinity }
     auction.offer(offer0)
-    auction.close()
+    kh.auctionClose(auction)
     const accepted = kh.canThePlayerPay(auction)
     expect(accepted).toBe(false)
   })
@@ -304,7 +304,7 @@ describe('Kuhhandel closed auction exchange', () => {
     const offeredValue = 10
     const offer0 = { playerId: player.id, value: offeredValue }
     auction.offer(offer0)
-    auction.close()
+    kh.auctionClose(auction)
     const accepted = kh.canThePlayerPay(auction)
     expect(accepted).toBe(true)
     expect(() => kh.exchange(auction, [{ value: 0 }])).toThrow()
@@ -319,7 +319,7 @@ describe('Kuhhandel closed auction exchange', () => {
     const offeredValue = 10
     const offer0 = { playerId: player.id, value: offeredValue }
     auction.offer(offer0)
-    auction.close()
+    kh.auctionClose(auction)
     const accepted = kh.canThePlayerPay(auction)
     // the draw might be a donkey and players receive extra money if that happens
     const auctioneerOriginalMoneyTotal = auctioneer.money.reduce(totalValue, 0)
@@ -329,6 +329,18 @@ describe('Kuhhandel closed auction exchange', () => {
     expect(kh.players[0].total()).toBe(auctioneerOriginalMoneyTotal + offeredValue)
     expect(kh.players[1].total()).toBe(playerOriginalMoneyTotal - offeredValue)
     expect(kh.players[1].animals).toEqual([animal])
+  })
+
+  it('should give the animal card directly to the auctioneer if there where no offers when the auction closes', () => {
+    const { kh } = randomInitiatedKuhhandel()
+    const animal = kh.draw()
+    const auctioneer = kh.players[0]
+    const auction = kh.auction({ player: auctioneer, animal })
+    kh.auctionClose(auction)
+    // the draw might be a donkey and players receive extra money if that happens
+    const auctioneerOriginalMoneyTotal = auctioneer.money.reduce(totalValue, 0)
+    expect(kh.players[0].total()).toBe(auctioneerOriginalMoneyTotal)
+    expect(kh.players[0].animals).toEqual([animal])
   })
 
   it('should throw if trying to buyback and the auction is not closed', () => {
@@ -342,7 +354,7 @@ describe('Kuhhandel closed auction exchange', () => {
     auction.offer(offer0)
     expect(() => kh.buyBack(auction, [])).toThrow()
   })
-  
+
   it('should throw if buyback is not given equal or more money for the highest offer', () => {
     const { kh } = randomInitiatedKuhhandel()
     const animal = kh.draw()
@@ -352,7 +364,7 @@ describe('Kuhhandel closed auction exchange', () => {
     const offeredValue = 10
     const offer0 = { playerId: player.id, value: offeredValue }
     auction.offer(offer0)
-    auction.close()
+    kh.auctionClose(auction)
     expect(() => kh.buyBack(auction, [{ value: 0 }])).toThrow()
   })
 
@@ -365,7 +377,7 @@ describe('Kuhhandel closed auction exchange', () => {
     const offeredValue = 10
     const offer0 = { playerId: player.id, value: offeredValue }
     auction.offer(offer0)
-    auction.close()
+    kh.auctionClose(auction)
     // the draw might be a donkey and players receive extra money if that happens
     const auctioneerOriginalMoneyTotal = auctioneer.money.reduce(totalValue, 0)
     const playerOriginalMoneyTotal = player.money.reduce(totalValue, 0)
