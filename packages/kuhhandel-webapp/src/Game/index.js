@@ -69,8 +69,7 @@ class Game extends EventEmitter {
   }
 
   auctionStart = (playerId, log = true) => {
-    const player = kh.players.find(p => p.id === playerId)
-    const opts = { player, animal: draw }
+    const opts = { playerId, animal: draw }
     auction = kh.auction(opts)
     this.emit('update')
     if (log) {
