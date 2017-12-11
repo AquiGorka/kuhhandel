@@ -76,6 +76,7 @@ class SelectMoney extends Component {
 }
 
 const Control = ({
+  id,
   onDraw,
   onAuctionStart,
   onAuctionClose,
@@ -87,6 +88,7 @@ const Control = ({
   cowTradeOtherPlayersXAnimals,
   onCowTradeRespond,
 }) => [
+  <div key={id}>{`Player Id: ${id}`}</div>,
   <button key="draw" onClick={onDraw}>
     Draw
   </button>,
@@ -127,6 +129,7 @@ const Controls = ({ game }) =>
   game.players.map(player => [
     <Control key={`control-${player.id}`}
       key={player.id}
+      id={player.id}
       onDraw={() => game.draw(player.id)}
       onAuctionStart={() => game.auctionStart(player.id)}
       onAuctionClose={game.auctionClose}
