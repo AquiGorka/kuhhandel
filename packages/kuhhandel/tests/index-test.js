@@ -402,7 +402,7 @@ describe('Kuhhandel cow trade', () => {
     const challenged = { playerId: kh.players[1].id }
     kh.players[1].receiveAnimals(animal)
     const cowTrade = kh.cowTrade({ initiator, challenged, animal })
-    cowTrade.challenged.response([{ value: 0 }])
+    cowTrade.respond([{ value: 0 }])
     // the draw might be a donkey and players receive extra money if that happens
     const initiatorOriginalMoneyTotal = kh.players[0].money.reduce(totalValue, 0)
     const challengedOriginalMoneyTotal = kh.players[1].money.reduce(totalValue, 0)
@@ -423,7 +423,7 @@ describe('Kuhhandel cow trade', () => {
     kh.players[1].receiveAnimals(animal)
     kh.players[1].receiveAnimals(animal)
     const cowTrade = kh.cowTrade({ initiator, challenged, animal })
-    cowTrade.challenged.response([{ value: 0 }])
+    cowTrade.respond([{ value: 0 }])
     // the draw might be a donkey and players receive extra money if that happens
     const initiatorOriginalMoneyTotal = kh.players[0].money.reduce(totalValue, 0)
     const challengedOriginalMoneyTotal = kh.players[1].money.reduce(totalValue, 0)
@@ -444,7 +444,7 @@ describe('Kuhhandel cow trade', () => {
     const challenged = { playerId: kh.players[1].id }
     kh.players[1].receiveAnimals(animal)
     const cowTrade = kh.cowTrade({ initiator, challenged, animal })
-    cowTrade.challenged.response([{ value: 0 }])
+    cowTrade.respond([{ value: 0 }])
     // the draw might be a donkey and players receive extra money if that happens
     const initiatorOriginalMoneyTotal = kh.players[0].money.reduce(totalValue, 0)
     const challengedOriginalMoneyTotal = kh.players[1].money.reduce(totalValue, 0)
@@ -466,7 +466,7 @@ describe('Kuhhandel cow trade', () => {
     kh.players[1].receiveAnimals(animal)
     kh.players[1].receiveAnimals(animal)
     const cowTrade = kh.cowTrade({ initiator, challenged, animal })
-    cowTrade.challenged.response([{ value: 0 }])
+    cowTrade.respond([{ value: 0 }])
     // the draw might be a donkey and players receive extra money if that happens
     const initiatorOriginalMoneyTotal = kh.players[0].money.reduce(totalValue, 0)
     const challengedOriginalMoneyTotal = kh.players[1].money.reduce(totalValue, 0)

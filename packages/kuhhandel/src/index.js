@@ -150,10 +150,6 @@ class Challenged {
     this.playerId = playerId
   }
 
-  response(money) {
-    this.money = money
-  }
-
   total() {
     return this.money.reduce(totalValue, 0)
   }
@@ -171,6 +167,10 @@ class CowTrade {
     this.initiator = new Initiator(initiator)
     this.challenged = new Challenged(challenged)
     this.animal = animal
+  }
+
+  respond(money) {
+    this.challenged.money = money
   }
 }
 
