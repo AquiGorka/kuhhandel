@@ -88,7 +88,7 @@ class Game extends EventEmitter {
   }
 
   cowTradeRespond = (money, log = true) => {
-    cowTrade.challenged.response(money)
+    cowTrade.respond(money)
     kh.settleCowTrade(cowTrade)
     cowTrade = null
     this.emit('update')
