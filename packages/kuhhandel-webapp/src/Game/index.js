@@ -138,7 +138,7 @@ class Game extends EventEmitter {
   }
 
   get canThePlayerPay() {
-    if (!auction || !auction.closed) {
+    if (!auction || !auction.closed || !auction.offers.length) {
       return null
     }
     return kh.canThePlayerPay(auction)
