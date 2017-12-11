@@ -100,8 +100,8 @@ class Game extends EventEmitter {
   cowTradeStart = (opts, log = true) => {
     const { money, animal, initiatorId, challengedId } = opts
     cowTrade = kh.cowTrade({
-      initiator: { money, player: kh.players.find(p => p.id === initiatorId) },
-      challenged: { player: kh.players.find(p => p.id === challengedId )},
+      initiator: { money, playerId: initiatorId },
+      challenged: { playerId: challengedId },
       animal
     })
     this.emit('update')
