@@ -145,7 +145,7 @@ const Controls = ({ game }) =>
       cowTradeOtherPlayersXAnimals={game.players
         .filter(p => p.id !== player.id)
         .map(({ id, animals }) =>
-          ({ id, animals: animals.filter(a => player.animals.includes(a)) })
+          ({ id, animals: Array.from(new Set(animals)).filter(a => player.animals.includes(a)) })
         )}
       onCowTradeRespond={game.cowTradeRespond}
     />,
