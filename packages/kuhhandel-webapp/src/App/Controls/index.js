@@ -124,8 +124,8 @@ const Control = ({
 ]
 
 const Controls = ({ game }) =>
-  game.players.map(player => (
-    <Control
+  game.players.map(player => [
+    <Control key={`control-${player.id}`}
       key={player.id}
       onDraw={() => game.draw(player.id)}
       onAuctionStart={() => game.auctionStart(player.id)}
@@ -145,7 +145,8 @@ const Controls = ({ game }) =>
           ({ id, animals: animals.filter(a => player.animals.includes(a)) })
         )}
       onCowTradeRespond={game.cowTradeRespond}
-    />
-  ))
+    />,
+    <hr key="separator" />,
+  ])
 
 export default Controls
