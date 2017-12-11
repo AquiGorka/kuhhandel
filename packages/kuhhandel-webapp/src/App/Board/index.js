@@ -1,6 +1,9 @@
 import React from 'react'
 
-const Animals = ({ players }) => players.map(({ id, animals}) => 
+const Score = ({ players }) => players.map(player =>
+  <div key={player.id}>{`Player ${player.id} score: ${player.score()}`}</div>)
+
+const Animals = ({ players }) => players.map(({ id, animals}) =>
   <div key={id}>{'Player ' + id + ': ' + JSON.stringify(animals)}</div>)
 
 const Board = ({ game }) => [
@@ -11,7 +14,8 @@ const Board = ({ game }) => [
   <div key="canPay">Current auction can the player pay: {JSON.stringify(game.canThePlayerPay)}</div>,
   <div key="canPayFalse">Player money: {JSON.stringify(game.cannotPayPlayerMoney)}</div>,
   <Animals key="animals" players={game.players} />,
-  <div key="cowTrade">Current cow trade: {JSON.stringify(game.currentCowTrade)}</div>
+  <div key="cowTrade">Current cow trade: {JSON.stringify(game.currentCowTrade)}</div>,
+  <Score key="score" players={game.players} />,
 ]
 
 export default Board
