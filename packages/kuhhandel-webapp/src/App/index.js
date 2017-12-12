@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Setup from './Setup'
 import Board from './Board'
 import Controls from './Controls'
+import Log from './Log'
 import game from '../Game'
 import './App.css'
 
@@ -26,7 +27,8 @@ class App extends Component {
 
     return [
       <Board key="board" game={game} />,
-      <Controls key="controls" game={game} />
+      <Controls key="controls" game={game} />,
+      <Log key="log" game={game} />
     ]
   }
 
