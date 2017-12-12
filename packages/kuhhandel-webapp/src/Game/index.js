@@ -170,4 +170,5 @@ class Game extends EventEmitter {
 
 }
 
+export { KH }
 export default new Game()

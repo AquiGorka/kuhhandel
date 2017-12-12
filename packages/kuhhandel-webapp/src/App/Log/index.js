@@ -1,5 +1,10 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { KH } from '../../Game'
 
-const Log = ({ game }) => <div>Log</div>
+class Log extends Component {
+  render() {
+    return <div>Log</div>
+  }
+}
 
 export default Log

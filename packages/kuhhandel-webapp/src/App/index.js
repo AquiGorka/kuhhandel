@@ -28,7 +28,7 @@ class App extends Component {
     return [
       <Board key="board" game={game} />,
       <Controls key="controls" game={game} />,
-      <Log key="log" game={game} />
+      <Log key="log" />
     ]
   }
 
