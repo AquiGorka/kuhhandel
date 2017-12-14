@@ -15,6 +15,9 @@ class Remote extends Component {
   componentDidMount() {
     peer = new Peer({ initiator: true, trickle: false })
     peer.once('signal', this.onSignal)
+    peer.on('connect', () => this.setState({ connected: true }))
+    //peer.on('data', data => this.emit('data', JSON.parse(data)))
+    peer.on('close', () => this.setState({ connected: false }))
   }
 
   render() {
