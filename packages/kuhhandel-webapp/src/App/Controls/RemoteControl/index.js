@@ -4,16 +4,36 @@ import Peer from 'simple-peer'
 import GoogleURL from 'google-url'
 import promisify from 'es6-promisify'
 
-let peer = null
 const googleUrl = new GoogleURL({ key: GOOGLE_APIKEY })
 const shorten = promisify(googleUrl.shorten.bind(googleUrl))
+const expand = promisify(googleUrl.expand.bind(googleUrl))
+
+class Connect extends Component {
+  render() {
+    return <form ref={f => this.form = f} onSubmit={this.onSubmit}>
+      <input type="text" name="id" placeholder="Id" />
+    </form>
+  }
+
+  onSubmit = async e => {
+    e.preventDefault()
+    const id = this.form.id.value
+    const longUrl = await expand(`https://goo.gl/${id}`)
+    const data = JSON.parse(atob(longUrl.split('?connect=')[1]))
+    this.props.onSubmit(data)
+  }
+}
 
 class Remote extends Component {
 
-  state = { connected: false, link: '' }
+  state = {
+    connected: false,
+    link: '',
+    peer: new Peer({ initiator: true, trickle: false })
+  }
 
   componentDidMount() {
-    peer = new Peer({ initiator: true, trickle: false })
+    const { peer } = this.state
     peer.once('signal', this.onSignal)
     peer.on('connect', () => this.setState({ connected: true }))
     //peer.on('data', data => this.emit('data', JSON.parse(data)))
@@ -21,7 +41,15 @@ class Remote extends Component {
   }
 
   render() {
-    return <div>{JSON.stringify(this.state)}</div>
+    const { peer, ...rest } = this.state
+    return [
+      <div key="data">{JSON.stringify(rest)}</div>,
+      <Connect key="connect" onSubmit={this.onConnect} />
+    ]
+  }
+
+  onConnect = data => {
+    this.state.peer.signal(data)
   }
 
   onSignal = async signalData => {

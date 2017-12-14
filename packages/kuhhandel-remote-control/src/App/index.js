@@ -8,7 +8,6 @@ import './App.css'
 let peer = null
 const googleUrl = new GoogleURL({ key: GOOGLE_APIKEY })
 const shorten = promisify(googleUrl.shorten.bind(googleUrl))
-const expand = promisify(googleUrl.expand.bind(googleUrl))
 
 class App extends Component {
 
@@ -23,6 +22,7 @@ class App extends Component {
     peer = new Peer({ trickle: false })
     peer.signal(signalData)
     peer.on('signal', this.onSignal)
+    peer.on('connect', () => this.setState({ connected: true }))
   }
 
   render() {
