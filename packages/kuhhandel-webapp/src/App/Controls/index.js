@@ -4,8 +4,8 @@ import RemoteControl from './RemoteControl'
 const Controls = ({ game }) => [
   <hr key="topSeparator" />,
   game.players.map(player => [
-    <RemoteControl key={`control-${player.id}`}
-      key={player.id}
+    <RemoteControl
+      key={`control-${player.id}`}
       id={player.id}
       onDraw={() => game.draw(player.id)}
       onAuctionStart={() => game.auctionStart(player.id)}
