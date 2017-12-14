@@ -1,0 +1,20 @@
+{
+  "name": "kuhhandel-remote-control",
+  "version": "1.0.0",
+  "description": "Webapp to remote control a player for kuhhandel-webapp",
+  "scripts": {
+    "build": "nwb build-react-app",
+    "clean": "nwb clean-app",
+    "start": "nwb serve-react-app"
+  },
+  "dependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "devDependencies": {
+    "nwb": "0.20.x"
+  },
+  "author": "Gorka",
+  "license": "MIT",
+  "repository": ""
+}
