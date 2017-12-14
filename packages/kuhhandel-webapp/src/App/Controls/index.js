@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Control } from 'kuhhandel-components'
 
-const Controls = ({ game }) =>
+const Controls = ({ game }) => [
+  <hr key="topSeparator" />,
   game.players.map(player => [
     <Control key={`control-${player.id}`}
       key={player.id}
@@ -26,6 +27,6 @@ const Controls = ({ game }) =>
       onCowTradeRespond={game.cowTradeRespond}
     />,
     <hr key="separator" />,
-  ])
-
+  ]),
+]
 export default Controls
