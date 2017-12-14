@@ -11,11 +11,14 @@
     "test:watch": "nwb test-react --server"
   },
   "dependencies": {
+    "es6-promisify": "^5.0.0",
+    "google-url": "^0.0.4",
     "kuhhandel": "^1.0.0",
     "kuhhandel-components": "^1.0.0",
     "localforage": "^1.5.5",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "simple-peer": "^8.2.0"
   },
   "devDependencies": {
     "nwb": "^0.20.0"

@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import { Control } from 'kuhhandel-components'
+import React from 'react'
+import RemoteControl from './RemoteControl'
 
 const Controls = ({ game }) => [
   <hr key="topSeparator" />,
   game.players.map(player => [
-    <Control key={`control-${player.id}`}
+    <RemoteControl key={`control-${player.id}`}
       key={player.id}
       id={player.id}
       onDraw={() => game.draw(player.id)}
