@@ -8,6 +8,7 @@ class Setup extends Component {
     const { players } = this.state
 
     return [
+      <button key="start" onClick={this.onStart}>Start game</button>,
       <form key="new" onSubmit={this.onAdd} ref={f => this.form = f}>
         <input type="text" name="new" placeholder="Player name" />
       </form>,
