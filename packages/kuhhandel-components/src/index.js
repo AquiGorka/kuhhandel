@@ -1,1 +1,1 @@
-export default 'Welcome to kuhhandel-components'
+export { default as Control } from './Control'

@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "kuhhandel": "^1.0.0",
+    "kuhhandel-components": "^1.0.0",
     "localforage": "^1.5.5",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"

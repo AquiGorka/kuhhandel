@@ -10,13 +10,10 @@
     "umd"
   ],
   "scripts": {
-    "build": "nwb build-web-module",
-    "clean": "nwb clean-module",
-    "test": "nwb test",
-    "test:coverage": "nwb test --coverage",
-    "test:watch": "nwb test --server"
+    "build": "nwb build-react-component"
   },
   "dependencies": {
+    "react": "^16.2.0"
   },
   "devDependencies": {
     "nwb": "0.20.x"
