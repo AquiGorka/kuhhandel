@@ -35,9 +35,14 @@ class Remote extends Component {
   componentDidMount() {
     const { peer } = this.state
     peer.once('signal', this.onSignal)
+    peer.once('connect', () => this.onSendProps(this.props))
     peer.on('connect', () => this.setState({ connected: true }))
-    //peer.on('data', data => this.emit('data', JSON.parse(data)))
+    peer.on('data', data => this.onData(JSON.parse(data)))
     peer.on('close', () => this.setState({ connected: false }))
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.onSendProps(nextProps)
   }
 
   render() {
@@ -50,6 +55,16 @@ class Remote extends Component {
 
   onConnect = data => {
     this.state.peer.signal(data)
+  }
+
+  onData = data => {
+    console.log(data)
+  }
+
+  onSendProps = props => {
+    if (this.state.peer.connected) {
+      this.state.peer.send(JSON.stringify(props))
+    }
   }
 
   onSignal = async signalData => {
