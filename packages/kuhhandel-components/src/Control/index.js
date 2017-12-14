@@ -27,7 +27,7 @@ class CowTrade extends Component {
   }
 
   onSubmit = money => {
-    const { id, ...animal } = JSON.parse(this.form.elements.cowTrade.value)
+    const { id, ...animal } = JSON.parse(this.form.cowTrade.value)
     this.props.onCowTradeStart({ money, challengedId: id, animal })
   }
 }
