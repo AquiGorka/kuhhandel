@@ -8,8 +8,12 @@
     "start": "nwb serve-react-app"
   },
   "dependencies": {
+    "es6-promisify": "^5.0.0",
+    "google-url": "^0.0.4",
+    "qmark": "^0.0.1",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "simple-peer": "^8.2.0"
   },
   "devDependencies": {
     "nwb": "0.20.x"
