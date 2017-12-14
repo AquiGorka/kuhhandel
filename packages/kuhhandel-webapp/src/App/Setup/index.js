@@ -9,7 +9,9 @@ class Setup extends Component {
 
   onSubmit = e => {
     e.preventDefault()
-    this.props.onSetup({ players: this.form.players.value })
+    const num = parseInt(this.form.players.value, 10)
+    const players = new Array(num).fill(0).map((e, i) => i)
+    this.props.onSetup({ players })
   }
 }
 
