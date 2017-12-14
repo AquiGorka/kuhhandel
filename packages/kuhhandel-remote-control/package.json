@@ -10,6 +10,7 @@
   "dependencies": {
     "es6-promisify": "^5.0.0",
     "google-url": "^0.0.4",
+    "kuhhandel-components": "^1.0.0",
     "qmark": "^0.0.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
