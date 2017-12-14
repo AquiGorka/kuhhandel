@@ -1,17 +1,35 @@
 import React, { Component } from 'react'
 
 class Setup extends Component {
+
+  state = { players: [] }
+
   render() {
-    return <form onSubmit={this.onSubmit} ref={f => this.form = f}>
-      <input type="text" name="players" placeholder="How many players" />
-    </form>
+    const { players } = this.state
+
+    return [
+      <form key="new" onSubmit={this.onAdd} ref={f => this.form = f}>
+        <input type="text" name="new" placeholder="Player name" />
+      </form>,
+      <ul key="list">
+        {players.map((name, index) =>
+          <li key={index}>
+            <div>{name}</div>
+            <button onClick={() => this.setState({ players: players.filter((e, i) => i !== index) })}>Remove</button>
+          </li>
+        )}
+      </ul>,
+    ]
   }
 
-  onSubmit = e => {
+  onAdd = e => {
     e.preventDefault()
-    const num = parseInt(this.form.players.value, 10)
-    const players = new Array(num).fill(0).map((e, i) => i)
-    this.props.onSetup({ players })
+    this.setState({ players: this.state.players.concat(this.form.new.value) })
+    this.form.reset()
+  }
+
+  onStart = () => {
+    this.props.onSetup({ players: this.state.players })
   }
 }
 
