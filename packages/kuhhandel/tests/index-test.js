@@ -11,7 +11,10 @@ import Kuhhandel, {
   ANIMALS
 } from 'src/index'
 
-const randomPlayers = () => Math.floor(2 + Math.random() * 3)
+const randomPlayers = () => {
+  const num = Math.floor(2 + Math.random() * 3)
+  return new Array(num).fill(0).map((e, i) => `${i}`)
+}
 const randomKuhhandel = () => {
   const players = randomPlayers()
   const kh = new Kuhhandel({ players })
@@ -25,22 +28,25 @@ const randomInitiatedKuhhandel = () => {
 }
 const randomHalfDeckEvenDistributedKuhhandel = () => {
   // we need players < 5 so that ech of them receive one of each card
-  const players = 2 + Math.floor(Math.random() * 2)
+  const players = randomPlayers()
+  if (players.length > 4) {
+    players.pop()
+  }
   const kh = new Kuhhandel({ players })
   kh.initialDeal()
-  // this is done on purpose, no shuffle means dealing evenly
+  // this is done on purpose, so that the players receive four of a kind
   //kh.initialShuffle()
   kh.stack = DECK.concat()
   let current = 0
   const playerLoop = () => {
     const player = kh.players[current]
     current++
-    if (current >= players) {
+    if (current >= players.length) {
       current = 0
     }
     return player
   }
-  for (let i=0; i< DECK.length / 2; i++) {
+  for (let i = 0; i < DECK.length / 2; i++) {
     const player = playerLoop()
     player.receiveAnimals(kh.draw())
   }
@@ -72,10 +78,10 @@ describe('Kuhhandel', () => {
   })
 
   it('should instantiate players with unique ids', () => {
-    const numPlayers = randomPlayers()
-    const kh = new Kuhhandel({ players: numPlayers })
+    const players = randomPlayers()
+    const kh = new Kuhhandel({ players })
     const set = new Set(kh.players.map(p => p.id))
-    expect(Array.from(set).length).toBe(numPlayers)
+    expect(Array.from(set)).toEqual(players)
   })
 
   it('should deal the same money cards to each player on the initial deal', ()=> {

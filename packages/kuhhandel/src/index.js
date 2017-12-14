@@ -176,18 +176,15 @@ class CowTrade {
 
 
 class Kuhhandel {
-  constructor({ players = 2, seed = Math.random() } = {}) {
-    if (players < 2) {
+  constructor({ players = ['1', '2'], seed = Math.random() } = {}) {
+    if (players.length < 2) {
       throw new Error('A minimum of 2 players is required')
     }
-    if (players > 5) {
+    if (players.length > 5) {
       throw new Error('A maximum of 5 players is allowed')
     }
     this.seed = seed
-    this.players = []
-    for (let i=0; i < players; i++) {
-      this.players.push(new Player({ id: i }))
-    }
+    this.players = players.map(id => new Player({ id }))
     this.stack = []
   }
 
