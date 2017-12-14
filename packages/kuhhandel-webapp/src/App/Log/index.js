@@ -16,13 +16,13 @@ class Log extends Component {
     return [
       <div key="title">Log</div>,
       <button key="reset" onClick={this.onReset}>Reset</button>,
+      <button key="undo" onClick={this.onUndo}>Undo last action</button>,
       <ul key="list">
         {list.concat().reverse().map((action, index) =>
           <li key={index}>
             <div>{list.length - index}</div>
             <div>{action.method}</div>
             <div>{JSON.stringify(action.payload)}</div>
-            {index === 0 && <button onClick={this.onRemove}>x</button>}
           </li>
         )}
       </ul>
@@ -42,7 +42,7 @@ class Log extends Component {
     window.location.reload()
   }
 
-  onRemove = async () => {
+  onUndo = async () => {
     const list = this.state.list.slice(0, -1)
     await localForage.setItem(KH, list)
     this.onReload()
