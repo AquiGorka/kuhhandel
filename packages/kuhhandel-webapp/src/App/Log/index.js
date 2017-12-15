@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { KH } from '../../Game'
 import localForage from 'localforage'
+import './Log.css'
 
 class Log extends Component {
 
@@ -13,10 +14,10 @@ class Log extends Component {
   render() {
     const { list } = this.state
 
-    return [
-      <div key="title">Log</div>,
-      <button key="reset" onClick={this.onReset}>Reset</button>,
-      <button key="undo" onClick={this.onUndo}>Undo last action</button>,
+    return <div className="log">
+      <div key="title">Log</div>
+      <button key="reset" onClick={this.onReset}>Reset</button>
+      <button key="undo" onClick={this.onUndo}>Undo last action</button>
       <ul key="list">
         {list.concat().reverse().map((action, index) =>
           <li key={index}>
@@ -26,7 +27,7 @@ class Log extends Component {
           </li>
         )}
       </ul>
-    ]
+    </div>
   }
 
   fetch = () => {
