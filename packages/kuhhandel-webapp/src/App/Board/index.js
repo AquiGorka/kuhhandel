@@ -25,8 +25,8 @@ const Board = ({ game }) => <div className="board">
   <h1>Emoji-trade or 🐮 🤝 💸 </h1>
   <header className="board__header">
     <div className="board__stack">
-      <h2>🎴</h2>
-      <span>x{game.stack.length}</span>
+      <h2 className="board__deck board__deck--big">🎴</h2>
+      <span className="board__left">x{game.stack.length}</span>
     </div>
     <h3 className="board__turn">👉 {game.turn}</h3>
   </header>

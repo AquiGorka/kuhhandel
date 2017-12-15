@@ -14,27 +14,31 @@
   padding: 1em;
 }
 
-.board__stack h2{
+.board__deck{
   position: relative;
-  font-size: 7em;
-  margin: 0em;
+  margin: 0;
+  padding: 0;
 }
 
-.board__stack h2:before{
+.board__deck--big{
+  font-size: 7em;
+}
+
+.board__deck:before{
   content: '🎴';
   position: absolute;
   top: 4px;
   left: 4px;
 }
 
-.board__stack h2:after{
+.board__deck:after{
   content: '🎴';
   position: absolute;
   top: 8px;
   left: 8px;
 }
 
-.board__stack span{
+.board__left{
   position: absolute;
   top: 4px;
   right: 4px;
