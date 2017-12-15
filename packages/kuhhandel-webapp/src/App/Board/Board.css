@@ -2,3 +2,44 @@
   height: 100%;
   padding: 1em;
 }
+
+.board__header{
+  display: flex;
+  align-items: center;
+}
+
+.board__stack{
+  position: relative;
+  display: inline-block;
+  padding: 1em;
+}
+
+.board__stack h2{
+  position: relative;
+  font-size: 7em;
+  margin: 0em;
+}
+
+.board__stack h2:before{
+  content: '🎴';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+}
+
+.board__stack h2:after{
+  content: '🎴';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+}
+
+.board__stack span{
+  position: absolute;
+  top: 4px;
+  right: 4px;
+}
+
+.board__turn{
+  font-size: 2em;
+}
