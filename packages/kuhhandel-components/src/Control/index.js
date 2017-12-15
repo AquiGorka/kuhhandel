@@ -123,7 +123,7 @@ const Control = ({
       money={money}
       label="Buy back"
     />,
-  status.op === 'auctionStart'
+  turn !== id && status.op === 'auctionStart'
     && <AuctionOffer key="auctionOffer" onAuctionOffer={onAuctionOffer} />,
   turn === id && cowTradeOtherPlayersXAnimals.length && status.op === ''
     && <CowTrade
