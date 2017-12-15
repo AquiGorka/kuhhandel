@@ -7,6 +7,7 @@ const Animals = ({ players }) => players.map(({ id, animals}) =>
   <div key={id}>{'Player ' + id + ': ' + JSON.stringify(animals)}</div>)
 
 const Board = ({ game }) => [
+  <div key="whoseTurn">Turn: {game.turn}</div>,
   <div key="stack">Stack: {game.stack.length}</div>,
   <div key="currentDraw">Current draw: {JSON.stringify(game.currentDraw)}</div>,
   <div key="currentAuction">Current auction: {JSON.stringify(game.currentAuction)}</div>,

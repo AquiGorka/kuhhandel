@@ -9,11 +9,11 @@ const Controls = ({ game }) => [
       id={player.id}
       onDraw={() => game.draw(player.id)}
       onAuctionStart={() => game.auctionStart(player.id)}
-      onAuctionClose={game.auctionClose}
+      onAuctionClose={() => game.auctionClose(player.id)}
       onAuctionOffer={value =>
         game.auctionOffer({ playerId: player.id, value })
       }
-      onExchange={game.exchange}
+      onExchange={money => game.exchange({ money, playerId: player.id })}
       money={player.money}
       onBuyBack={game.buyBack}
       onCowTradeStart={opts =>

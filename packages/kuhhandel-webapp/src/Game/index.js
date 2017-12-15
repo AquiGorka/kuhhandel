@@ -27,6 +27,7 @@ class Game extends EventEmitter {
   constructor() {
     super()
     this.init()
+    this.turns = 0
   }
 
   init = async () => {
@@ -34,6 +35,13 @@ class Game extends EventEmitter {
     if (log && log.length) {
       log.forEach(action => this[action.method](action.payload, false))
     }
+  }
+
+  nextTurn = () => {
+    this.turns++
+    draw = null
+    auction = null
+    cowTrade = null
   }
 
   setup = async (opts, log = true) => {
@@ -50,15 +58,24 @@ class Game extends EventEmitter {
   }
 
   /* this layer exists to persist actions, some methods are simple pass-by handlers */
-  auctionClose = (_, log = true) => {
+  auctionClose = (playerId, log = true) => {
+    if (this.turn !== playerId) {
+      return
+    }
     kh.auctionClose(auction)
+    if (auction.offers.length === 0) {
+      this.nextTurn()
+    }
     this.emit('update')
     if (log) {
-      saveState({ method: 'auctionClose', payload: null })
+      saveState({ method: 'auctionClose', payload: playerId })
     }
   }
 
   auctionOffer = (offer, log = true) => {
+    if (!auction) {
+      return
+    }
     const accepted = auction.offer(offer)
     if (accepted) {
       this.emit('update')
@@ -69,6 +86,9 @@ class Game extends EventEmitter {
   }
 
   auctionStart = (playerId, log = true) => {
+    if (this.turn !== playerId) {
+      return
+    }
     const opts = { playerId, animal: draw }
     auction = kh.auction(opts)
     this.emit('update')
@@ -81,6 +101,7 @@ class Game extends EventEmitter {
     kh.buyBack(auction, money)
     draw = null
     auction = null
+    this.nextTurn()
     this.emit('update')
     if (log) {
       saveState({ method: 'buyBack', payload: money })
@@ -91,6 +112,7 @@ class Game extends EventEmitter {
     cowTrade.respond(money)
     kh.settleCowTrade(cowTrade)
     cowTrade = null
+    this.nextTurn()
     this.emit('update')
     if (log) {
       saveState({ method: 'cowTradeRespond', payload: money })
@@ -111,6 +133,9 @@ class Game extends EventEmitter {
   }
 
   draw = (playerId, log = true) => {
+    if (this.turn !== playerId) {
+      return
+    }
     draw = kh.draw()
     this.emit('update')
     if (log) {
@@ -118,13 +143,18 @@ class Game extends EventEmitter {
     }
   }
 
-  exchange = (money, log = true) => {
+  exchange = (payload, log = true) => {
+    const { money, playerId } = payload
+    if (auction.highestBid().value > money.reduce((p, c) => p + c.value ,0)) {
+      return
+    }
     if (kh.canThePlayerPay(auction)) {
       kh.exchange(auction, money)
       draw = null
       auction = null
+      this.nextTurn()
       if (log) {
-        saveState({ method: 'exchange', payload: money })
+        saveState({ method: 'exchange', payload })
       }
     }
     this.emit('update')
@@ -166,6 +196,11 @@ class Game extends EventEmitter {
 
   get stack() {
     return kh.stack
+  }
+
+  get turn() {
+    const turn = this.turns % this.players.length
+    return this.players[turn].id
   }
 
 }
