@@ -44,14 +44,14 @@ class App extends Component {
       const { id } = props
       const overloadedProps = {
         ...props,
-        onDraw: () => this.onSend({ method: 'draw', payload: id}),
-        onAuctionStart: () => this.onSend({ method: 'auctionStart', payload: id }),
-        onAuctionClose: () => this.onSend({ method: 'auctionClose'}),
-        onAuctionOffer: value => this.onSend({ method: 'auctionOffer', payload: { playerId: id, value }}),
-        onExchange: payload => this.onSend({ method: 'exchange', payload }),
-        onBuyBack: payload => this.onSend({ method: 'buyBack', payload }),
-        onCowTradeStart: opts => this.onSend({ method: 'cowTradeStart', payload: { ...opts, initiatorId: id }}),
-        onCowTradeRespond: payload => this.onSend({ method: 'cowTradeRespond', payload }),
+        onDraw: () => this.onSend({ method: 'onDraw' }),
+        onAuctionStart: () => this.onSend({ method: 'onAuctionStart' }),
+        onAuctionClose: () => this.onSend({ method: 'onAuctionClose'}),
+        onAuctionOffer: payload => this.onSend({ method: 'onAuctionOffer', payload }),
+        onExchange: payload => this.onSend({ method: 'onExchange', payload }),
+        onBuyBack: payload => this.onSend({ method: 'onBuyBack', payload }),
+        onCowTradeStart: payload => this.onSend({ method: 'onCowTradeStart', payload }),
+        onCowTradeRespond: payload => this.onSend({ method: 'onCowTradeRespond', payload }),
       }
       return <Control {...overloadedProps} />
     }

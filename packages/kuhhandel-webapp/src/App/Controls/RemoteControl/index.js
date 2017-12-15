@@ -58,7 +58,7 @@ class Remote extends Component {
   }
 
   onData = data => {
-    console.log(data)
+    this.props[data.method](data.payload)
   }
 
   onSendProps = props => {
