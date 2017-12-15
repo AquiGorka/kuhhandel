@@ -9,6 +9,7 @@ class Log extends Component {
 
   componentDidMount() {
     this.props.game.on('update', this.fetch)
+    window.reset = this.onReset
   }
 
   render() {
