@@ -240,7 +240,7 @@ class Game extends EventEmitter {
         ? [auction.highestBid().playerId]
         : this.players.map(p => p.id)
       : cowTrade
-        ? [cowTrade.initiator.playerId, cowTrade.challenged.playerId]
+        ? [cowTrade.challenged.playerId]
         : []
     return { op, involved }
   }
