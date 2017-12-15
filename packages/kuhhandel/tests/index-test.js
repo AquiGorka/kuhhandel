@@ -277,8 +277,8 @@ describe('Kuhhandel closed auction exchange', () => {
     const offer0 = { playerId: kh.players[1].id, value: Infinity }
     auction.offer(offer0)
     kh.auctionClose(auction)
-    const accepted = kh.canThePlayerPay(auction)
-    expect(accepted).toBe(false)
+    const rejected = kh.canThePlayerPay(auction)
+    expect(rejected).toBe(false)
   })
 
   it('should throw if trying to execute an exchange if the auction is not closed', () => {
@@ -305,7 +305,7 @@ describe('Kuhhandel closed auction exchange', () => {
     expect(() => kh.exchange(auction, [{ value: 0 }])).toThrow()
   })
 
-  it('should execute the exchange successfully', () => {
+  it('should accept the exchange and execute the trade', () => {
     const { kh } = randomInitiatedKuhhandel()
     const animal = kh.draw()
     const auctioneer = kh.players[0]
@@ -320,6 +320,7 @@ describe('Kuhhandel closed auction exchange', () => {
     const auctioneerOriginalMoneyTotal = auctioneer.money.reduce(totalValue, 0)
     const playerOriginalMoneyTotal = player.money.reduce(totalValue, 0)
     kh.exchange(auction, [{ value: 10 }])
+    kh.exchangeAccept(auction)
     expect(accepted).toBe(true)
     expect(kh.players[0].total()).toBe(auctioneerOriginalMoneyTotal + offeredValue)
     expect(kh.players[1].total()).toBe(playerOriginalMoneyTotal - offeredValue)
