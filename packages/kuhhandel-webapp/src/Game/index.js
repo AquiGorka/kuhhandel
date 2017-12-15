@@ -115,19 +115,26 @@ class Game extends EventEmitter {
     }
   }
 
-  cowTradeRespond = (money, log = true) => {
+  cowTradeRespond = (payload, log = true) => {
+    const { money, playerId } = payload
+    if (cowTrade.challenged.playerId !== playerId) {
+      return
+    }
     cowTrade.respond(money)
     kh.settleCowTrade(cowTrade)
     cowTrade = null
     this.nextTurn()
     this.emit('update')
     if (log) {
-      saveState({ method: 'cowTradeRespond', payload: money })
+      saveState({ method: 'cowTradeRespond', payload })
     }
   }
 
   cowTradeStart = (opts, log = true) => {
     const { money, animal, initiatorId, challengedId } = opts
+    if (this.turn !== initiatorId) {
+      return
+    }
     cowTrade = kh.cowTrade({
       initiator: { money, playerId: initiatorId },
       challenged: { playerId: challengedId },

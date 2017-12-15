@@ -24,7 +24,7 @@ const Controls = ({ game }) => [
         .map(({ id, animals }) =>
           ({ id, animals: Array.from(new Set(animals)).filter(a => player.animals.includes(a)) })
         )}
-      onCowTradeRespond={game.cowTradeRespond}
+      onCowTradeRespond={money => game.cowTradeRespond({ money, playerId: player.id })}
     />,
     <hr key="separator" />,
   ]),
