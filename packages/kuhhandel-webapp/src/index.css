@@ -3,13 +3,14 @@
 }
 html, body, #app {
   height: 100%;
+  color: #735A5A;
 }
 
 body {
   font-family: sans-serif;
   margin: 0;
-  padding: 10px;
-  background: url('http://www.luxuryroomdecor.com/mediaimages/light_wood_table_backgroundwww-luxuryroomdecor-com.jpg');
+  padding: 1em;
+  background: url('./bg.jpg');
 }
 
 #app{

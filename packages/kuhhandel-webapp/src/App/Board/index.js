@@ -8,6 +8,7 @@ const Animals = ({ players }) => players.map(({ id, animals}) =>
   <div key={id}>{'Player ' + id + ': ' + JSON.stringify(animals)}</div>)
 
 const Board = ({ game }) => <div className="board">
+  <h1>Emoji-trade or 🐮 🤝 💸 </h1>
   <div key="whoseTurn">Turn: {game.turn}</div>
   <div key="stack">Stack: {game.stack.length}</div>
   <div key="currentDraw">Current draw: {JSON.stringify(game.currentDraw)}</div>
