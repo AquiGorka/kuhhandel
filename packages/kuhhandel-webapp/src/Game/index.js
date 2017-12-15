@@ -97,14 +97,21 @@ class Game extends EventEmitter {
     }
   }
 
-  buyBack = (money, log = true) => {
+  buyBack = (payload, log = true) => {
+    const { money, playerId } = payload
+    if (this.turn !== playerId) {
+      return
+    }
+    if (auction.highestBid().value > money.reduce((p, c) => p + c.value ,0)) {
+      return
+    }
     kh.buyBack(auction, money)
     draw = null
     auction = null
     this.nextTurn()
     this.emit('update')
     if (log) {
-      saveState({ method: 'buyBack', payload: money })
+      saveState({ method: 'buyBack', payload })
     }
   }
 

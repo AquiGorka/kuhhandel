@@ -15,7 +15,7 @@ const Controls = ({ game }) => [
       }
       onExchange={money => game.exchange({ money, playerId: player.id })}
       money={player.money}
-      onBuyBack={game.buyBack}
+      onBuyBack={money => game.buyBack({ money, playerId: player.id })}
       onCowTradeStart={opts =>
         game.cowTradeStart({ ...opts, initiatorId: player.id })
       }
