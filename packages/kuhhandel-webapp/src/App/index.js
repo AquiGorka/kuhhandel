@@ -4,7 +4,6 @@ import Board from './Board'
 import Controls from './Controls'
 import Log from './Log'
 import game from '../Game'
-import './App.css'
 
 class App extends Component {
 

@@ -12,8 +12,10 @@ const peerConfig = { initiator: true, trickle: false }
 
 class Connect extends Component {
   render() {
+    const { link, connected, id } = this.props
+    const placeholder = `${id} ${connected ? '✅' : ' - ' + link.substr(15)}`
     return <form ref={f => this.form = f} onSubmit={this.onSubmit}>
-      <input type="text" name="id" placeholder="Id" />
+      <input className="connect" type="text" name="id" placeholder={placeholder} />
     </form>
   }
 
@@ -23,6 +25,7 @@ class Connect extends Component {
     const longUrl = await expand(`https://goo.gl/${id}`)
     const data = JSON.parse(atob(longUrl.split('?connect=')[1]))
     this.props.onSubmit(data)
+    this.form.reset()
   }
 }
 
@@ -34,15 +37,6 @@ class Remote extends Component {
     peer: new Peer(peerConfig)
   }
 
-  initPeer = () => {
-    const { peer } = this.state
-    peer.once('signal', this.onSignal)
-    peer.once('connect', () => this.onSendProps(this.props))
-    peer.on('connect', () => this.setState({ connected: true }))
-    peer.on('data', data => this.onData(JSON.parse(data)))
-    peer.on('close', () => this.setState({ connected: false, peer: new Peer(peerConfig) }, this.initPeer))
-  }
-
   componentDidMount() {
     this.initPeer()
   }
@@ -52,11 +46,22 @@ class Remote extends Component {
   }
 
   render() {
-    const { peer, ...rest } = this.state
-    return [
-      <div key="data">{JSON.stringify(rest)}</div>,
-      <Connect key="connect" onSubmit={this.onConnect} />
-    ]
+    const { link, connected } = this.state
+    return <Connect
+      onSubmit={this.onConnect}
+      link={link}
+      connected={connected}
+      id={this.props.id}
+    />
+  }
+
+  initPeer = () => {
+    const { peer } = this.state
+    peer.once('signal', this.onSignal)
+    peer.once('connect', () => this.onSendProps(this.props))
+    peer.on('connect', () => this.setState({ connected: true }))
+    peer.on('data', data => this.onData(JSON.parse(data)))
+    peer.on('close', () => this.setState({ link: '', connected: false, peer: new Peer(peerConfig) }, this.initPeer))
   }
 
   onConnect = data => {
@@ -81,7 +86,7 @@ class Remote extends Component {
 
 const RemoteControl = props => [
   <Remote key="remote" {...props} />,
-  <div key="local" className="control">
+  <div key="local" className="local">
     <Control {...props} />
   </div>,
 ]
