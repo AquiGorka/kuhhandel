@@ -15,6 +15,7 @@ const Controls = ({ game }) => <div className="controls">
       onAuctionOffer={value =>
         game.auctionOffer({ playerId: player.id, value })
       }
+      canThePlayerPay={game.canThePlayerPay}
       onExchange={money => game.exchange({ money, playerId: player.id })}
       onExchangeAccept={() => game.exchangeAccept({ playerId: player.id })}
       money={player.money}

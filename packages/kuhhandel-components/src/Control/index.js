@@ -89,50 +89,51 @@ const Control = ({
   cowTradeOtherPlayersXAnimals,
   onCowTradeRespond,
   turn,
-  status,
+  status: { op, involved },
+  canThePlayerPay,
 }) => [
   <div key={id}>{`Player Id: ${id}`}</div>,
   <div key="money">Money: {JSON.stringify(money)}</div>,
-  turn === id && status.op === ''
+  turn === id && op === ''
     && <button key="draw" onClick={onDraw}>
         Draw
       </button>,
-  turn === id && status.op === 'draw'
+  turn === id && (op === 'draw' || (op === 'auctionClose' && !canThePlayerPay))
     && <button key="auctionStart" onClick={onAuctionStart}>
       Start auction
     </button>,
-  turn === id && status.op === 'auctionStart'
+  turn === id && op === 'auctionStart'
     && <button key="auctionClose" onClick={onAuctionClose}>
       Close auction
     </button>,
-  status.op === 'auctionClose' && status.involved.includes(id)
+  op === 'auctionClose' && involved.includes(id)
     && <SelectMoney
       key="exchange"
       onSubmit={onExchange}
       money={money}
       label="Exchange"
     />,
-  turn === id && status.op === 'auctionExchange'
+  turn === id && op === 'auctionExchange'
     && <button key="auctionExchangeAccept" onClick={onExchangeAccept}>
       Accept exchange
     </button>,
-  turn === id && status.op === 'auctionExchange'
+  turn === id && op === 'auctionExchange'
     && <SelectMoney
       key="buyback"
       onSubmit={onBuyBack}
       money={money}
       label="Buy back"
     />,
-  turn !== id && status.op === 'auctionStart'
+  turn !== id && op === 'auctionStart'
     && <AuctionOffer key="auctionOffer" onAuctionOffer={onAuctionOffer} />,
-  turn === id && cowTradeOtherPlayersXAnimals.length && status.op === ''
+  turn === id && cowTradeOtherPlayersXAnimals.length && op === ''
     && <CowTrade
       key="cowTrade"
       onCowTradeStart={onCowTradeStart}
       money={money}
       cowTradeOtherPlayersXAnimals={cowTradeOtherPlayersXAnimals}
     />,
-  status.op === 'cowTradeStart' && status.involved.includes(id)
+  op === 'cowTradeStart' && involved.includes(id)
     && <SelectMoney
       key="cowTradeRespond"
       onSubmit={onCowTradeRespond}

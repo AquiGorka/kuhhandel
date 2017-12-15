@@ -52,6 +52,40 @@
 
 .board__event{
   flex: 1;
+  display: flex;
+}
+
+.event__draw,
+.event__auction,
+.event__lie{
+  padding: 0 1em;
+  width: 100%;
+}
+
+.draw__animal{
+  font-size: 7em;
+}
+
+.auction__lie{
+  width: 100%;
+  text-align: center;
+}
+
+.auction__liar{
+  font-size: 3em;
+}
+
+.auction__lieMoney{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.auction__lieMoney_item{
+  border: 1px solid #CCC;
+  padding: 1em;
 }
 
 .players{

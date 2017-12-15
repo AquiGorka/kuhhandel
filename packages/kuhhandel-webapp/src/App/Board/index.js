@@ -30,17 +30,33 @@ const Auction = ({
     status: { op }
   }
 }) => [
-  op === 'auctionStart' && <div key="currentAuction">Current auction: {JSON.stringify(currentAuction)}</div>,
-  <div key="highestOffer">Current auction highest offer: {JSON.stringify(highestBid)}</div>,
-  <div key="canPay">Current auction can the player pay: {JSON.stringify(canThePlayerPay)}</div>,
-  <div key="canPayFalse">🤥 Player money: {JSON.stringify(cannotPayPlayerMoney)}</div>
+  <div className="event__auction" key="currentAuctionWrap">
+    <h4 key="currentAuction">Auction</h4>
+    <div key="highestOffer">
+      <div>Highest offer:</div>
+      {highestBid && <div>{highestBid.playerId} - {highestBid.value}</div>}
+    </div>
+  </div>,
+  op === 'auctionClose' && !canThePlayerPay
+    && <div key="canPayFalse" className="auction__lie">
+      <div className="auction__liar">🤥</div>
+      <ul className="auction__lieMoney">{cannotPayPlayerMoney.sort((a, b) => b.value - a.value).map(({ value }, index) =>
+        <li className="auction__lieMoney_item" key={`card-${index}-${value}`}>{value}</li>
+      )}</ul>
+    </div>
 ]
 
 const Draw = ({ game }) => {
-  const { status: { op }} = game
+  const { status: { op }, currentDraw } = game
   return [
-    op === 'draw' && <div key="currentDraw">Current draw: {JSON.stringify(game.currentDraw)}</div>,
-    (op === 'auctionStart' || op === 'auctionExchange' || op === 'auctionClose') && <Auction key="auction" game={game} />,
+    op !== 'cowTrade' && op !== ''
+      && <div className="event__draw" key="draw">
+        <h4>Draw</h4>
+        <div className="draw__animal">{currentDraw.animal}</div>
+        <div>Value {currentDraw.value}</div>
+      </div>,
+    (op === 'auctionStart' || op === 'auctionExchange' || op === 'auctionClose')
+      && <Auction key="auction" game={game} />,
   ]
 }
 
