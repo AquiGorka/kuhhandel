@@ -106,8 +106,6 @@ class Game extends EventEmitter {
       return
     }
     kh.buyBack(auction, money)
-    draw = null
-    auction = null
     this.nextTurn()
     this.emit('update')
     if (log) {
@@ -122,7 +120,6 @@ class Game extends EventEmitter {
     }
     cowTrade.respond(money)
     kh.settleCowTrade(cowTrade)
-    cowTrade = null
     this.nextTurn()
     this.emit('update')
     if (log) {
@@ -164,14 +161,27 @@ class Game extends EventEmitter {
     }
     if (kh.canThePlayerPay(auction)) {
       kh.exchange(auction, money)
-      draw = null
-      auction = null
-      this.nextTurn()
       if (log) {
         saveState({ method: 'exchange', payload })
       }
     }
     this.emit('update')
+  }
+
+  exchangeAccept = (payload, log = true) => {
+    const { playerId } = payload
+    if (this.turn !== playerId) {
+      return
+    }
+    if (!auction.exchange) {
+      return
+    }
+    kh.exchangeAccept(auction)
+    this.nextTurn()
+    this.emit('update')
+    if (log) {
+      saveState({ method: 'exchangeAccept', payload })
+    }
   }
 
   get cannotPayPlayerMoney() {
@@ -217,7 +227,9 @@ class Game extends EventEmitter {
     const op = draw
       ? auction
         ? auction.closed
-          ? 'auctionClose'
+          ? auction.exchange
+            ? 'auctionExchange'
+            : 'auctionClose'
           : 'auctionStart'
         : 'draw'
       : cowTrade

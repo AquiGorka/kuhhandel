@@ -82,6 +82,7 @@ const Control = ({
   onAuctionClose,
   onAuctionOffer,
   onExchange,
+  onExchangeAccept,
   money,
   onBuyBack,
   onCowTradeStart,
@@ -92,40 +93,52 @@ const Control = ({
 }) => [
   <div key={id}>{`Player Id: ${id}`}</div>,
   <div key="money">Money: {JSON.stringify(money)}</div>,
-  turn === id && status.op === '' && <button key="draw" onClick={onDraw}>
-    Draw
-  </button>,
-  turn === id && status.op === 'draw' && <button key="auctionStart" onClick={onAuctionStart}>
-    Start auction
-  </button>,
-  turn === id && status.op === 'auctionStart' && <button key="auctionClose" onClick={onAuctionClose}>
-    Close auction
-  </button>,
-  status.op === 'auctionClose' && status.involved.includes(id) && <SelectMoney
-    key="exchange"
-    onSubmit={onExchange}
-    money={money}
-    label="Exchange"
-  />,
-  turn === id && status.op === 'auctionClose' && <SelectMoney
-    key="buyback"
-    onSubmit={onBuyBack}
-    money={money}
-    label="Buy back"
-  />,
-  status.op === 'auctionStart' && <AuctionOffer key="auctionOffer" onAuctionOffer={onAuctionOffer} />,
-  turn === id && cowTradeOtherPlayersXAnimals.length && status.op === '' && <CowTrade
-    key="cowTrade"
-    onCowTradeStart={onCowTradeStart}
-    money={money}
-    cowTradeOtherPlayersXAnimals={cowTradeOtherPlayersXAnimals}
-  />,
-  status.op === 'cowTradeStart' && status.involved.includes(id) && <SelectMoney
-    key="cowTradeRespond"
-    onSubmit={onCowTradeRespond}
-    money={money}
-    label="Respond Cow Trade"
-  />,
+  turn === id && status.op === ''
+    && <button key="draw" onClick={onDraw}>
+        Draw
+      </button>,
+  turn === id && status.op === 'draw'
+    && <button key="auctionStart" onClick={onAuctionStart}>
+      Start auction
+    </button>,
+  turn === id && status.op === 'auctionStart'
+    && <button key="auctionClose" onClick={onAuctionClose}>
+      Close auction
+    </button>,
+  status.op === 'auctionClose' && status.involved.includes(id)
+    && <SelectMoney
+      key="exchange"
+      onSubmit={onExchange}
+      money={money}
+      label="Exchange"
+    />,
+  turn === id && status.op === 'auctionExchange'
+    && <button key="auctionExchangeAccept" onClick={onExchangeAccept}>
+      Accept exchange
+    </button>,
+  turn === id && status.op === 'auctionExchange'
+    && <SelectMoney
+      key="buyback"
+      onSubmit={onBuyBack}
+      money={money}
+      label="Buy back"
+    />,
+  status.op === 'auctionStart'
+    && <AuctionOffer key="auctionOffer" onAuctionOffer={onAuctionOffer} />,
+  turn === id && cowTradeOtherPlayersXAnimals.length && status.op === ''
+    && <CowTrade
+      key="cowTrade"
+      onCowTradeStart={onCowTradeStart}
+      money={money}
+      cowTradeOtherPlayersXAnimals={cowTradeOtherPlayersXAnimals}
+    />,
+  status.op === 'cowTradeStart' && status.involved.includes(id)
+    && <SelectMoney
+      key="cowTradeRespond"
+      onSubmit={onCowTradeRespond}
+      money={money}
+      label="Respond Cow Trade"
+    />,
 ]
 
 export default Control
