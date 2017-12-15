@@ -112,7 +112,7 @@ const Control = ({
     label="Buy back"
   />,
   <AuctionOffer key="auctionOffer" onAuctionOffer={onAuctionOffer} />,
-  turn === id && <CowTrade
+  turn === id && cowTradeOtherPlayersXAnimals.length && <CowTrade
     key="cowTrade"
     onCowTradeStart={onCowTradeStart}
     money={money}
