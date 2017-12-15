@@ -7,6 +7,7 @@ const Controls = ({ game }) => [
     <RemoteControl
       key={`control-${player.id}`}
       id={player.id}
+      turn={game.turn}
       onDraw={() => game.draw(player.id)}
       onAuctionStart={() => game.auctionStart(player.id)}
       onAuctionClose={() => game.auctionClose(player.id)}

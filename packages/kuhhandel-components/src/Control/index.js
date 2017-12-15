@@ -87,15 +87,16 @@ const Control = ({
   onCowTradeStart,
   cowTradeOtherPlayersXAnimals,
   onCowTradeRespond,
+  turn,
 }) => [
   <div key={id}>{`Player Id: ${id}`}</div>,
-  <button key="draw" onClick={onDraw}>
+  turn === id && <button key="draw" onClick={onDraw}>
     Draw
   </button>,
-  <button key="auctionStart" onClick={onAuctionStart}>
+  turn === id && <button key="auctionStart" onClick={onAuctionStart}>
     Start auction
   </button>,
-  <button key="auctionClose" onClick={onAuctionClose}>
+  turn === id && <button key="auctionClose" onClick={onAuctionClose}>
     Close auction
   </button>,
   <SelectMoney
@@ -104,14 +105,14 @@ const Control = ({
     money={money}
     label="Exchange"
   />,
-  <SelectMoney
+  turn === id && <SelectMoney
     key="buyback"
     onSubmit={onBuyBack}
     money={money}
     label="Buy back"
   />,
   <AuctionOffer key="auctionOffer" onAuctionOffer={onAuctionOffer} />,
-  <CowTrade
+  turn === id && <CowTrade
     key="cowTrade"
     onCowTradeStart={onCowTradeStart}
     money={money}
