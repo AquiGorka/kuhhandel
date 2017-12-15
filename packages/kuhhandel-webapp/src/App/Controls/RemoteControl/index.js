@@ -7,6 +7,7 @@ import promisify from 'es6-promisify'
 const googleUrl = new GoogleURL({ key: GOOGLE_APIKEY })
 const shorten = promisify(googleUrl.shorten.bind(googleUrl))
 const expand = promisify(googleUrl.expand.bind(googleUrl))
+const peerConfig = { initiator: true, trickle: false }
 
 class Connect extends Component {
   render() {
@@ -29,16 +30,20 @@ class Remote extends Component {
   state = {
     connected: false,
     link: '',
-    peer: new Peer({ initiator: true, trickle: false })
+    peer: new Peer(peerConfig)
   }
 
-  componentDidMount() {
+  initPeer = () => {
     const { peer } = this.state
     peer.once('signal', this.onSignal)
     peer.once('connect', () => this.onSendProps(this.props))
     peer.on('connect', () => this.setState({ connected: true }))
     peer.on('data', data => this.onData(JSON.parse(data)))
-    peer.on('close', () => this.setState({ connected: false }))
+    peer.on('close', () => this.setState({ connected: false, peer: new Peer(peerConfig) }, this.initPeer))
+  }
+
+  componentDidMount() {
+    this.initPeer()
   }
 
   componentWillReceiveProps(nextProps) {
