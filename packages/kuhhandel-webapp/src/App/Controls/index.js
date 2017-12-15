@@ -8,6 +8,7 @@ const Controls = ({ game }) => [
       key={`control-${player.id}`}
       id={player.id}
       turn={game.turn}
+      status={game.status}
       onDraw={() => game.draw(player.id)}
       onAuctionStart={() => game.auctionStart(player.id)}
       onAuctionClose={() => game.auctionClose(player.id)}

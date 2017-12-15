@@ -212,6 +212,27 @@ class Game extends EventEmitter {
     return kh.stack
   }
 
+  get status() {
+    // draw, auctionStart, auctionClose, cowTradeStart
+    const op = draw
+      ? auction
+        ? auction.closed
+          ? 'auctionClose'
+          : 'auctionStart'
+        : 'draw'
+      : cowTrade
+        ? 'cowTradeStart'
+        : ''
+    const involved = auction
+      ? auction.closed
+        ? [auction.highestBid().playerId]
+        : this.players.map(p => p.id)
+      : cowTrade
+        ? [cowTrade.initiator.playerId, cowTrade.challenged.playerId]
+        : []
+    return { op, involved }
+  }
+
   get turn() {
     const turn = this.turns % this.players.length
     return this.players[turn].id

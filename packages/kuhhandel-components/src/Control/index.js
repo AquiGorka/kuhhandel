@@ -88,37 +88,39 @@ const Control = ({
   cowTradeOtherPlayersXAnimals,
   onCowTradeRespond,
   turn,
+  status,
 }) => [
   <div key={id}>{`Player Id: ${id}`}</div>,
-  turn === id && <button key="draw" onClick={onDraw}>
+  <div key="money">Money: {JSON.stringify(money)}</div>,
+  turn === id && status.op === '' && <button key="draw" onClick={onDraw}>
     Draw
   </button>,
-  turn === id && <button key="auctionStart" onClick={onAuctionStart}>
+  turn === id && status.op === 'draw' && <button key="auctionStart" onClick={onAuctionStart}>
     Start auction
   </button>,
-  turn === id && <button key="auctionClose" onClick={onAuctionClose}>
+  turn === id && status.op === 'auctionStart' && <button key="auctionClose" onClick={onAuctionClose}>
     Close auction
   </button>,
-  <SelectMoney
+  status.op === 'auctionClose' && status.involved.includes(id) && <SelectMoney
     key="exchange"
     onSubmit={onExchange}
     money={money}
     label="Exchange"
   />,
-  turn === id && <SelectMoney
+  turn === id && status.op === 'auctionClose' && <SelectMoney
     key="buyback"
     onSubmit={onBuyBack}
     money={money}
     label="Buy back"
   />,
-  <AuctionOffer key="auctionOffer" onAuctionOffer={onAuctionOffer} />,
-  turn === id && cowTradeOtherPlayersXAnimals.length && <CowTrade
+  status.op === 'auctionStart' && <AuctionOffer key="auctionOffer" onAuctionOffer={onAuctionOffer} />,
+  turn === id && cowTradeOtherPlayersXAnimals.length && status.op === '' && <CowTrade
     key="cowTrade"
     onCowTradeStart={onCowTradeStart}
     money={money}
     cowTradeOtherPlayersXAnimals={cowTradeOtherPlayersXAnimals}
   />,
-  <SelectMoney
+  status.op === 'cowTradeStart' && status.involved.includes(id) && <SelectMoney
     key="cowTradeRespond"
     onSubmit={onCowTradeRespond}
     money={money}
