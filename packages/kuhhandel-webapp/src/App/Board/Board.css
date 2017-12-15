@@ -88,6 +88,17 @@
   padding: 1em;
 }
 
+.cowTrade__initiator,
+.cowTrade__challenged,
+.cowTrade__money{
+  font-weight: bold;
+  font-size: 2em;
+}
+
+.cowTrade__animal{
+  font-size: 4em;
+}
+
 .players{
   list-style: none;
   margin: 0;

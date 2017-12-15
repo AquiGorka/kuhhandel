@@ -1,15 +1,23 @@
 import React from 'react'
 import './Board.css'
 
-const Animals = ({ animals }) => <ul className="animals">
-  {Array.from(new Set(animals)).map((animal, index) => {
-    const count = animals.filter(a => a === animal).length
-    return <li key={`animal-${index}`} className="animals__item">
-      <div className="animal__label" title={animal.value}>{animal.animal}</div>
-      <div className="animal__count">{count === 1 ? '' : `x${count}`}</div>
-    </li>
-  })}
-</ul>
+const Animals = ({ animals }) => {
+  const uniqueAnimals = animals.reduce((p, c) => {
+    if (!p.find(i => i.value === c.value)) {
+      p.push(c)
+    }
+    return p
+  }, [])
+  return <ul className="animals">
+    {uniqueAnimals.map((animal, index) => {
+      const count = animals.filter(a => a.value === animal.value).length
+      return <li key={`animal-${index}`} className="animals__item">
+        <div className="animal__label" title={animal.value}>{animal.animal}</div>
+        <div className="animal__count">{count === 1 ? '' : `x${count}`}</div>
+      </li>
+    })}
+  </ul>
+}
 
 const Players = ({ players }) => <ul className="players">
   {players.map((player) =>
@@ -49,7 +57,7 @@ const Auction = ({
 const Draw = ({ game }) => {
   const { status: { op }, currentDraw } = game
   return [
-    op !== 'cowTrade' && op !== ''
+    op !== 'cowTradeStart' && op !== ''
       && <div className="event__draw" key="draw">
         <h4>Draw</h4>
         <div className="draw__animal">{currentDraw.animal}</div>
@@ -60,8 +68,11 @@ const Draw = ({ game }) => {
   ]
 }
 
-const CowTrade = ({ game }) => game.status.op === 'cowTradeStart' 
-  && <div key="cowTrade">Current cow trade: {JSON.stringify(game.currentCowTrade)}</div>
+const CowTrade = ({ game: { status: { op }, currentCowTrade: { initiator, challenged, animal: { animal }}}}) => op === 'cowTradeStart' 
+  && <div key="cowTrade">
+    <h4>Cow trade</h4>
+    <div><span className="cowTrade__initiator">{initiator.playerId}</span> challenges <span className="cowTrade__challenged">{challenged.playerId}</span> for <span className="cowTrade__animal">{animal}</span> with <span className="cowTrade__money">{initiator.money.length}</span> money cards</div>
+  </div>
 
 const Board = ({ game }) => <div className="board">
   <h1>Emoji-trade or 🐮 🤝 💸 </h1>
@@ -74,7 +85,7 @@ const Board = ({ game }) => <div className="board">
   </header>
   <div className="board__event">
     <Draw game={game} />
-    <CowTrade game={game} />
+    {game.currentCowTrade && <CowTrade game={game} />}
   </div>
   <Players players={game.players} />
 </div>
