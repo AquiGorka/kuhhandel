@@ -15,18 +15,18 @@ export const FIRST_DONKEY_DEAL = 50
 export const SECOND_DONKEY_DEAL = 100
 export const THIRD_DONKEY_DEAL = 200
 export const FOURTH_DONKEY_DEAL = 500
-export const DONKEY = { animal: 'donkey', value: 500 }
+export const DONKEY = { animal: '🐻', value: 500 }
 export const ANIMALS = [
-  { animal: 'chicken', value: 10 },
-  { animal: 'goose', value: 40 },
-  { animal: 'cat', value: 90 },
-  { animal: 'dog', value: 160 },
-  { animal: 'sheep', value: 250 },
-  { animal: 'goat', value: 350 },
+  { animal: '🐤', value: 10 },
+  { animal: '🐓', value: 40 },
+  { animal: '🐱', value: 90 },
+  { animal: '🐶', value: 160 },
+  { animal: '🐑', value: 250 },
+  { animal: '🐐', value: 350 },
   DONKEY,
-  { animal: 'pig', value: 650 },
-  { animal: 'cow', value: 800 },
-  { animal: 'horse', value: 1000 },
+  { animal: '🐷', value: 650 },
+  { animal: '🐮', value: 800 },
+  { animal: '🐴', value: 1000 },
 ]
 export const DECK = [...ANIMALS, ...ANIMALS, ...ANIMALS, ...ANIMALS]
 
