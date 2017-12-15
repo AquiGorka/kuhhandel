@@ -1,6 +1,8 @@
 .board{
   height: 100%;
   padding: 1em;
+  display: flex;
+  flex-direction: column;
 }
 
 .board__header{
@@ -46,6 +48,10 @@
 
 .board__turn{
   font-size: 2em;
+}
+
+.board__event{
+  flex: 1;
 }
 
 .players{
