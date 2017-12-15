@@ -3,6 +3,7 @@ import { Control } from 'kuhhandel-components'
 import Peer from 'simple-peer'
 import GoogleURL from 'google-url'
 import promisify from 'es6-promisify'
+import './RemoteControl.css'
 
 const googleUrl = new GoogleURL({ key: GOOGLE_APIKEY })
 const shorten = promisify(googleUrl.shorten.bind(googleUrl))
@@ -80,7 +81,9 @@ class Remote extends Component {
 
 const RemoteControl = props => [
   <Remote key="remote" {...props} />,
-  <Control key="local" {...props} />,
+  <div key="local" className="control">
+    <Control {...props} />
+  </div>,
 ]
 
 export default RemoteControl

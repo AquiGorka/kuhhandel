@@ -1,9 +1,8 @@
 import React from 'react'
 import RemoteControl from './RemoteControl'
 
-const Controls = ({ game }) => [
-  <hr key="topSeparator" />,
-  game.players.map(player => [
+const Controls = ({ game }) =>
+  game.players.map(player =>
     <RemoteControl
       key={`control-${player.id}`}
       id={player.id}
@@ -33,8 +32,6 @@ const Controls = ({ game }) => [
           return p
         }, [])}
       onCowTradeRespond={money => game.cowTradeRespond({ money, playerId: player.id })}
-    />,
-    <hr key="separator" />,
-  ]),
-]
+    />)
+
 export default Controls
