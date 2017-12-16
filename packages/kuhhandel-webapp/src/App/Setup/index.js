@@ -127,7 +127,12 @@ class Setup extends Component {
     e.preventDefault()
     const { players } = this.state
     if (players.length < 5) {
-      this.setState({ players: players.concat(this.form.new.value) })
+      const newName = this.form.new.value
+      if (players.includes(newName)) {
+        alert('Please add unique player names')
+      } else {
+        this.setState({ players: players.concat(newName) })
+      }
     }
     this.form.reset()
   }
