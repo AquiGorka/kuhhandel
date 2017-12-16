@@ -1,0 +1,69 @@
+.setup{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  padding: 2em;
+}
+
+.setup__players{
+  height: 30%;
+  display: flex;
+  align-items: center;
+}
+
+.setup__start{
+  padding: 3em;
+  margin-right: 1em;
+}
+
+.setup__input{
+  padding: 1em;
+}
+
+.setup__list{
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-left: 1em;
+  display: flex;
+}
+
+.setup__item{
+  border: 1px solid #CCC;
+  padding: 1em;
+  margin: 1em;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.setup__remove{
+  border: none;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  cursor: pointer;
+  background: none;
+}
+
+.setup__instructions{
+  overflow: auto;
+  margin: 3em auto;
+  border: 1px dashed #735A5A;
+  padding: 1em;
+  position: relative;
+}
+
+.setup__header{
+  border-bottom: 1px solid #CCC;
+  margin-top: -1px;
+  padding: 1em;
+  position: sticky;
+  top: 0;
+  background: #FDF9F1;
+}
