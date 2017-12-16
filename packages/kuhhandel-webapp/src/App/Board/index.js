@@ -88,6 +88,11 @@ const Board = ({ game }) => <div className="board">
     {game.currentCowTrade && <CowTrade game={game} />}
   </div>
   <Players players={game.players} />
+  <button className="board__reset" onClick={() => {
+    if (window.confirm('All progress will be lost. Are you sure you want to start a new game?')) {
+      game.reset()
+    }
+  }}>New Game</button>
 </div>
 
 export default Board

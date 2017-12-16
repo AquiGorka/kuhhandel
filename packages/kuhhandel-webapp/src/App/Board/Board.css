@@ -3,6 +3,7 @@
   padding: 1em;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .board__header{
@@ -53,6 +54,13 @@
 .board__event{
   flex: 1;
   display: flex;
+}
+
+.board__reset{
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  cursor: pointer;
 }
 
 .event__draw,

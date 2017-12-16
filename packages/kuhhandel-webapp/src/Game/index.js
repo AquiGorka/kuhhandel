@@ -184,6 +184,11 @@ class Game extends EventEmitter {
     }
   }
 
+  reset = async () => {
+    await localForage.setItem(KH, [])
+    window.location.reload()
+  }
+
   get cannotPayPlayerMoney() {
     if (this.canThePlayerPay === false) {
       return kh.players.find(p => p.id === auction.highestBid().playerId).money
