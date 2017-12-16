@@ -9,6 +9,7 @@ const Controls = ({ game }) => <div className="controls">
       id={player.id}
       turn={game.turn}
       status={game.status}
+      canDraw={game.stack.length}
       onDraw={() => game.draw(player.id)}
       onAuctionStart={() => game.auctionStart(player.id)}
       onAuctionClose={() => game.auctionClose(player.id)}

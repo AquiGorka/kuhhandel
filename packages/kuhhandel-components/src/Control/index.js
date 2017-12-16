@@ -91,10 +91,11 @@ const Control = ({
   turn,
   status: { op, involved },
   canThePlayerPay,
+  canDraw,
 }) => [
   <div key={id}>{`Player Id: ${id}`}</div>,
   <div key="money">Money: {JSON.stringify(money)}</div>,
-  turn === id && op === ''
+  turn === id && op === '' && canDraw
     && <button key="draw" onClick={onDraw}>
         Draw
       </button>,
