@@ -15,7 +15,7 @@ class Connect extends Component {
     const { link, connected, id } = this.props
     const placeholder = `${id} ${connected ? '✅' : ' - ' + link.substr(15)}`
     return <form ref={f => this.form = f} onSubmit={this.onSubmit}>
-      <input className="connect" type="text" name="id" placeholder={placeholder} />
+      <input className="connect" type="text" name="id" placeholder={placeholder} title={`Open ${link} in your smartphone`} />
     </form>
   }
 
