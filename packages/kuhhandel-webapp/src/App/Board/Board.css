@@ -61,6 +61,14 @@
   top: 1em;
   right: 1em;
   cursor: pointer;
+  background: none;
+  padding: 1em;
+  border: 1px solid #CCC;
+  border-radius: 2px;
+}
+
+.board__reset:hover{
+  border: 1px solid #333;
 }
 
 .event__draw,
