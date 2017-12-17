@@ -31,15 +31,6 @@ class App extends Component {
   render() {
     const { error, connected, id, props } = this.state
 
-    if (error) {
-      console.log(error);
-      return <div>There has been an error, please try again.</div>
-    }
-
-    if (!connected && id) {
-      return <div>{id}</div>
-    }
-
     if (props) {
       const { id } = props
       const overloadedProps = {
@@ -56,8 +47,26 @@ class App extends Component {
       return <Control {...overloadedProps} />
     }
 
-    return <div className="index">
-      Remote Control
+    let content = "Remote Control"
+
+    if (error) {
+      console.log(error);
+      content = <div className="remote__error">
+        There has been an error, please try again.
+      </div>
+    }
+
+    if (!connected && id) {
+      content = [
+        <label key="label">
+          Use this Id to connect the game to your controller:
+        </label>,
+        <div key="id" className="remote__id">{id}</div>
+      ]
+    }
+
+    return <div className="remote">
+      {content}
     </div>
   }
 
