@@ -12,7 +12,10 @@ class Setup extends Component {
       <div className="setup__players">
         <button className="setup__start" key="start" onClick={this.onStart}>Start game</button>
         <form key="new" onSubmit={this.onAdd} ref={f => this.form = f}>
-          <input className="setup__input" type="text" name="new" placeholder="Player name" />
+          <label>
+            Type new player’s name and hit enter:
+            <input className="setup__input" type="text" name="new" placeholder="Add player" />
+          </label>
         </form>
         <ul className="setup__list" key="list">
           {players.map((name, index) =>
