@@ -15,11 +15,14 @@ class App extends Component {
   state = { connected: false, error: false, id: null, props: null }
 
   async componentDidMount() {
-    const signalData = atob(qmark('signalData'))
-    if (!signalData) {
+    let signalData
+    try {
+      signalData = atob(qmark('signalData'))
+    } catch (err) {
+      console.log('Error: ', err)
       this.setState({ error: 'No signal data was provided' })
       return
-  }
+    }
     peer = new Peer({ trickle: false })
     peer.signal(signalData)
     peer.on('signal', this.onSignal)
@@ -50,9 +53,8 @@ class App extends Component {
     let content = "Remote Control"
 
     if (error) {
-      console.log(error);
       content = <div className="remote__error">
-        There has been an error, please try again.
+        Please use the link provided in the game’s main window
       </div>
     }
 
