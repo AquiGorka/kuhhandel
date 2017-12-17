@@ -30,7 +30,7 @@ class Setup extends Component {
         </ul>
       </div>
       <div key="instructions" className="setup__instructions">
-        <h2 className="setup__header">Rules of the Game</h2>
+        <h2 className="setup__header">Game Rules</h2>
         <h3>Components</h3>
         <ul>
           <li>
