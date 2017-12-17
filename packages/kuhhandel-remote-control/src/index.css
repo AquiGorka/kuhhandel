@@ -1,6 +1,11 @@
 html, body, #app {
   height: 100%;
 }
+
+html{
+  font-size: calc(1em + 0.5vw);
+}
+
 body {
   font-family: sans-serif;
   margin: 0;

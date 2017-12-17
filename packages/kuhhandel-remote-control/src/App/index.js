@@ -56,7 +56,7 @@ class App extends Component {
       return <Control {...overloadedProps} />
     }
 
-    return <div>
+    return <div className="index">
       Remote Control
     </div>
   }
