@@ -115,7 +115,7 @@ const Control = ({
   <ul key="money" className="control__money">
     {money.map(({ value }, index) => <li key={`money-${index}-${value}`}>{value}</li>)}
   </ul>,
-  turn === id && op === '' && canDraw
+  turn === id && op === '' && !!canDraw
     && <Button key="draw" onClick={onDraw}>
         Draw
       </Button>,
