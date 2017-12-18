@@ -7,6 +7,12 @@ class CowTrade extends Component {
   render() {
     const { money, cowTradeOtherPlayersXAnimals } = this.props
     return [
+      <SelectMoney
+        key="money"
+        onSubmit={this.onSubmit}
+        money={money}
+        label="Cow Trade"
+      />,
       <form key="form" ref={f => (this.form = f)}>
         {cowTradeOtherPlayersXAnimals.map(({ id, animals }) => {
           return [
@@ -20,12 +26,6 @@ class CowTrade extends Component {
           ]
         })}
       </form>,
-      <SelectMoney
-        key="money"
-        onSubmit={this.onSubmit}
-        money={money}
-        label="Cow Trade"
-      />,
     ]
   }
 
@@ -54,13 +54,13 @@ class SelectMoney extends Component {
   render() {
     return (
       <form ref={f => (this.form = f)} onSubmit={this.onSubmit}>
+        <Button type="submit">{this.props.label}</Button>
         {this.props.money.map((card, index) => (
           <label key={index}>
             {JSON.stringify(card)}
             <input name={index} type="checkbox" value={index} />
           </label>
         ))}
-        <Button type="submit">{this.props.label}</Button>
       </form>
     )
   }
