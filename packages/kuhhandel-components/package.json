@@ -10,7 +10,7 @@
     "umd"
   ],
   "scripts": {
-    "build": "nwb build-react-component"
+    "build": "nwb build-react-component --copy-files"
   },
   "dependencies": {
     "react": "^16.2.0"
