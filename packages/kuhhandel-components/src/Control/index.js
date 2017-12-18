@@ -14,17 +14,28 @@ class CowTrade extends Component {
         label="Cow Trade"
       />,
       <form key="form" ref={f => (this.form = f)}>
-        {cowTradeOtherPlayersXAnimals.map(({ id, animals }) => {
-          return [
-            <div key="playerId">Player {id}</div>,
-            animals.map((a, index) =>
-              <label key={`option-${id}-${index}`}>
-                {JSON.stringify(a)}
-                <input type="radio" name="cowTrade" value={JSON.stringify({ ...a, id })} />
-              </label>
-            )
-          ]
-        })}
+        <ul>
+        {cowTradeOtherPlayersXAnimals.map(({ id, animals }) =>
+          <li key={`player-${id}-animals`}>
+            <h4 key="playerId">{id}</h4>
+            <ul>
+              {animals.map(({ animal, value }, index) =>
+                <li key={`player-${id}-animals-${index}`}>
+                  <label>
+                    {animal}
+                    {value}
+                    <input
+                      type="radio"
+                      name="cowTrade"
+                      value={JSON.stringify({ animal, id })}
+                    />
+                  </label>
+                </li>
+              )}
+            </ul>
+          </li>
+        )}
+        </ul>
       </form>,
     ]
   }
