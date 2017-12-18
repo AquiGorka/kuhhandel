@@ -1,0 +1,13 @@
+.control__id{
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid #CCC;
+  margin: 0;
+  padding: 1em;
+}
+
+.control__money{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}

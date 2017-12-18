@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import './Control.css'
 
 class CowTrade extends Component {
   render() {
@@ -93,8 +94,10 @@ const Control = ({
   canThePlayerPay,
   canDraw,
 }) => [
-  <div key={id}>{`Player Id: ${id}`}</div>,
-  <div key="money">Money: {JSON.stringify(money)}</div>,
+  <h2 className="control__id" key={id}>{id}</h2>,
+  <ul key="money" className="control__money">
+    {money.map(({ value }, index) => <li key={`money-${index}-${value}`}>{value}</li>)}
+  </ul>,
   turn === id && op === '' && canDraw
     && <button key="draw" onClick={onDraw}>
         Draw
