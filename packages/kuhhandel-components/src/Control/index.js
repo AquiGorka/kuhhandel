@@ -27,7 +27,7 @@ class CowTrade extends Component {
                     <input
                       type="radio"
                       name="cowTrade"
-                      value={JSON.stringify({ animal, id })}
+                      value={JSON.stringify({ animal: { animal, value }, id })}
                     />
                   </label>
                 </li>
@@ -41,7 +41,7 @@ class CowTrade extends Component {
   }
 
   onSubmit = money => {
-    const { id, ...animal } = JSON.parse(this.form.cowTrade.value)
+    const { id, animal } = JSON.parse(this.form.cowTrade.value)
     this.props.onCowTradeStart({ money, challengedId: id, animal })
   }
 }
@@ -71,7 +71,7 @@ class SelectMoney extends Component {
           <li key={index}>
             <label>
               {value}
-              <input name={index} type="checkbox" value={index} />
+              <input name={`money-${index}`} type="checkbox" value={index} />
             </label>
           </li>
         )}
@@ -83,7 +83,7 @@ class SelectMoney extends Component {
   onSubmit = e => {
     e.preventDefault()
     const money = this.props.money.reduce((p, c, index) => {
-      if (this.form.elements[index].checked) {
+      if (this.form[`money-${index}`].checked) {
         p.push(c)
       }
       return p
