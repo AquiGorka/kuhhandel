@@ -50,7 +50,13 @@ class AuctionOffer extends Component {
   render() {
     return (
       <form onSubmit={this.onSubmit} ref={f => (this.form = f)}>
-        <input name="offer" type="number" defaultValue="10" step="10" />
+        <input
+          className="control__tel"
+          name="offer"
+          type="tel"
+          pattern="\d*"
+          defaultValue="10"
+        />
       </form>
     )
   }
