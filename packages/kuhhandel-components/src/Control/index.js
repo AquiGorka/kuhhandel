@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import './Control.css'
 
+const Button = ({ children, ...props}) => <button {...props} className="control__button">{children}</button>
+
 class CowTrade extends Component {
   render() {
     const { money, cowTradeOtherPlayersXAnimals } = this.props
@@ -58,7 +60,7 @@ class SelectMoney extends Component {
             <input name={index} type="checkbox" value={index} />
           </label>
         ))}
-        <button type="submit">{this.props.label}</button>
+        <Button type="submit">{this.props.label}</Button>
       </form>
     )
   }
@@ -99,17 +101,17 @@ const Control = ({
     {money.map(({ value }, index) => <li key={`money-${index}-${value}`}>{value}</li>)}
   </ul>,
   turn === id && op === '' && canDraw
-    && <button key="draw" onClick={onDraw}>
+    && <Button key="draw" onClick={onDraw}>
         Draw
-      </button>,
+      </Button>,
   turn === id && (op === 'draw' || (op === 'auctionClose' && !canThePlayerPay))
-    && <button key="auctionStart" onClick={onAuctionStart}>
+    && <Button key="auctionStart" onClick={onAuctionStart}>
       Start auction
-    </button>,
+    </Button>,
   turn === id && op === 'auctionStart'
-    && <button key="auctionClose" onClick={onAuctionClose}>
+    && <Button key="auctionClose" onClick={onAuctionClose}>
       Close auction
-    </button>,
+    </Button>,
   op === 'auctionClose' && involved.includes(id)
     && <SelectMoney
       key="exchange"
@@ -118,9 +120,9 @@ const Control = ({
       label="Exchange"
     />,
   turn === id && op === 'auctionExchange'
-    && <button key="auctionExchangeAccept" onClick={onExchangeAccept}>
+    && <Button key="auctionExchangeAccept" onClick={onExchangeAccept}>
       Accept exchange
-    </button>,
+    </Button>,
   turn === id && op === 'auctionExchange'
     && <SelectMoney
       key="buyback"

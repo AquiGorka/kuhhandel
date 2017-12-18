@@ -11,3 +11,14 @@
   padding: 0;
   margin: 0;
 }
+
+.control__button{
+  border:1px solid #CCC;
+  padding: 2em;
+  background: #FFF;
+}
+
+.control__button:hover,
+.control__button:active{
+  border:1px solid #333;
+}
