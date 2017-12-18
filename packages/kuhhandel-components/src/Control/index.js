@@ -153,7 +153,7 @@ const Control = ({
     />,
   turn !== id && op === 'auctionStart'
     && <AuctionOffer key="auctionOffer" onAuctionOffer={onAuctionOffer} />,
-  turn === id && cowTradeOtherPlayersXAnimals.length && op === ''
+  turn === id && !!cowTradeOtherPlayersXAnimals.length && op === ''
     && <CowTrade
       key="cowTrade"
       onCowTradeStart={onCowTradeStart}
