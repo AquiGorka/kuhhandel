@@ -55,12 +55,16 @@ class SelectMoney extends Component {
     return (
       <form ref={f => (this.form = f)} onSubmit={this.onSubmit}>
         <Button type="submit">{this.props.label}</Button>
-        {this.props.money.map((card, index) => (
-          <label key={index}>
-            {JSON.stringify(card)}
-            <input name={index} type="checkbox" value={index} />
-          </label>
-        ))}
+        <ul>
+        {this.props.money.map(({ value }, index) =>
+          <li key={index}>
+            <label>
+              {value}
+              <input name={index} type="checkbox" value={index} />
+            </label>
+          </li>
+        )}
+        </ul>
       </form>
     )
   }
