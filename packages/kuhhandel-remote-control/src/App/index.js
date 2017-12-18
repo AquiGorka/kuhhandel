@@ -43,6 +43,7 @@ class App extends Component {
         onAuctionClose: () => this.onSend({ method: 'onAuctionClose'}),
         onAuctionOffer: payload => this.onSend({ method: 'onAuctionOffer', payload }),
         onExchange: payload => this.onSend({ method: 'onExchange', payload }),
+        onExchangeAccept: () => this.onSend({ method: 'onExchangeAccept' }),
         onBuyBack: payload => this.onSend({ method: 'onBuyBack', payload }),
         onCowTradeStart: payload => this.onSend({ method: 'onCowTradeStart', payload }),
         onCowTradeRespond: payload => this.onSend({ method: 'onCowTradeRespond', payload }),
