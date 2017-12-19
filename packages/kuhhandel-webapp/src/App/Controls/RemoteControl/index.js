@@ -58,8 +58,10 @@ class Remote extends Component {
   initPeer = () => {
     const { peer } = this.state
     peer.once('signal', this.onSignal)
-    peer.once('connect', () => this.onSendProps(this.props))
-    peer.on('connect', () => this.setState({ connected: true }))
+    peer.on('connect', () => {
+      peer.send(JSON.stringify(this.props))
+      this.setState({ connected: true })
+    })
     peer.on('data', data => this.onData(JSON.parse(data)))
     peer.on('close', () => this.setState({ link: '', connected: false, peer: new Peer(peerConfig) }, this.initPeer))
   }
