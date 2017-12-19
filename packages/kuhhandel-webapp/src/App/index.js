@@ -24,10 +24,12 @@ class App extends Component {
       return <Setup onSetup={game.setup} />
     }
 
+    const { time } = this.state
+
     return [
-      <Board key="board" game={game} />,
-      <Controls key="controls" game={game} />,
-      <Log key="log" game={game} />,
+      <Board key="board" game={game} time={time} />,
+      <Controls key="controls" game={game} time={time} />,
+      <Log key="log" game={game} time={time} />,
     ]
   }
 
