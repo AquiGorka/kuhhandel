@@ -35,11 +35,17 @@
   border:1px solid #333;
 }
 
-.control__tel{
+.offer__tel{
   padding: 1em;
 }
 
+.offer__submit{
+  padding: 1em;
+  margin-left: 1em;
+}
 
+.exchange__money ul,
+.buyback__money ul,
 .cowTrade__money ul,
 .cowTrade__players,
 .cowTrade__player,
@@ -51,6 +57,8 @@
   flex-wrap: wrap;
 }
 
+.exchange__money_item,
+.buyback__money_item,
 .cowTrade__money_item,
 .cowTrade__players_item,
 .cowTrade__player_item,

@@ -53,12 +53,13 @@ class AuctionOffer extends Component {
     return (
       <form onSubmit={this.onSubmit} ref={f => (this.form = f)}>
         <input
-          className="control__tel"
+          className="offer__tel"
           name="offer"
           type="tel"
           pattern="\d*"
           defaultValue="10"
         />
+        <button type="submit" className="offer__submit">Offer</button>
       </form>
     )
   }
@@ -139,6 +140,8 @@ const Control = ({
   op === 'auctionClose' && involved.includes(id)
     && <SelectMoney
       key="exchange"
+      className="exchange__money"
+      itemClassName="exchange__money_item"
       onSubmit={onExchange}
       money={money}
       label="Exchange"
@@ -150,6 +153,8 @@ const Control = ({
   turn === id && op === 'auctionExchange'
     && <SelectMoney
       key="buyback"
+      className="buyback__money"
+      itemClassName="buyback__money_item"
       onSubmit={onBuyBack}
       money={money}
       label="Buy back"
