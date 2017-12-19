@@ -36,3 +36,48 @@
 .control__tel{
   padding: 1em;
 }
+
+
+.cowTrade__money ul{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cowTrade__money_item{
+  border: 1px solid #CCC;
+  padding: 1em;
+  margin: 0.5em;
+}
+
+.cowTrade__players{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cowTrade__players_item{
+  border: 1px solid #CCC;
+  padding: 1em;
+  margin: 0.5em;
+  display: block;
+  width: 100%;
+}
+
+.cowTrade__player{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cowTrade__player_item{
+  border: 1px solid #CCC;
+  padding: 1em;
+  margin: 0.5em;
+}

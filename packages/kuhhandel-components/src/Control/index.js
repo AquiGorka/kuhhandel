@@ -9,18 +9,20 @@ class CowTrade extends Component {
     return [
       <SelectMoney
         key="money"
+        className="cowTrade__money"
+        itemClassName="cowTrade__money_item"
         onSubmit={this.onSubmit}
         money={money}
         label="Cow Trade"
       />,
       <form key="form" ref={f => (this.form = f)}>
-        <ul>
+        <ul className="cowTrade__players">
         {cowTradeOtherPlayersXAnimals.map(({ id, animals }) =>
-          <li key={`player-${id}-animals`}>
+          <li className="cowTrade__players_item" key={`player-${id}-animals`}>
             <h4 key="playerId">{id}</h4>
-            <ul>
+            <ul className="cowTrade__player">
               {animals.map(({ animal, value }, index) =>
-                <li key={`player-${id}-animals-${index}`}>
+                <li className="cowTrade__player_item" key={`player-${id}-animals-${index}`}>
                   <label>
                     {animal}
                     {value}
@@ -69,12 +71,13 @@ class AuctionOffer extends Component {
 
 class SelectMoney extends Component {
   render() {
+    const { label, className, itemClassName, money } = this.props
     return (
-      <form ref={f => (this.form = f)} onSubmit={this.onSubmit}>
-        <Button type="submit">{this.props.label}</Button>
+      <form ref={f => (this.form = f)} onSubmit={this.onSubmit} className={className}>
+        <Button type="submit">{label}</Button>
         <ul>
-        {this.props.money.map(({ value }, index) =>
-          <li key={index}>
+        {money.map(({ value }, index) =>
+          <li key={index} className={itemClassName}>
             <label>
               {value}
               <input name={`money-${index}`} type="checkbox" value={index} />
