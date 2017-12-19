@@ -21,3 +21,7 @@ body {
   flex-direction: column;
   overflow: hidden;
 }
+
+#app .control__money{
+  display: none;
+}
