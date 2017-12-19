@@ -11,6 +11,15 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #CCC;
+}
+
+.control__money__item{
+  border: 1px solid #5d9a65;
+  padding: 1em;
+  margin: 0.5em;
 }
 
 .control__button{
