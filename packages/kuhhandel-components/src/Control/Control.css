@@ -26,6 +26,8 @@
   border:1px solid #CCC;
   padding: 2em;
   background: #FFF;
+  display: block;
+  margin: 0.5em auto;
 }
 
 .control__button:hover,
