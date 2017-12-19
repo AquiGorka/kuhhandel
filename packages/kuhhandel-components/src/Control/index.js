@@ -166,6 +166,8 @@ const Control = ({
   op === 'cowTradeStart' && involved.includes(id)
     && <SelectMoney
       key="cowTradeRespond"
+      className="cowTradeRespond__money"
+      itemClassName="cowTradeRespond__money_item"
       onSubmit={onCowTradeRespond}
       money={money}
       label="Respond Cow Trade"
