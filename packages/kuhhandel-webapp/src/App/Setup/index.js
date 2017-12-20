@@ -1,5 +1,10 @@
 import React, { Component } from 'react'
+import { ANIMALS } from 'kuhhandel'
 import './Setup.css'
+import c1 from './connect-1.png'
+import c2 from './connect-2.png'
+import c3 from './connect-3.png'
+import c4 from './connect-4.png'
 
 class Setup extends Component {
 
@@ -34,21 +39,24 @@ class Setup extends Component {
       </div>
       <div key="instructions" className="setup__instructions">
         <h2 className="setup__header">Game Rules</h2>
+        <h3>Players</h3>
+        <div>Minimum of 2 players and up to 6 can play</div>
+        <h3>Controllers</h3>
+        <div>
+          Use your smartphones as controllers.
+          <br />
+          Once you start the game use the input boxes at the bottom: <img src={c1} alt="Connection input boxes" style={{ height: 100, position: 'relative', top: 10 }} />
+          <br />
+          Enter the URL in your smartphone and then copy & paste the Id shown: <img src={c2} alt="Id from smartphone" style={{ height: 100, position: 'relative', top: 40 }} /> <img src={c3} alt="Use in input box" style={{ height: 35, position: 'relative', top: 15 }} />
+          <br />
+          You will get connected instantly: <img src={c4} alt="Connected" style={{ height: 50, position: 'relative', top: 10 }} />
+        </div>
         <h3>Components</h3>
         <ul>
           <li>
             40 emoji cards: 10 x 4 emojis
             <ul>
-              <li>🐤 value 10</li>
-              <li>🐓 value 40</li>
-              <li>🐱 value 90</li>
-              <li>🐶 value 160</li>
-              <li>🐑 value 250</li>
-              <li>🐐 value 350</li>
-              <li>🐻 value 500</li>
-              <li>🐷 value 650</li>
-              <li>🐮 value 800</li>
-              <li>🐴 value 1000</li>
+              {Array.from(ANIMALS).map(([id, { emoji, value }]) => <li>{emoji} value {value}</li>)}
             </ul>
           </li>
           <li>Money cards: 0, 10, 20, 50, 100, 200, 500</li>
