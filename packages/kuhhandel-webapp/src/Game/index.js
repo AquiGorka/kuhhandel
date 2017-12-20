@@ -89,7 +89,7 @@ class Game extends EventEmitter {
     if (this.turn !== playerId) {
       return
     }
-    const opts = { playerId, animal: draw }
+    const opts = { playerId, animalId: draw }
     auction = kh.auction(opts)
     this.emit('update')
     if (log) {
@@ -128,14 +128,14 @@ class Game extends EventEmitter {
   }
 
   cowTradeStart = (opts, log = true) => {
-    const { money, animal, initiatorId, challengedId } = opts
+    const { money, animalId, initiatorId, challengedId } = opts
     if (this.turn !== initiatorId) {
       return
     }
     cowTrade = kh.cowTrade({
       initiator: { money, playerId: initiatorId },
       challenged: { playerId: challengedId },
-      animal
+      animalId
     })
     this.emit('update')
     if (log) {

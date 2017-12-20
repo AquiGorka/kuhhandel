@@ -27,7 +27,8 @@ const Controls = ({ game }) => <div className="controls">
       cowTradeOtherPlayersXAnimals={game.players
         .filter(p => p.id !== player.id)
         .map(({ id, animals }) =>
-          ({ id, animals: Array.from(new Set(animals)).filter(a => player.animals.includes(a)) }))
+          ({ id, animals: Array.from(new Set(animals)).filter(a =>
+            player.animals.includes(a)) }))
         .reduce((p, c) => {
           if (c.animals.length) {
             p.push(c)

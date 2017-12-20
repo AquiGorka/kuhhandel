@@ -13,6 +13,7 @@
     "build": "nwb build-react-component --copy-files"
   },
   "dependencies": {
+    "kuhhandel": "^1.1.3",
     "react": "^16.2.0"
   },
   "devDependencies": {

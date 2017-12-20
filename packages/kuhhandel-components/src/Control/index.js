@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { ANIMALS } from 'kuhhandel'
 import './Control.css'
 
 const Button = ({ children, ...props}) => <button {...props} className="control__button">{children}</button>
@@ -21,19 +22,20 @@ class CowTrade extends Component {
           <li className="cowTrade__players_item" key={`player-${id}-animals`}>
             <h4 key="playerId">{id}</h4>
             <ul className="cowTrade__player">
-              {animals.map(({ animal, value }, index) =>
-                <li className="cowTrade__player_item" key={`player-${id}-animals-${index}`}>
+              {animals.map(animalId => {
+                const { emoji, value } = ANIMALS.get(animalId)
+                return <li className="cowTrade__player_item" key={`player-${id}-animals-${animalId}`}>
                   <label>
-                    {animal}
+                    {emoji}
                     {value}
                     <input
                       type="radio"
                       name="cowTrade"
-                      value={JSON.stringify({ animal: { animal, value }, id })}
+                      value={JSON.stringify({ animalId, id })}
                     />
                   </label>
                 </li>
-              )}
+              })}
             </ul>
           </li>
         )}
@@ -43,8 +45,8 @@ class CowTrade extends Component {
   }
 
   onSubmit = money => {
-    const { id, animal } = JSON.parse(this.form.cowTrade.value)
-    this.props.onCowTradeStart({ money, challengedId: id, animal })
+    const { id, animalId } = JSON.parse(this.form.cowTrade.value)
+    this.props.onCowTradeStart({ money, challengedId: id, animalId })
   }
 }
 
@@ -59,7 +61,7 @@ class AuctionOffer extends Component {
           pattern="\d*"
           defaultValue="10"
         />
-        <Button type="submit">Offer</button>
+        <Button type="submit">Offer</Button>
       </form>
     )
   }
