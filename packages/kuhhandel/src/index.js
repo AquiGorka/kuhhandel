@@ -15,20 +15,21 @@ export const FIRST_DONKEY_DEAL = 50
 export const SECOND_DONKEY_DEAL = 100
 export const THIRD_DONKEY_DEAL = 200
 export const FOURTH_DONKEY_DEAL = 500
-export const DONKEY = { animal: 'Donkey', emoji: '🐴', value: 500 }
-export const ANIMALS = [
-  { animal: 'Chick', emoji: '🐤', value: 10 },
-  { animal: 'Penguin', emoji: '🐧', value: 40 },
-  { animal: 'Cat', emoji: '🐱', value: 90 },
-  { animal: 'Dog', emoji: '🐶', value: 160 },
-  { animal: 'Boar', emoji: '🐗', value: 250 },
-  { animal: 'Monkey', emoji: '🐵', value: 350 },
-  DONKEY,
-  { animal: 'Pig', emoji: '🐷', value: 650 },
-  { animal: 'Cow', emoji: '🐮', value: 800 },
-  { animal: 'Bear', emoji: '🐻', value: 1001 },
-]
-export const DECK = [...ANIMALS, ...ANIMALS, ...ANIMALS, ...ANIMALS]
+export const DONKEY = 'donkey'
+export const ANIMALS = new Map([
+  ['chick', { emoji: '🐤', value: 10 }],
+  ['penguin', { emoji: '🐧', value: 40 }],
+  ['cat', { emoji: '🐱', value: 90 }],
+  ['dog', { emoji: '🐶', value: 160 }],
+  ['boar', { emoji: '🐗', value: 250 }],
+  ['monkey', { emoji: '🐵', value: 350 }],
+  [DONKEY, { emoji: '🐴', value: 500 }],
+  ['pig', { emoji: '🐷', value: 650 }],
+  ['cow', { emoji: '🐮', value: 800 }],
+  ['bear', { emoji: '🐻', value: 1000 }],
+])
+const keys = Array.from(ANIMALS.keys())
+export const DECK = [...keys, ...keys, ...keys, ...keys]
 
 export const totalValue = (p, c) => p + c.value
 
@@ -53,16 +54,16 @@ class Player {
   }
 
   score() {
-    const animalMap = this.animals.reduce((p, c) => {
-      if (!p.has(c.animal)) {
-        p.set(c.animal, { count: 0 })
+    const animalCount = this.animals.reduce((p, c) => {
+      if (!p.has(c)) {
+        p.set(c, 0)
       }
-      p.set(c.animal, { value: c.value, count: p.get(c.animal).count + 1 })
+      p.set(c, p.get(c) + 1)
       return p
     }, new Map())
-    const fourOfAKindMap = Array.from(animalMap).filter(arr => arr[1].count === 4)
-    return fourOfAKindMap.length * fourOfAKindMap.reduce((p, c) => {
-      return p + c[1].value
+    const fourOfAKindMap = Array.from(animalCount).filter(([id, count]) => count === 4)
+    return fourOfAKindMap.length * fourOfAKindMap.reduce((p, [id, count]) => {
+      return p + ANIMALS.get(id).value
     }, 0)
   }
 
@@ -71,7 +72,7 @@ class Player {
   }
 
   letGoAnimals(animals) {
-    this.animals = reduceArray(this.animals, animals.concat(), c => i => i.value === c.value)
+    this.animals = reduceArray(this.animals, animals.concat(), c => i => i === c)
   }
 
   letGoMoney(money) {
@@ -88,11 +89,11 @@ class Player {
 }
 
 class Auction {
-  constructor({ playerId, animal } = {}) {
-    if (!playerId || !animal) {
+  constructor({ playerId, animalId } = {}) {
+    if (!playerId || !animalId) {
       throw new Error('Provide a player id and an animal to start an auction')
     }
-    this.animal = animal
+    this.animalId = animalId
     this.auctioneerId = playerId
     this.closed = false
     this.offers = []
@@ -160,13 +161,13 @@ class Challenged {
 }
 
 class CowTrade {
-  constructor({ initiator, challenged, animal }) {
-    if (!initiator || !challenged || !animal) {
-      throw new Error('Provide an initiator a challengerd and an animal to start a Cow Trade')
+  constructor({ initiator, challenged, animalId }) {
+    if (!initiator || !challenged || !animalId) {
+      throw new Error('Provide an initiator, a challenger and an animal to start a Cow Trade')
     }
     this.initiator = new Initiator(initiator)
     this.challenged = new Challenged(challenged)
-    this.animal = animal
+    this.animalId = animalId
   }
 
   respond(money) {
@@ -180,8 +181,8 @@ class Kuhhandel {
     if (players.length < 2) {
       throw new Error('A minimum of 2 players is required')
     }
-    if (players.length > 5) {
-      throw new Error('A maximum of 5 players is allowed')
+    if (players.length > 6) {
+      throw new Error('A maximum of 6 players is allowed')
     }
     this.seed = seed
     this.players = players.map(id => new Player({ id }))
@@ -197,7 +198,7 @@ class Kuhhandel {
     if (!auction.offers.length) {
       this.players
         .find(p => p.id === auction.auctioneerId)
-        .receiveAnimals(auction.animal)
+        .receiveAnimals(auction.animalId)
     }
   }
 
@@ -213,7 +214,7 @@ class Kuhhandel {
     const auctioneer = this.players.find(p => p.id === auction.auctioneerId)
     auctioneer.letGoMoney(money)
     player.receiveMoney(money)
-    auctioneer.receiveAnimals(auction.animal)
+    auctioneer.receiveAnimals(auction.animalId)
   }
 
   canThePlayerPay(auction) {
@@ -245,12 +246,12 @@ class Kuhhandel {
     if (!this.stack.length) {
       throw new Error('There are no more cards left')
     }
-    const animal = this.stack.pop()
-    if (animal === DONKEY) {
+    const animalId = this.stack.pop()
+    if (animalId === DONKEY) {
       const value = this.computeValueForDonkeyDraw()
       this.players.forEach(p => p.receiveMoney({ value }))
     }
-    return animal
+    return animalId
   }
 
   cowTrade(opts) {
@@ -274,7 +275,7 @@ class Kuhhandel {
     const auctioneer = this.players.find(p => p.id === auction.auctioneerId)
     player.letGoMoney(money)
     auctioneer.receiveMoney(money)
-    player.receiveAnimals(auction.animal)
+    player.receiveAnimals(auction.animalId)
   }
 
   initialDeal() {
@@ -297,13 +298,13 @@ class Kuhhandel {
     const loserId  = (initiator.total() < challenged.total()) ? initiator.playerId : challenged.playerId
     const winner = this.players.find(p => p.id === winnerId)
     const loser = this.players.find(p => p.id === loserId)
-    // the winner gets the animal card(s)
-    const winnerNumberOfAnimal = winner.animals.filter(a => a.animal === cowTrade.animal.animal).length
-    const loserNumberOfAnimal = loser.animals.filter(a => a.animal === cowTrade.animal.animal).length
+    // the winner gets the animals
+    const winnerNumberOfAnimal = winner.animals.filter(a => a === cowTrade.animalId).length
+    const loserNumberOfAnimal = loser.animals.filter(a => a === cowTrade.animalId).length
     const numberOfAnimalsToReceive = (winnerNumberOfAnimal === 2 && loserNumberOfAnimal === 2) ? 2 : 1
     for (let i = 0; i < numberOfAnimalsToReceive; i++) {
-      winner.receiveAnimals([cowTrade.animal])
-      loser.letGoAnimals([cowTrade.animal])
+      winner.receiveAnimals([cowTrade.animalId])
+      loser.letGoAnimals([cowTrade.animalId])
     }
     const initiatorPlayer = this.players.find(p => p.id === initiator.playerId)
     const challengedPlayer = this.players.find(p => p.id === challenged.playerId)

@@ -176,8 +176,8 @@ describe('Kuhhandel auction', () => {
 
   it('should start an auction and listen to offers', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
-    const auction = kh.auction({ playerId: '0', animal })
+    const animalId = kh.draw()
+    const auction = kh.auction({ playerId: '0', animalId })
     const offer = { playerId: '1', value: 10 }
     auction.offer(offer)
     expect(auction.offers).toEqual([offer])
@@ -185,8 +185,8 @@ describe('Kuhhandel auction', () => {
 
   it('should return true after accepting an offer', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
-    const auction = kh.auction({ playerId: '0', animal })
+    const animalId = kh.draw()
+    const auction = kh.auction({ playerId: '0', animalId })
     const offer = { playerId: '1', value: 10 }
     const accepted = auction.offer(offer)
     expect(accepted).toBe(true)
@@ -194,8 +194,8 @@ describe('Kuhhandel auction', () => {
 
   it('should return false after not accepting an offer', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
-    const auction = kh.auction({ playerId: '0', animal })
+    const animalId = kh.draw()
+    const auction = kh.auction({ playerId: '0', animalId })
     const offer = { playerId: '1', value: 10 }
     auction.offer(offer)
     const rejected = auction.offer(offer)
@@ -204,8 +204,8 @@ describe('Kuhhandel auction', () => {
 
   it('should not accept offers for value 0', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
-    const auction = kh.auction({ playerId: '0', animal })
+    const animalId = kh.draw()
+    const auction = kh.auction({ playerId: '0', animalId })
     const offer = { playerId: '1', value: 0 }
     const rejected = auction.offer(offer)
     expect(rejected).toBe(false)
@@ -213,16 +213,16 @@ describe('Kuhhandel auction', () => {
 
   it('should throw if it receives an offer from the auctioneer', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
-    const auction = kh.auction({ playerId: '0', animal })
+    const animalId = kh.draw()
+    const auction = kh.auction({ playerId: '0', animalId })
     const offer = { playerId: '0', value: 10 }
     expect(() => auction.offer(offer)).toThrow()
   })
 
   it('should not accept offers for less or equal the current highest bid', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
-    const auction = kh.auction({ playerId: '0', animal })
+    const animalId = kh.draw()
+    const auction = kh.auction({ playerId: '0', animalId })
     const offer0 = { playerId: '1', value: 20 }
     const offer1 = { playerId: '2', value: 10 }
     const offer2= { playerId: '2', value: 20 }
@@ -235,8 +235,8 @@ describe('Kuhhandel auction', () => {
 
   it('should return the highest bid for a card', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
-    const auction = kh.auction({ playerId: '0', animal })
+    const animalId = kh.draw()
+    const auction = kh.auction({ playerId: '0', animalId })
     const offer0 = { playerId: '1', value: 10 }
     const offer1 = { playerId: '2', value: 20 }
     auction.offer(offer0)
@@ -246,8 +246,8 @@ describe('Kuhhandel auction', () => {
 
   it('should not accept more offers after the auction has been closed', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
-    const auction = kh.auction({ playerId: '0', animal })
+    const animalId = kh.draw()
+    const auction = kh.auction({ playerId: '0', animalId })
     const offer0 = { playerId: '1', value: 10 }
     const offer1 = { playerId: '2', value: 20 }
     const offer2 = { playerId: '3', value: 30 }
@@ -261,8 +261,8 @@ describe('Kuhhandel auction', () => {
 describe('Kuhhandel closed auction exchange', () => {
   it('should return true if the exchange can take place', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
-    const auction = kh.auction({ playerId: kh.players[0].id, animal })
+    const animalId = kh.draw()
+    const auction = kh.auction({ playerId: kh.players[0].id, animalId })
     const offer0 = { playerId: kh.players[1].id, value: 10 }
     auction.offer(offer0)
     kh.auctionClose(auction)
@@ -272,8 +272,8 @@ describe('Kuhhandel closed auction exchange', () => {
 
   it('should return false if the exchange can not take place', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
-    const auction = kh.auction({ playerId: kh.players[0].id, animal })
+    const animalId = kh.draw()
+    const auction = kh.auction({ playerId: kh.players[0].id, animalId })
     const offer0 = { playerId: kh.players[1].id, value: Infinity }
     auction.offer(offer0)
     kh.auctionClose(auction)
@@ -283,8 +283,8 @@ describe('Kuhhandel closed auction exchange', () => {
 
   it('should throw if trying to execute an exchange if the auction is not closed', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
-    const auction = kh.auction({ playerId: kh.players[0].id, animal })
+    const animalId = kh.draw()
+    const auction = kh.auction({ playerId: kh.players[0].id, animalId })
     const offer0 = { playerId: kh.players[1].id, value: Infinity }
     auction.offer(offer0)
     expect(() => kh.exchange(auction, [])).toThrow()
@@ -292,9 +292,9 @@ describe('Kuhhandel closed auction exchange', () => {
 
   it('should throw if exchange is not given equal or more money for the highest offer', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
+    const animalId = kh.draw()
     const auctioneer = kh.players[0]
-    const auction = kh.auction({ playerId: auctioneer.id, animal })
+    const auction = kh.auction({ playerId: auctioneer.id, animalId })
     const player = kh.players[1]
     const offeredValue = 10
     const offer0 = { playerId: player.id, value: offeredValue }
@@ -307,9 +307,9 @@ describe('Kuhhandel closed auction exchange', () => {
 
   it('should accept the exchange and execute the trade', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
+    const animalId = kh.draw()
     const auctioneer = kh.players[0]
-    const auction = kh.auction({ playerId: auctioneer.id, animal })
+    const auction = kh.auction({ playerId: auctioneer.id, animalId })
     const player = kh.players[1]
     const offeredValue = 10
     const offer0 = { playerId: player.id, value: offeredValue }
@@ -324,26 +324,26 @@ describe('Kuhhandel closed auction exchange', () => {
     expect(accepted).toBe(true)
     expect(kh.players[0].total()).toBe(auctioneerOriginalMoneyTotal + offeredValue)
     expect(kh.players[1].total()).toBe(playerOriginalMoneyTotal - offeredValue)
-    expect(kh.players[1].animals).toEqual([animal])
+    expect(kh.players[1].animals).toEqual([animalId])
   })
 
   it('should give the animal card directly to the auctioneer if there where no offers when the auction closes', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
+    const animalId = kh.draw()
     const auctioneer = kh.players[0]
-    const auction = kh.auction({ playerId: auctioneer.id, animal })
+    const auction = kh.auction({ playerId: auctioneer.id, animalId })
     kh.auctionClose(auction)
     // the draw might be a donkey and players receive extra money if that happens
     const auctioneerOriginalMoneyTotal = auctioneer.money.reduce(totalValue, 0)
     expect(kh.players[0].total()).toBe(auctioneerOriginalMoneyTotal)
-    expect(kh.players[0].animals).toEqual([animal])
+    expect(kh.players[0].animals).toEqual([animalId])
   })
 
   it('should throw if trying to buyback and the auction is not closed', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
+    const animalId = kh.draw()
     const auctioneer = kh.players[0]
-    const auction = kh.auction({ playerId: auctioneer.id, animal })
+    const auction = kh.auction({ playerId: auctioneer.id, animalId })
     const player = kh.players[1]
     const offeredValue = 10
     const offer0 = { playerId: player.id, value: offeredValue }
@@ -353,9 +353,9 @@ describe('Kuhhandel closed auction exchange', () => {
 
   it('should throw if buyback is not given equal or more money for the highest offer', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
+    const animalId = kh.draw()
     const auctioneer = kh.players[0]
-    const auction = kh.auction({ playerId: auctioneer.id, animal })
+    const auction = kh.auction({ playerId: auctioneer.id, animalId })
     const player = kh.players[1]
     const offeredValue = 10
     const offer0 = { playerId: player.id, value: offeredValue }
@@ -366,9 +366,9 @@ describe('Kuhhandel closed auction exchange', () => {
 
   it('should execute the buyBack successfully', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
+    const animalId = kh.draw()
     const auctioneer = kh.players[0]
-    const auction = kh.auction({ playerId: auctioneer.id, animal })
+    const auction = kh.auction({ playerId: auctioneer.id, animalId })
     const player = kh.players[1]
     const offeredValue = 10
     const offer0 = { playerId: player.id, value: offeredValue }
@@ -379,7 +379,7 @@ describe('Kuhhandel closed auction exchange', () => {
     const playerOriginalMoneyTotal = player.money.reduce(totalValue, 0)
     kh.buyBack(auction, [{ value: 10 }])
     expect(kh.players[0].total()).toBe(auctioneerOriginalMoneyTotal - offeredValue)
-    expect(kh.players[0].animals).toEqual([animal])
+    expect(kh.players[0].animals).toEqual([animalId])
     expect(kh.players[1].total()).toBe(playerOriginalMoneyTotal + offeredValue)
   })
 })
@@ -392,23 +392,23 @@ describe('Kuhhandel cow trade', () => {
 
   it('should initiate a cow trade and see how many money cards the challenger submitted', () => {
     const { kh } = randomHalfDeckEvenDistributedKuhhandel()
-    const animal = kh.players[0].animals[0]
+    const animalId = kh.players[0].animals[0]
     const cowTrade = kh.cowTrade({
       initiator: { playerId: kh.players[0].id, money: [{ value: 0 }] },
       challenged: { playerId: kh.players[1].id },
-      animal
+      animalId
     })
     expect(cowTrade.initiator.visibleMoney()).toBe(1)
   })
 
   it('should settle a cow trade after the challenged player submits their cards', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
+    const animalId = kh.draw()
     const initiator = { playerId: kh.players[0].id, money: [{ value: 10 }] }
-    kh.players[0].receiveAnimals(animal)
+    kh.players[0].receiveAnimals(animalId)
     const challenged = { playerId: kh.players[1].id }
-    kh.players[1].receiveAnimals(animal)
-    const cowTrade = kh.cowTrade({ initiator, challenged, animal })
+    kh.players[1].receiveAnimals(animalId)
+    const cowTrade = kh.cowTrade({ initiator, challenged, animalId })
     cowTrade.respond([{ value: 0 }])
     // the draw might be a donkey and players receive extra money if that happens
     const initiatorOriginalMoneyTotal = kh.players[0].money.reduce(totalValue, 0)
@@ -416,20 +416,20 @@ describe('Kuhhandel cow trade', () => {
     const settled = kh.settleCowTrade(cowTrade)
     expect(settled).toBe(true)
     expect(kh.players[0].money.reduce(totalValue, 0)).toBe(initiatorOriginalMoneyTotal - 10)
-    expect(kh.players[0].animals).toEqual([animal, animal])
+    expect(kh.players[0].animals).toEqual([animalId, animalId])
     expect(kh.players[1].money.reduce(totalValue, 0)).toBe(challengedOriginalMoneyTotal + 10)
     expect(kh.players[1].animals).toEqual([])
   })
 
   it('should settle the cow trade for one card when the initiator only owns one item', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
+    const animalId = kh.draw()
     const initiator = { playerId: kh.players[0].id, money: [{ value: 10 }] }
-    kh.players[0].receiveAnimals(animal)
+    kh.players[0].receiveAnimals(animalId)
     const challenged = { playerId: kh.players[1].id }
-    kh.players[1].receiveAnimals(animal)
-    kh.players[1].receiveAnimals(animal)
-    const cowTrade = kh.cowTrade({ initiator, challenged, animal })
+    kh.players[1].receiveAnimals(animalId)
+    kh.players[1].receiveAnimals(animalId)
+    const cowTrade = kh.cowTrade({ initiator, challenged, animalId })
     cowTrade.respond([{ value: 0 }])
     // the draw might be a donkey and players receive extra money if that happens
     const initiatorOriginalMoneyTotal = kh.players[0].money.reduce(totalValue, 0)
@@ -437,20 +437,20 @@ describe('Kuhhandel cow trade', () => {
     const settled = kh.settleCowTrade(cowTrade)
     expect(settled).toBe(true)
     expect(kh.players[0].money.reduce(totalValue, 0)).toBe(initiatorOriginalMoneyTotal - 10)
-    expect(kh.players[0].animals).toEqual([animal, animal])
+    expect(kh.players[0].animals).toEqual([animalId, animalId])
     expect(kh.players[1].money.reduce(totalValue, 0)).toBe(challengedOriginalMoneyTotal + 10)
-    expect(kh.players[1].animals).toEqual([animal])
+    expect(kh.players[1].animals).toEqual([animalId])
   })
 
   it('should settle the cow trade for one card when the challenger only owns one item', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
+    const animalId = kh.draw()
     const initiator = { playerId: kh.players[0].id, money: [{ value: 10 }] }
-    kh.players[0].receiveAnimals(animal)
-    kh.players[0].receiveAnimals(animal)
+    kh.players[0].receiveAnimals(animalId)
+    kh.players[0].receiveAnimals(animalId)
     const challenged = { playerId: kh.players[1].id }
-    kh.players[1].receiveAnimals(animal)
-    const cowTrade = kh.cowTrade({ initiator, challenged, animal })
+    kh.players[1].receiveAnimals(animalId)
+    const cowTrade = kh.cowTrade({ initiator, challenged, animalId })
     cowTrade.respond([{ value: 0 }])
     // the draw might be a donkey and players receive extra money if that happens
     const initiatorOriginalMoneyTotal = kh.players[0].money.reduce(totalValue, 0)
@@ -458,21 +458,21 @@ describe('Kuhhandel cow trade', () => {
     const settled = kh.settleCowTrade(cowTrade)
     expect(settled).toBe(true)
     expect(kh.players[0].money.reduce(totalValue, 0)).toBe(initiatorOriginalMoneyTotal - 10)
-    expect(kh.players[0].animals).toEqual([animal, animal, animal])
+    expect(kh.players[0].animals).toEqual([animalId, animalId, animalId])
     expect(kh.players[1].money.reduce(totalValue, 0)).toBe(challengedOriginalMoneyTotal + 10)
     expect(kh.players[1].animals).toEqual([])
   })
 
   it('should settle the cow trade for two cards when people own two items', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
+    const animalId = kh.draw()
     const initiator = { playerId: kh.players[0].id, money: [{ value: 10 }] }
-    kh.players[0].receiveAnimals(animal)
-    kh.players[0].receiveAnimals(animal)
+    kh.players[0].receiveAnimals(animalId)
+    kh.players[0].receiveAnimals(animalId)
     const challenged = { playerId: kh.players[1].id }
-    kh.players[1].receiveAnimals(animal)
-    kh.players[1].receiveAnimals(animal)
-    const cowTrade = kh.cowTrade({ initiator, challenged, animal })
+    kh.players[1].receiveAnimals(animalId)
+    kh.players[1].receiveAnimals(animalId)
+    const cowTrade = kh.cowTrade({ initiator, challenged, animalId })
     cowTrade.respond([{ value: 0 }])
     // the draw might be a donkey and players receive extra money if that happens
     const initiatorOriginalMoneyTotal = kh.players[0].money.reduce(totalValue, 0)
@@ -480,7 +480,7 @@ describe('Kuhhandel cow trade', () => {
     const settled = kh.settleCowTrade(cowTrade)
     expect(settled).toBe(true)
     expect(kh.players[0].money.reduce(totalValue, 0)).toBe(initiatorOriginalMoneyTotal - 10)
-    expect(kh.players[0].animals).toEqual([animal, animal, animal, animal])
+    expect(kh.players[0].animals).toEqual([animalId, animalId, animalId, animalId])
     expect(kh.players[1].money.reduce(totalValue, 0)).toBe(challengedOriginalMoneyTotal + 10)
     expect(kh.players[1].animals).toEqual([])
   })
@@ -489,34 +489,35 @@ describe('Kuhhandel cow trade', () => {
 describe('Kuhhandel scoring', () => {
   it('should add an animals value to a players score if the players has the four cards', () => {
     const { kh } = randomInitiatedKuhhandel()
-    const animal = kh.draw()
+    const animalId = kh.draw()
     for(let i = 0; i < 4; i++) {
-      kh.players[0].receiveAnimals(animal)
+      kh.players[0].receiveAnimals(animalId)
     }
-    expect(kh.players[0].score()).toBe(animal.value)
+    expect(kh.players[0].score()).toBe(ANIMALS.get(animalId).value)
   })
 
   it('should not add an animals value to a players score if the players does not have the four cards', () => {
     const { kh } = randomInitiatedKuhhandel()
     for(let i = 0; i < 3; i++) {
-      const animal = kh.draw()
-      kh.players[0].receiveAnimals(animal)
+      const animalId = kh.draw()
+      kh.players[0].receiveAnimals(animalId)
     }
     expect(kh.players[0].score()).toBe(0)
   })
 
   it('should multiply the players score times the number of four of a kind animals the player has', () => {
     const { kh } = randomKuhhandel()
-    kh.stack = DECK.concat().sort((a , b) => b.value - a.value)
+    kh.stack = DECK.concat().sort()
     let total = 0
-    const howMany = 2 + Math.floor(Math.random() * ANIMALS.length - 2)
+    //const howMany = 2 + Math.floor(Math.random() * ANIMALS.size - 2)
+    const howMany = 6
     for( let i = 0; i < howMany; i++) {
-      const animal = kh.draw()
-      total += animal.value
-      kh.players[0].receiveAnimals(animal)
+      const animalId = kh.draw()
+      total += ANIMALS.get(animalId).value
+      kh.players[0].receiveAnimals(animalId)
       for (let j = 1; j < 4; j++) {
         const animal = kh.draw()
-        kh.players[0].receiveAnimals(animal)
+        kh.players[0].receiveAnimals(animalId)
       }
     }
     expect(kh.players[0].score()).toBe(total * howMany)
