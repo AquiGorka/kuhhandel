@@ -1,0 +1,22 @@
+nguage: node_js
+node_js:
+  - node
+git:
+  depth: 10
+branches:
+  only:
+    - master
+script:
+  - npm i
+  - node_modules/.bin/lerna bootstrap
+  - node_modules/.bin/lerna link
+  - cd packages/kuhhandel
+  - npm run build
+  - cd ../kuhhandel-components
+  - npm run build
+  - cd ../kuhhandel-remote-control
+  - npm run build
+  - ./scripts/deploy.sh
+  - cd ../kuhhandel-webapp
+  - npm run build
+  - ./scripts/deploy.sh
