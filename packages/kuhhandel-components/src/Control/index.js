@@ -59,7 +59,7 @@ class AuctionOffer extends Component {
           pattern="\d*"
           defaultValue="10"
         />
-        <button type="submit" className="offer__submit">Offer</button>
+        <Button type="submit">Offer</button>
       </form>
     )
   }

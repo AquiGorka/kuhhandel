@@ -42,11 +42,7 @@
 
 .offer__tel{
   padding: 1em;
-}
-
-.offer__submit{
-  padding: 1em;
-  margin-left: 1em;
+  margin-right: 1em;
 }
 
 .exchange__money ul,
