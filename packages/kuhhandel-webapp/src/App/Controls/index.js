@@ -34,7 +34,15 @@ const Controls = ({ game }) => <div className="controls">
           }
           return p
         }, [])}
-      onCowTradeRespond={money => game.cowTradeRespond({ money, playerId: player.id })}
+      onCowTradeRespond={money => {
+        const getTotal = (p, c) => p + c.value
+        const moneyTotal = money.reduce(getTotal, 0)
+        const cowTradeTotal = game.currentCowTrade.initiator.money.reduce(getTotal, 0)
+        if (moneyTotal === cowTradeTotal){
+          alert('Tie!')
+        }
+        game.cowTradeRespond({ money, playerId: player.id })
+      }}
     />)}
 </div>
 
