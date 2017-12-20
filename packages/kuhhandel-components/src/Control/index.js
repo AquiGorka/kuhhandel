@@ -51,7 +51,7 @@ class CowTrade extends Component {
 class AuctionOffer extends Component {
   render() {
     return (
-      <form onSubmit={this.onSubmit} ref={f => (this.form = f)}>
+      <form className="offer" onSubmit={this.onSubmit} ref={f => (this.form = f)}>
         <input
           className="offer__tel"
           name="offer"

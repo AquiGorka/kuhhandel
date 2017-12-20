@@ -35,6 +35,11 @@
   border:1px solid #333;
 }
 
+.offer{
+  text-align: center;
+  padding: 1em;
+}
+
 .offer__tel{
   padding: 1em;
 }
@@ -68,3 +73,6 @@
   margin: 0.5em;
 }
 
+.cowTrade__players_item{
+  width: 100%;
+}
