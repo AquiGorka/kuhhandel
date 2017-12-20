@@ -59,7 +59,7 @@ class Remote extends Component {
     const { peer } = this.state
     peer.once('signal', this.onSignal)
     peer.on('connect', () => {
-      peer.send(JSON.stringify(this.props))
+      setTimeout(() => peer.send(JSON.stringify(this.props)), 100)
       this.setState({ connected: true })
     })
     peer.on('data', data => this.onData(JSON.parse(data)))
