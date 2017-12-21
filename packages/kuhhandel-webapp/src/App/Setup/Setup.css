@@ -68,4 +68,5 @@
   position: sticky;
   top: 0;
   background: #FDF9F1;
+  z-index: 1;
 }
