@@ -4,6 +4,7 @@ import Peer from 'simple-peer'
 import GoogleURL from 'google-url'
 import promisify from 'es6-promisify'
 import { Control } from 'kuhhandel-components'
+import AI from './AI'
 import './App.css'
 
 let peer = null
@@ -48,7 +49,7 @@ class App extends Component {
         onCowTradeStart: payload => this.onSend({ method: 'onCowTradeStart', payload }),
         onCowTradeRespond: payload => this.onSend({ method: 'onCowTradeRespond', payload }),
       }
-      return <Control {...overloadedProps} />
+      return <AI><Control {...overloadedProps} /></AI>
     }
 
     let content = "Remote Control"
