@@ -49,7 +49,9 @@ class App extends Component {
         onCowTradeStart: payload => this.onSend({ method: 'onCowTradeStart', payload }),
         onCowTradeRespond: payload => this.onSend({ method: 'onCowTradeRespond', payload }),
       }
-      return <AI><Control {...overloadedProps} /></AI>
+      return <AI {...overloadedProps}>
+        <Control {...overloadedProps} />
+      </AI>
     }
 
     let content = "Remote Control"
