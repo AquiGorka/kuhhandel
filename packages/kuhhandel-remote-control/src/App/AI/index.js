@@ -12,6 +12,10 @@ class AI extends Component {
     }
   }
 
+  componentDidUnmount() {
+    clearInterval(this.state.interval)
+  }
+
   render() {
     console.log(this.state)
     if (this.state.ai) {
