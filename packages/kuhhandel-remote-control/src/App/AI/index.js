@@ -7,17 +7,17 @@ class AI extends Component {
 
   componentDidMount() {
     if(qmark('ai')) {
-      const interval = setInterval(this.play, 100)
+      const interval = setInterval(this.play, 1000)
       this.setState({ ai: true, interval })
     }
   }
 
-  componentDidUnmount() {
+  componentWillUnmount() {
     clearInterval(this.state.interval)
   }
 
   render() {
-    console.log(this.state)
+    console.log(this.state, this.props)
     if (this.state.ai) {
       return <div>AI took over</div>
     }
