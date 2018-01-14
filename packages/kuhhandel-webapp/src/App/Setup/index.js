@@ -56,7 +56,7 @@ class Setup extends Component {
           <li>
             40 emoji cards: 10 x 4 emojis
             <ul>
-              {Array.from(ANIMALS).map(([id, { emoji, value }]) => <li>{emoji} value {value}</li>)}
+              {Array.from(ANIMALS).map(([id, { emoji, value }]) => <li key={`emoji-${id}`}>{emoji} value {value}</li>)}
             </ul>
           </li>
           <li>Money cards: 0, 10, 20, 50, 100, 200, 500</li>
