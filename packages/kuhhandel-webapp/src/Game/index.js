@@ -144,6 +144,9 @@ class Game extends EventEmitter {
   }
 
   draw = (playerId, log = true) => {
+    if (draw) {
+      return
+    }
     if (this.turn !== playerId) {
       return
     }
