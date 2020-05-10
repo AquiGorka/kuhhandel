@@ -17,7 +17,8 @@
     "test:watch": "nwb test --server"
   },
   "dependencies": {
-    "rng": "^0.2.2"
+    "rng": "^0.2.2",
+    "shuffle-array": "^1.0.1"
   },
   "devDependencies": {
     "nwb": "^0.20.0"
