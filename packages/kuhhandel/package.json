@@ -21,7 +21,7 @@
     "shuffle-array": "^1.0.1"
   },
   "devDependencies": {
-    "nwb": "^0.20.0"
+    "nwb": "^0.25.2"
   },
   "author": "Gorka",
   "homepage": "",
